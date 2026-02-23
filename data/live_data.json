@@ -1,0 +1,137 @@
+{
+  "_meta": {
+    "last_updated": "2026-02-01",
+    "last_updated_by": "auto",
+    "next_update": "2026-03-01",
+    "notes": "Auto-updated on the 1st of each month. You can also edit this file manually in any text editor."
+  },
+
+  "headline_stats": {
+    "total_facilities": 6297,
+    "total_incarcerated": 1980000,
+    "ice_detained_current": 68000,
+    "ice_detained_note": "Record high as of Jan 2026, post-OBBBA expansion",
+    "annual_system_cost_billions": 126.7,
+    "federal_bop_budget_billions": 9.1,
+    "ice_detention_budget_billions": 14.4,
+    "data_as_of": "February 2026"
+  },
+
+  "bop": {
+    "source": "bop.gov/about/statistics/population_statistics.jsp",
+    "total_population": 155972,
+    "total_facilities": 98,
+    "staff_count": 35000,
+    "capacity_rated": 135336,
+    "percent_over_capacity": 15.2,
+    "in_private_facilities_pct": 9.1,
+    "last_fetched": "2026-02-01"
+  },
+
+  "ice": {
+    "source": "ice.gov/detain/detention-management",
+    "total_detained": 68000,
+    "total_facilities": 133,
+    "pct_in_private_facilities": 90,
+    "average_daily_population_fy2025": 54000,
+    "obbba_new_bed_target": 100000,
+    "last_fetched": "2026-02-01"
+  },
+
+  "facility_types": [
+    { "type": "State Prisons",         "count": 1566, "population": 1050000, "color": "#b91c1c" },
+    { "type": "Local Jails",           "count": 3116, "population": 664200,  "color": "#dc2626" },
+    { "type": "Juvenile Facilities",   "count": 1277, "population": 31000,   "color": "#ea580c" },
+    { "type": "Immigration (ICE)",     "count": 133,  "population": 68000,   "color": "#d97706" },
+    { "type": "Federal Prisons (BOP)", "count": 98,   "population": 155972,  "color": "#16a34a" },
+    { "type": "Indian Country Jails",  "count": 80,   "population": 2200,    "color": "#0891b2" },
+    { "type": "Military Facilities",   "count": 7,    "population": 1300,    "color": "#4f46e5" },
+    { "type": "Civil Commitment",      "count": 20,   "population": 5800,    "color": "#7c3aed" }
+  ],
+
+  "budget_split": [
+    { "name": "State Corrections",  "value": 63.6, "color": "#b91c1c" },
+    { "name": "Local Jails",        "value": 37.0, "color": "#dc2626" },
+    { "name": "Federal BOP",        "value": 9.1,  "color": "#ea580c" },
+    { "name": "ICE Detention",      "value": 14.4, "color": "#d97706" },
+    { "name": "US Marshals",        "value": 1.5,  "color": "#16a34a" },
+    { "name": "Military/Other",     "value": 1.1,  "color": "#4f46e5" }
+  ],
+
+  "breaking_news": [
+    {
+      "id": 1,
+      "date": "July 2025",
+      "headline": "$45B for New ICE Detention Centers (OBBBA)",
+      "body": "Passed via reconciliation July 1, 2025. Largest single detention investment in U.S. history. Averages $10.6B/yr through FY2029 — exceeds the entire BOP annual budget.",
+      "color": "#f97316"
+    },
+    {
+      "id": 2,
+      "date": "July 2025",
+      "headline": "$29.9B for ICE Operations & Deportation (OBBBA)",
+      "body": "Triples ICE's annual budget. Funds 10,000 new ICE officers, fleet modernization, and immigration court staff. Routed through reconciliation, limiting Appropriations Committee oversight.",
+      "color": "#f97316"
+    },
+    {
+      "id": 3,
+      "date": "Jan 2026",
+      "headline": "ICE Detention at Record High: 68,000+",
+      "body": "ICE detention population hit an all-time high of 68,000+ in December 2025, surpassing the prior record of 56,000 set in FY2019. Six deaths in ICE custody recorded in December 2025 alone.",
+      "color": "#ef4444"
+    }
+  ],
+
+  "states": [
+    { "state": "CA", "facilities": 35,  "population": 94000,  "budget": 11.09, "rate": 281 },
+    { "state": "TX", "facilities": 106, "population": 125000, "budget": 3.6,   "rate": 540 },
+    { "state": "NY", "facilities": 54,  "population": 43000,  "budget": 3.9,   "rate": 255 },
+    { "state": "FL", "facilities": 65,  "population": 80000,  "budget": 2.8,   "rate": 452 },
+    { "state": "PA", "facilities": 27,  "population": 37000,  "budget": 2.4,   "rate": 329 },
+    { "state": "OH", "facilities": 29,  "population": 43000,  "budget": 1.9,   "rate": 419 },
+    { "state": "IL", "facilities": 28,  "population": 28000,  "budget": 1.9,   "rate": 248 },
+    { "state": "MI", "facilities": 30,  "population": 36000,  "budget": 2.0,   "rate": 400 },
+    { "state": "WI", "facilities": 18,  "population": 22000,  "budget": 1.3,   "rate": 411 },
+    { "state": "MA", "facilities": 19,  "population": 7500,   "budget": 1.5,   "rate": 118 },
+    { "state": "WA", "facilities": 12,  "population": 17000,  "budget": 1.2,   "rate": 264 },
+    { "state": "NJ", "facilities": 14,  "population": 14000,  "budget": 1.2,   "rate": 167 },
+    { "state": "CO", "facilities": 20,  "population": 17000,  "budget": 1.1,   "rate": 337 },
+    { "state": "AZ", "facilities": 15,  "population": 37000,  "budget": 1.1,   "rate": 574 },
+    { "state": "GA", "facilities": 34,  "population": 51000,  "budget": 1.3,   "rate": 537 },
+    { "state": "NC", "facilities": 57,  "population": 34000,  "budget": 1.5,   "rate": 370 },
+    { "state": "VA", "facilities": 35,  "population": 28000,  "budget": 1.2,   "rate": 372 },
+    { "state": "MD", "facilities": 23,  "population": 16000,  "budget": 1.0,   "rate": 298 },
+    { "state": "OR", "facilities": 14,  "population": 14000,  "budget": 1.0,   "rate": 372 },
+    { "state": "TN", "facilities": 13,  "population": 26000,  "budget": 0.9,   "rate": 458 },
+    { "state": "MO", "facilities": 21,  "population": 24000,  "budget": 0.9,   "rate": 439 },
+    { "state": "MN", "facilities": 9,   "population": 10800,  "budget": 0.9,   "rate": 215 },
+    { "state": "IN", "facilities": 18,  "population": 24000,  "budget": 0.8,   "rate": 395 },
+    { "state": "KY", "facilities": 14,  "population": 23000,  "budget": 0.6,   "rate": 580 },
+    { "state": "SC", "facilities": 22,  "population": 18000,  "budget": 0.6,   "rate": 434 },
+    { "state": "NV", "facilities": 18,  "population": 12000,  "budget": 0.6,   "rate": 460 },
+    { "state": "OK", "facilities": 17,  "population": 24000,  "budget": 0.6,   "rate": 729 },
+    { "state": "LA", "facilities": 12,  "population": 28000,  "budget": 0.7,   "rate": 804 },
+    { "state": "AL", "facilities": 15,  "population": 24000,  "budget": 0.5,   "rate": 596 },
+    { "state": "AR", "facilities": 22,  "population": 16000,  "budget": 0.4,   "rate": 773 },
+    { "state": "KS", "facilities": 11,  "population": 10000,  "budget": 0.5,   "rate": 378 },
+    { "state": "IA", "facilities": 9,   "population": 9000,   "budget": 0.5,   "rate": 311 },
+    { "state": "MS", "facilities": 7,   "population": 18000,  "budget": 0.4,   "rate": 847 },
+    { "state": "NM", "facilities": 12,  "population": 6500,   "budget": 0.4,   "rate": 360 },
+    { "state": "AK", "facilities": 12,  "population": 5000,   "budget": 0.4,   "rate": 727 },
+    { "state": "NE", "facilities": 11,  "population": 5500,   "budget": 0.3,   "rate": 310 },
+    { "state": "ID", "facilities": 14,  "population": 9000,   "budget": 0.3,   "rate": 556 },
+    { "state": "UT", "facilities": 5,   "population": 7000,   "budget": 0.3,   "rate": 253 },
+    { "state": "MT", "facilities": 10,  "population": 3900,   "budget": 0.2,   "rate": 393 },
+    { "state": "HI", "facilities": 4,   "population": 4000,   "budget": 0.3,   "rate": 299 },
+    { "state": "CT", "facilities": 13,  "population": 8000,   "budget": 0.7,   "rate": 248 },
+    { "state": "WV", "facilities": 9,   "population": 6300,   "budget": 0.3,   "rate": 415 },
+    { "state": "DE", "facilities": 6,   "population": 5500,   "budget": 0.3,   "rate": 625 },
+    { "state": "WY", "facilities": 4,   "population": 2300,   "budget": 0.2,   "rate": 459 },
+    { "state": "SD", "facilities": 4,   "population": 4000,   "budget": 0.2,   "rate": 524 },
+    { "state": "ND", "facilities": 6,   "population": 2000,   "budget": 0.1,   "rate": 286 },
+    { "state": "RI", "facilities": 6,   "population": 2400,   "budget": 0.2,   "rate": 250 },
+    { "state": "NH", "facilities": 4,   "population": 2700,   "budget": 0.2,   "rate": 210 },
+    { "state": "VT", "facilities": 7,   "population": 1600,   "budget": 0.2,   "rate": 151 },
+    { "state": "ME", "facilities": 8,   "population": 2200,   "budget": 0.2,   "rate": 144 }
+  ]
+}
