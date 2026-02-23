@@ -1,634 +1,305 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>U.S. Prison & Detention Ecosystem Dashboard</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.0/Recharts.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#080810;color:#e0e0e0;font-family:Georgia,'Times New Roman',serif;min-height:100vh}
-    ::-webkit-scrollbar{width:6px;height:6px}
-    ::-webkit-scrollbar-track{background:#111}
-    ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-    .tab{background:none;border:none;cursor:pointer;padding:12px 16px;font-family:Georgia,serif;font-size:13px;white-space:nowrap;transition:color .2s}
-    .tab:hover{color:#ef4444}
-    table{border-collapse:collapse;width:100%;font-size:13px}
-    th{padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#ef4444;background:#130010;border-bottom:2px solid #7f1d1d;white-space:nowrap}
-    td{padding:9px 14px;border-bottom:1px solid #141424}
-    tr:hover td{background:#0d0d1e}
-    .sort-btn{background:none;border:1px solid #333;color:#777;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px;transition:all .2s}
-    .sort-btn.on{background:#7f1d1d;border-color:#ef4444;color:#fff}
-    .filter-btn{background:none;border:1px solid #333;color:#777;padding:5px 14px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px;transition:all .2s}
-    .filter-btn.on{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd}
-    .cmte-card{background:#0e0e20;border:1px solid #1e1e3a;border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s;margin-bottom:12px}
-    .cmte-card:hover{border-color:#ef444440}
-    .expand{background:#080810;border-top:1px solid #1e1e3a;padding:16px 20px;font-size:13px;line-height:1.6;color:#bbb}
-    @media(max-width:768px){.g2,.g3{grid-template-columns:1fr!important}.kpirow{flex-wrap:wrap}}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>U.S. Prison & Detention Ecosystem Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080810;color:#e0e0e0;font-family:Georgia,'Times New Roman',serif;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#111}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.header{background:linear-gradient(135deg,#130005 0%,#1a0008 40%,#080810 100%);border-bottom:2px solid #7f1d1d;padding:28px 32px 22px}
+.header-label{font-size:10px;letter-spacing:5px;color:#7f1d1d;text-transform:uppercase;margin-bottom:6px}
+.header h1{font-size:clamp(22px,4vw,38px);font-weight:800;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:4px}
+.header h1 span{color:#ef4444}
+.header p{color:#555;font-size:13px;max-width:620px;line-height:1.6;margin:8px 0 18px}
+.status-pill{display:inline-flex;align-items:center;gap:8px;background:#001a0a;border:1px solid #14532d;border-radius:20px;padding:4px 14px;margin-bottom:18px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block}
+.status-pill span{color:#4ade80;font-size:12px}
+.kpi-row{display:flex;gap:12px;flex-wrap:wrap}
+.kpi{background:rgba(255,255,255,0.03);border-radius:8px;padding:14px 18px;flex:1 1 140px}
+.kpi-val{font-size:22px;font-weight:800}
+.kpi-lbl{font-size:11px;font-weight:700;color:#ccc;text-transform:uppercase;letter-spacing:1px}
+.kpi-sub{font-size:11px;color:#555;margin-top:2px}
+.tabs{background:#0b0b18;border-bottom:1px solid #1e1e3a;padding:0 32px;display:flex;overflow-x:auto}
+.tab{background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;padding:12px 16px;font-family:Georgia,serif;font-size:13px;white-space:nowrap;color:#555}
+.tab:hover{color:#ef4444}
+.tab.active{color:#ef4444;border-bottom-color:#ef4444;font-weight:700}
+.content{padding:28px 32px;max-width:1400px;margin:0 auto}
+.section-title{color:#ef4444;font-size:20px;margin-bottom:6px}
+.section-sub{color:#555;font-size:13px;margin-bottom:22px;line-height:1.5}
+.card{background:#0e0e20;border:1px solid #1e1e3a;border-radius:10px;padding:22px;margin-bottom:24px}
+.card-title{margin-bottom:16px;color:#aaa;font-size:12px;text-transform:uppercase;letter-spacing:2.5px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.bar-label{width:160px;text-align:right;color:#aaa;flex-shrink:0;font-size:11px}
+.bar-track{flex:1;background:#1a1a2e;border-radius:4px;height:22px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:#fff;font-weight:700;white-space:nowrap}
+.bar-val{width:60px;color:#aaa;font-size:11px;flex-shrink:0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#ef4444;background:#130010;border-bottom:2px solid #7f1d1d;white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid #141424;color:#ccc}
+tr:hover td{background:#0d0d1e}
+.tbl-wrap{overflow-x:auto}
+.sort-btn{background:none;border:1px solid #333;color:#777;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px}
+.sort-btn.on{background:#7f1d1d;border-color:#ef4444;color:#fff}
+.filter-btn{background:none;border:1px solid #333;color:#777;padding:5px 14px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px}
+.filter-btn.on{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd}
+.cmte-card{background:#0e0e20;border:1px solid #1e1e3a;border-radius:8px;overflow:hidden;margin-bottom:12px;cursor:pointer}
+.cmte-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.cmte-expand{background:#080810;border-top:1px solid #1e1e3a;padding:16px 20px;font-size:13px;line-height:1.6;color:#bbb;display:none}
+.cmte-expand.open{display:block}
+.badge{display:inline-block;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-right:6px}
+.news-card{background:#130a00;border-radius:6px;padding:14px;border-left:3px solid}
+.news-date{font-size:11px;color:#666;margin-bottom:4px}
+.news-head{font-weight:700;color:#fed7aa;font-size:13px;margin-bottom:6px}
+.news-body{color:#888;font-size:12px;line-height:1.5}
+.fac-card{border-radius:8px;padding:20px;margin-bottom:14px;border:1px solid}
+.source-row{background:#0e0e20;border:1px solid #1e1e3a;border-radius:8px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer{margin-top:40px;border-top:1px solid #1e1e3a;padding-top:18px;color:#333;font-size:11px;line-height:1.7}
+.how-card{background:#001a0a;border:1px solid #14532d;border-radius:6px;padding:14px}
+.how-card h4{color:#4ade80;font-size:13px;margin-bottom:6px}
+.how-card p{color:#666;font-size:12px;line-height:1.5}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr!important}.kpi-row{flex-wrap:wrap}.bar-label{width:80px}}
+</style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-// ─── TO UPDATE DATA MONTHLY: edit the DATA object below ───────────────────
-const DATA = {
-  _meta: {
-    last_updated: "2026-02-01",
-    next_update: "2026-03-01"
-  },
-  headline_stats: {
-    total_facilities: 6297,
-    total_incarcerated: 1980000,
-    ice_detained_current: 68000,
-    ice_detained_note: "Record high as of Jan 2026, post-OBBBA expansion",
-    annual_system_cost_billions: 126.7,
-    federal_bop_budget_billions: 9.1,
-    ice_detention_budget_billions: 14.4,
-    data_as_of: "February 2026"
-  },
-  breaking_news: [
-    { id:1, date:"July 2025", headline:"$45B for New ICE Detention Centers (OBBBA)", body:"Passed via reconciliation July 1, 2025. Largest single detention investment in U.S. history. Averages $10.6B/yr through FY2029 — exceeds the entire BOP annual budget.", color:"#f97316" },
-    { id:2, date:"July 2025", headline:"$29.9B for ICE Operations & Deportation (OBBBA)", body:"Triples ICE's annual budget. Funds 10,000 new ICE officers. Routed through reconciliation, limiting Appropriations Committee oversight.", color:"#f97316" },
-    { id:3, date:"Jan 2026", headline:"ICE Detention at Record High: 68,000+", body:"ICE detention population hit an all-time high in December 2025. Six deaths in ICE custody recorded in December 2025 alone.", color:"#ef4444" }
+<div id="app"></div>
+<script>
+var DATA = {
+  last_updated:"2026-02-01",next_update:"2026-03-01",data_as_of:"February 2026",
+  stats:{total_facilities:6297,total_incarcerated:1980000,ice_detained:68000,ice_note:"Record high Jan 2026, post-OBBBA",system_cost:126.7,bop_budget:9.1,ice_budget:14.4},
+  news:[
+    {date:"July 2025",headline:"$45B for New ICE Detention Centers (OBBBA)",body:"Passed via reconciliation July 1, 2025. Largest single detention investment in U.S. history. Averages $10.6B/yr through FY2029.",color:"#f97316"},
+    {date:"July 2025",headline:"$29.9B for ICE Operations & Deportation (OBBBA)",body:"Triples ICE annual budget. Funds 10,000 new officers. Routed through reconciliation, limiting Appropriations Committee oversight.",color:"#f97316"},
+    {date:"Jan 2026",headline:"ICE Detention at Record High: 68,000+",body:"All-time high December 2025. Six deaths in ICE custody that month alone. OBBBA targets 100K bed capacity.",color:"#ef4444"}
   ],
-  facility_types: [
-    { type:"State Prisons",         count:1566, population:1050000, color:"#b91c1c" },
-    { type:"Local Jails",           count:3116, population:664200,  color:"#dc2626" },
-    { type:"Juvenile Facilities",   count:1277, population:31000,   color:"#ea580c" },
-    { type:"Immigration (ICE)",     count:133,  population:68000,   color:"#d97706" },
-    { type:"Federal Prisons (BOP)", count:98,   population:155972,  color:"#16a34a" },
-    { type:"Indian Country Jails",  count:80,   population:2200,    color:"#0891b2" },
-    { type:"Military Facilities",   count:7,    population:1300,    color:"#4f46e5" },
-    { type:"Civil Commitment",      count:20,   population:5800,    color:"#7c3aed" }
+  facility_types:[
+    {type:"State Prisons",count:1566,pop:1050000,color:"#b91c1c"},
+    {type:"Local Jails",count:3116,pop:664200,color:"#dc2626"},
+    {type:"Juvenile Facilities",count:1277,pop:31000,color:"#ea580c"},
+    {type:"Immigration (ICE)",count:133,pop:68000,color:"#d97706"},
+    {type:"Federal Prisons (BOP)",count:98,pop:155972,color:"#16a34a"},
+    {type:"Indian Country Jails",count:80,pop:2200,color:"#0891b2"},
+    {type:"Military Facilities",count:7,pop:1300,color:"#4f46e5"},
+    {type:"Civil Commitment",count:20,pop:5800,color:"#7c3aed"}
   ],
-  budget_split: [
-    { name:"State Corrections", value:63.6, color:"#b91c1c" },
-    { name:"Local Jails",       value:37.0, color:"#dc2626" },
-    { name:"Federal BOP",       value:9.1,  color:"#ea580c" },
-    { name:"ICE Detention",     value:14.4, color:"#d97706" },
-    { name:"US Marshals",       value:1.5,  color:"#16a34a" },
-    { name:"Military/Other",    value:1.1,  color:"#4f46e5" }
+  budget:[
+    {name:"State Corrections",value:63.6,color:"#b91c1c"},
+    {name:"Local Jails",value:37.0,color:"#dc2626"},
+    {name:"ICE Detention",value:14.4,color:"#d97706"},
+    {name:"Federal BOP",value:9.1,color:"#ea580c"},
+    {name:"US Marshals",value:1.5,color:"#16a34a"},
+    {name:"Military/Other",value:1.1,color:"#4f46e5"}
   ],
-  states: [
-    { state:"CA", facilities:35,  population:94000,  budget:11.09, rate:281 },
-    { state:"TX", facilities:106, population:125000, budget:3.6,   rate:540 },
-    { state:"NY", facilities:54,  population:43000,  budget:3.9,   rate:255 },
-    { state:"FL", facilities:65,  population:80000,  budget:2.8,   rate:452 },
-    { state:"PA", facilities:27,  population:37000,  budget:2.4,   rate:329 },
-    { state:"OH", facilities:29,  population:43000,  budget:1.9,   rate:419 },
-    { state:"IL", facilities:28,  population:28000,  budget:1.9,   rate:248 },
-    { state:"MI", facilities:30,  population:36000,  budget:2.0,   rate:400 },
-    { state:"WI", facilities:18,  population:22000,  budget:1.3,   rate:411 },
-    { state:"MA", facilities:19,  population:7500,   budget:1.5,   rate:118 },
-    { state:"WA", facilities:12,  population:17000,  budget:1.2,   rate:264 },
-    { state:"NJ", facilities:14,  population:14000,  budget:1.2,   rate:167 },
-    { state:"CO", facilities:20,  population:17000,  budget:1.1,   rate:337 },
-    { state:"AZ", facilities:15,  population:37000,  budget:1.1,   rate:574 },
-    { state:"GA", facilities:34,  population:51000,  budget:1.3,   rate:537 },
-    { state:"NC", facilities:57,  population:34000,  budget:1.5,   rate:370 },
-    { state:"VA", facilities:35,  population:28000,  budget:1.2,   rate:372 },
-    { state:"MD", facilities:23,  population:16000,  budget:1.0,   rate:298 },
-    { state:"OR", facilities:14,  population:14000,  budget:1.0,   rate:372 },
-    { state:"TN", facilities:13,  population:26000,  budget:0.9,   rate:458 },
-    { state:"MO", facilities:21,  population:24000,  budget:0.9,   rate:439 },
-    { state:"MN", facilities:9,   population:10800,  budget:0.9,   rate:215 },
-    { state:"IN", facilities:18,  population:24000,  budget:0.8,   rate:395 },
-    { state:"KY", facilities:14,  population:23000,  budget:0.6,   rate:580 },
-    { state:"SC", facilities:22,  population:18000,  budget:0.6,   rate:434 },
-    { state:"NV", facilities:18,  population:12000,  budget:0.6,   rate:460 },
-    { state:"OK", facilities:17,  population:24000,  budget:0.6,   rate:729 },
-    { state:"LA", facilities:12,  population:28000,  budget:0.7,   rate:804 },
-    { state:"AL", facilities:15,  population:24000,  budget:0.5,   rate:596 },
-    { state:"AR", facilities:22,  population:16000,  budget:0.4,   rate:773 },
-    { state:"KS", facilities:11,  population:10000,  budget:0.5,   rate:378 },
-    { state:"IA", facilities:9,   population:9000,   budget:0.5,   rate:311 },
-    { state:"MS", facilities:7,   population:18000,  budget:0.4,   rate:847 },
-    { state:"NM", facilities:12,  population:6500,   budget:0.4,   rate:360 },
-    { state:"AK", facilities:12,  population:5000,   budget:0.4,   rate:727 },
-    { state:"NE", facilities:11,  population:5500,   budget:0.3,   rate:310 },
-    { state:"ID", facilities:14,  population:9000,   budget:0.3,   rate:556 },
-    { state:"UT", facilities:5,   population:7000,   budget:0.3,   rate:253 },
-    { state:"MT", facilities:10,  population:3900,   budget:0.2,   rate:393 },
-    { state:"HI", facilities:4,   population:4000,   budget:0.3,   rate:299 },
-    { state:"CT", facilities:13,  population:8000,   budget:0.7,   rate:248 },
-    { state:"WV", facilities:9,   population:6300,   budget:0.3,   rate:415 },
-    { state:"DE", facilities:6,   population:5500,   budget:0.3,   rate:625 },
-    { state:"WY", facilities:4,   population:2300,   budget:0.2,   rate:459 },
-    { state:"SD", facilities:4,   population:4000,   budget:0.2,   rate:524 },
-    { state:"ND", facilities:6,   population:2000,   budget:0.1,   rate:286 },
-    { state:"RI", facilities:6,   population:2400,   budget:0.2,   rate:250 },
-    { state:"NH", facilities:4,   population:2700,   budget:0.2,   rate:210 },
-    { state:"VT", facilities:7,   population:1600,   budget:0.2,   rate:151 },
-    { state:"ME", facilities:8,   population:2200,   budget:0.2,   rate:144 }
+  states:[
+    {s:"CA",f:35,p:94000,b:11.09,r:281},{s:"TX",f:106,p:125000,b:3.6,r:540},{s:"NY",f:54,p:43000,b:3.9,r:255},
+    {s:"FL",f:65,p:80000,b:2.8,r:452},{s:"PA",f:27,p:37000,b:2.4,r:329},{s:"OH",f:29,p:43000,b:1.9,r:419},
+    {s:"IL",f:28,p:28000,b:1.9,r:248},{s:"MI",f:30,p:36000,b:2.0,r:400},{s:"WI",f:18,p:22000,b:1.3,r:411},
+    {s:"MA",f:19,p:7500,b:1.5,r:118},{s:"WA",f:12,p:17000,b:1.2,r:264},{s:"NJ",f:14,p:14000,b:1.2,r:167},
+    {s:"CO",f:20,p:17000,b:1.1,r:337},{s:"AZ",f:15,p:37000,b:1.1,r:574},{s:"GA",f:34,p:51000,b:1.3,r:537},
+    {s:"NC",f:57,p:34000,b:1.5,r:370},{s:"VA",f:35,p:28000,b:1.2,r:372},{s:"MD",f:23,p:16000,b:1.0,r:298},
+    {s:"OR",f:14,p:14000,b:1.0,r:372},{s:"TN",f:13,p:26000,b:0.9,r:458},{s:"MO",f:21,p:24000,b:0.9,r:439},
+    {s:"MN",f:9,p:10800,b:0.9,r:215},{s:"IN",f:18,p:24000,b:0.8,r:395},{s:"KY",f:14,p:23000,b:0.6,r:580},
+    {s:"SC",f:22,p:18000,b:0.6,r:434},{s:"NV",f:18,p:12000,b:0.6,r:460},{s:"OK",f:17,p:24000,b:0.6,r:729},
+    {s:"LA",f:12,p:28000,b:0.7,r:804},{s:"AL",f:15,p:24000,b:0.5,r:596},{s:"AR",f:22,p:16000,b:0.4,r:773},
+    {s:"KS",f:11,p:10000,b:0.5,r:378},{s:"IA",f:9,p:9000,b:0.5,r:311},{s:"MS",f:7,p:18000,b:0.4,r:847},
+    {s:"NM",f:12,p:6500,b:0.4,r:360},{s:"AK",f:12,p:5000,b:0.4,r:727},{s:"NE",f:11,p:5500,b:0.3,r:310},
+    {s:"ID",f:14,p:9000,b:0.3,r:556},{s:"UT",f:5,p:7000,b:0.3,r:253},{s:"MT",f:10,p:3900,b:0.2,r:393},
+    {s:"HI",f:4,p:4000,b:0.3,r:299},{s:"CT",f:13,p:8000,b:0.7,r:248},{s:"WV",f:9,p:6300,b:0.3,r:415},
+    {s:"DE",f:6,p:5500,b:0.3,r:625},{s:"WY",f:4,p:2300,b:0.2,r:459},{s:"SD",f:4,p:4000,b:0.2,r:524},
+    {s:"ND",f:6,p:2000,b:0.1,r:286},{s:"RI",f:6,p:2400,b:0.2,r:250},{s:"NH",f:4,p:2700,b:0.2,r:210},
+    {s:"VT",f:7,p:1600,b:0.2,r:151},{s:"ME",f:8,p:2200,b:0.2,r:144}
   ]
 };
-// ─── END OF DATA SECTION ──────────────────────────────────────────────────
 
-const { useState } = React;
-const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-ResponsiveContainer, PieChart, Pie, Cell, Legend } = Recharts;
-
-const TABS = [
-{ id:“overview”, label:“📊 Overview” },
-{ id:“types”,    label:“🏛️ Facility Types” },
-{ id:“states”,   label:“🗺️ By State” },
-{ id:“federal”,  label:“💰 Federal Budget” },
-{ id:“fcmte”,    label:“🏛 Federal Committees” },
-{ id:“scmte”,    label:“🏛 State Committees” },
-{ id:“sources”,  label:“📚 Sources” },
+var COMMITTEES=[
+  {chamber:"SENATE",role:"Appropriator",name:"Senate Appropriations — Subcommittee on Commerce, Justice, Science (CJS)",chair:"Full Committee: Sen. Susan Collins (R-ME)",ranking:"Sen. Patty Murray (D-WA)",detail:"Annual appropriations for BOP (Federal Prison System S&amp;E, acct 15-1060) and U.S. Marshals Service. FY2026 S.2354 includes $10.1B+ for DOJ.",url:"appropriations.senate.gov"},
+  {chamber:"SENATE",role:"Appropriator",name:"Senate Appropriations — Subcommittee on Homeland Security",chair:"Sen. Katie Britt (R-AL)",ranking:"Sen. Chris Murphy (D-CT)",detail:"Annual base appropriations for ICE Detention &amp; Removal (Custody Operations PPA). OBBBA $45B bypassed this committee via reconciliation.",url:"appropriations.senate.gov"},
+  {chamber:"SENATE",role:"Policy Oversight",name:"Senate Judiciary — Subcommittee on Crime & Terrorism",chair:"Ranking: Sen. Dick Durbin (D-IL)",ranking:"",detail:"Oversight of BOP operations, conditions of confinement, Federal Prison Oversight Act (2024), sentencing, reentry.",url:"judiciary.senate.gov"},
+  {chamber:"SENATE",role:"Policy Oversight",name:"Senate Judiciary — Subcommittee on Immigration, Border Security & Enforcement",chair:"Sen. Tom Cotton (R-AR)",ranking:"Sen. Alex Padilla (D-CA)",detail:"Oversight of ICE detention conditions, immigration enforcement, DHS immigration functions.",url:"judiciary.senate.gov"},
+  {chamber:"HOUSE",role:"Appropriator",name:"House Appropriations — Subcommittee on Commerce, Justice, Science (CJS)",chair:"Rep. Harold Rogers (R-KY)",ranking:"Rep. Grace Meng (D-NY)",detail:"Annual appropriations for BOP (acct 15-1060) and USMS. FY2026 H.R.5342 includes $10.124B for BOP.",url:"appropriations.house.gov"},
+  {chamber:"HOUSE",role:"Appropriator",name:"House Appropriations — Subcommittee on Homeland Security",chair:"Rep. Mark Amodei (R-NV)",ranking:"Rep. David Price (D-NC)",detail:"Annual ICE base appropriations. OBBBA $45B + $29.9B bypassed this subcommittee via reconciliation.",url:"appropriations.house.gov"},
+  {chamber:"HOUSE",role:"Policy Oversight",name:"House Judiciary — Subcommittee on Crime and Federal Government Surveillance",chair:"Rep. Andy Biggs (R-AZ)",ranking:"Rep. Lucy McBath (D-GA)",detail:"Primary BOP oversight committee. Joint hearing 'Federal Corrections in Focus' May 6, 2025.",url:"judiciary.house.gov"},
+  {chamber:"HOUSE",role:"Policy Oversight",name:"House Judiciary — Subcommittee on Immigration Integrity, Security & Enforcement",chair:"Rep. Tom McClintock (R-CA)",ranking:"Rep. Pramila Jayapal (D-WA)",detail:"Oversight of ICE detention standards, private contractor accountability.",url:"judiciary.house.gov"},
+  {chamber:"HOUSE",role:"Policy Oversight",name:"House Committee on Homeland Security",chair:"Rep. Mark Green (R-TN)",ranking:"Rep. Bennie Thompson (D-MS)",detail:"Authorization &amp; oversight of DHS, CBP, ICE. Reviews $45B OBBBA detention construction.",url:"homeland.house.gov"}
 ];
 
-const FEDERAL_COMMITTEES = [
-{ chamber:“SENATE”, role:“Appropriator”, committee:“Committee on Appropriations”, subcommittee:“Subcommittee on Commerce, Justice, Science (CJS)”, chair:“Full Committee: Sen. Susan Collins (R-ME)”, ranking:“Sen. Patty Murray (D-WA)”, jurisdiction:“Annual appropriations for BOP (Federal Prison System S&E, acct 15-1060) and U.S. Marshals Service. FY2026 S.2354 includes $10.1B+ for DOJ.”, url:“appropriations.senate.gov”, color:”#b91c1c” },
-{ chamber:“SENATE”, role:“Appropriator”, committee:“Committee on Appropriations”, subcommittee:“Subcommittee on Homeland Security”, chair:“Sen. Katie Britt (R-AL)”, ranking:“Sen. Chris Murphy (D-CT)”, jurisdiction:“Annual appropriations for ICE Detention & Removal (Custody Operations PPA). The OBBBA $45B was routed through reconciliation, bypassing this committee.”, url:“appropriations.senate.gov”, color:”#b91c1c” },
-{ chamber:“SENATE”, role:“Policy Oversight”, committee:“Committee on the Judiciary”, subcommittee:“Subcommittee on Crime & Terrorism”, chair:“Ranking: Sen. Dick Durbin (D-IL)”, ranking:””, jurisdiction:“Policy oversight of BOP operations, conditions of confinement, Federal Prison Oversight Act (2024) implementation, sentencing, reentry.”, url:“judiciary.senate.gov”, color:”#b91c1c” },
-{ chamber:“SENATE”, role:“Policy Oversight”, committee:“Committee on the Judiciary”, subcommittee:“Subcommittee on Immigration, Border Security & Enforcement”, chair:“Sen. Tom Cotton (R-AR)”, ranking:“Sen. Alex Padilla (D-CA)”, jurisdiction:“Oversight of ICE detention conditions, immigration enforcement, DHS immigration functions.”, url:“judiciary.senate.gov”, color:”#b91c1c” },
-{ chamber:“HOUSE”, role:“Appropriator”, committee:“Committee on Appropriations”, subcommittee:“Subcommittee on Commerce, Justice, Science (CJS)”, chair:“Rep. Harold Rogers (R-KY)”, ranking:“Rep. Grace Meng (D-NY)”, jurisdiction:“Annual appropriations for BOP (acct 15-1060) and USMS. FY2026 H.R.5342 includes $10.124B for BOP.”, url:“appropriations.house.gov”, color:”#1d4ed8” },
-{ chamber:“HOUSE”, role:“Appropriator”, committee:“Committee on Appropriations”, subcommittee:“Subcommittee on Homeland Security”, chair:“Rep. Mark Amodei (R-NV)”, ranking:“Rep. David Price (D-NC)”, jurisdiction:“Annual ICE base appropriations. OBBBA $45B + $29.9B bypassed this subcommittee via reconciliation.”, url:“appropriations.house.gov”, color:”#1d4ed8” },
-{ chamber:“HOUSE”, role:“Policy Oversight”, committee:“Committee on the Judiciary”, subcommittee:“Subcommittee on Crime and Federal Government Surveillance”, chair:“Rep. Andy Biggs (R-AZ)”, ranking:“Rep. Lucy McBath (D-GA)”, jurisdiction:“Primary BOP oversight. Joint hearing ‘Federal Corrections in Focus’ May 6, 2025.”, url:“judiciary.house.gov”, color:”#1d4ed8” },
-{ chamber:“HOUSE”, role:“Policy Oversight”, committee:“Committee on the Judiciary”, subcommittee:“Subcommittee on Immigration Integrity, Security & Enforcement”, chair:“Rep. Tom McClintock (R-CA)”, ranking:“Rep. Pramila Jayapal (D-WA)”, jurisdiction:“Oversight of ICE detention standards, private contractor accountability.”, url:“judiciary.house.gov”, color:”#1d4ed8” },
-{ chamber:“HOUSE”, role:“Policy Oversight”, committee:“Committee on Homeland Security”, subcommittee:“Full Committee + Subcommittee on Border Security & Enforcement”, chair:“Rep. Mark Green (R-TN)”, ranking:“Rep. Bennie Thompson (D-MS)”, jurisdiction:“Authorization & oversight of DHS, CBP, ICE. Reviews $45B OBBBA detention construction.”, url:“homeland.house.gov”, color:”#1d4ed8” },
+var TOP15=[
+  {s:"CA",b:11.09,agency:"CDCR",appro:"Senate Budget Subcommittee No. 5; Assembly Budget Sub. 5",policy:"Senate Public Safety; Assembly Public Safety",chair:"Sub. 5 Chair: Sen. Aisha Wahab (D)",notes:"CDCR total ~$13.6B. JLBC year-round oversight."},
+  {s:"NY",b:3.9,agency:"DOCCS",appro:"Senate Finance; Assembly Ways &amp; Means",policy:"Senate Crime Victims, Crime &amp; Correction; Assembly Correction",chair:"Senate Finance: Sen. Liz Krueger (D)",notes:"Executive Budget process. Public Protection budget function."},
+  {s:"TX",b:3.6,agency:"TDCJ",appro:"Senate Finance; House Appropriations - Article V",policy:"Senate Criminal Justice; House Corrections",chair:"Legislative Budget Board (LBB) continuous oversight",notes:"Biennial budget cycle."},
+  {s:"FL",b:2.8,agency:"FDC",appro:"Senate Appropriations on Crim. &amp; Civil Justice; House Justice Appropriations",policy:"Senate Criminal Justice; House Criminal Justice &amp; Public Safety",chair:"Sen. Clay Yarborough (R)",notes:"Aging facilities (pre-1980, no A/C) are a recurring budget flashpoint."},
+  {s:"PA",b:2.4,agency:"PA DOC",appro:"Senate Appropriations; House Appropriations",policy:"Senate Judiciary; House Judiciary",chair:"Senate Approps: Sen. Scott Martin (R)",notes:"Recommended closing SCI Cresson &amp; Pine Grove 2025."},
+  {s:"MI",b:2.0,agency:"MDOC",appro:"Senate Corrections Approps Sub.; House Corrections Approps Sub.",policy:"Senate Judiciary &amp; Public Safety; House Judiciary",chair:"Sen. Jeremy Moss (D)",notes:"Rare standalone corrections subcommittees in both chambers."},
+  {s:"OH",b:1.9,agency:"ODRC",appro:"Senate Finance; House Finance - Criminal Justice Sub.",policy:"Senate Judiciary; House Criminal Justice",chair:"Senate Finance: Sen. Matt Dolan (R)",notes:"Biennial budget (HB 96 for FY26-27)."},
+  {s:"IL",b:1.9,agency:"IDOC",appro:"Senate Appropriations II; House Appropriations - Criminal Justice",policy:"Senate Criminal Law; House Judiciary - Criminal",chair:"Senate Approps II: Majority Democrat",notes:"Federal court mandate drives mental health spending."},
+  {s:"NC",b:1.5,agency:"NCDAC",appro:"Senate &amp; House Appropriations on Justice &amp; Public Safety",policy:"Senate Judiciary; House Judiciary I &amp; II",chair:"Sen. Danny Britt (R)",notes:"New standalone agency 2022. ~25% officer vacancy rate."},
+  {s:"MA",b:1.5,agency:"MADOC",appro:"Senate Ways &amp; Means; House Ways &amp; Means",policy:"Senate Judiciary; House Judiciary",chair:"Sen. Michael Rodrigues (D)",notes:"Highest cost/inmate ($284,976/yr). Lowest rate (118/100K)."},
+  {s:"GA",b:1.3,agency:"GDC",appro:"Senate Appropriations (Public Safety Sub.); House Appropriations",policy:"Senate Judiciary; House Judiciary Non-Civil",chair:"Sen. Blake Tillery (R)",notes:"DOJ 2023 unconstitutional conditions finding. $600M+ reform underway."},
+  {s:"WI",b:1.3,agency:"WI DOC",appro:"Joint Finance Committee (JFC)",policy:"Senate Judiciary &amp; Public Safety; Assembly Corrections",chair:"JFC: Sen. Howard Marklein (R) &amp; Rep. Mark Born (R)",notes:"JFC is dominant budget body."},
+  {s:"WA",b:1.2,agency:"WADOC",appro:"Senate Ways &amp; Means; House Appropriations",policy:"Senate Law &amp; Justice; House Community Safety, Justice &amp; Reentry",chair:"Sen. June Robinson (D)",notes:"House committee renamed 2023."},
+  {s:"VA",b:1.2,agency:"VADOC",appro:"Senate Finance &amp; Appropriations; House Appropriations",policy:"Senate Courts of Justice; House Courts of Justice",chair:"Sen. Janet Howell (D)",notes:"Biennial budget with annual amendments."},
+  {s:"NJ",b:1.2,agency:"NJDOC",appro:"Senate Budget &amp; Appropriations; Assembly Budget",policy:"Senate Law &amp; Public Safety; Assembly Law &amp; Public Safety",chair:"Sen. Paul Sarlo (D)",notes:"Prison population down 45%+ since 2000."}
 ];
 
-const TOP15 = [
-{ state:“CA”, budget:11.09, agency:“CDCR”, appro:“Senate Budget Subcommittee No. 5; Assembly Budget Sub. 5”, policy:“Senate Public Safety; Assembly Public Safety”, chair:“Sub. 5 Chair: Sen. Aisha Wahab (D)”, notes:“CDCR total budget ~$13.6B. JLBC year-round oversight. Detailed spring hearings.” },
-{ state:“NY”, budget:3.9,  agency:“DOCCS”, appro:“Senate Finance; Assembly Ways & Means”, policy:“Senate Crime Victims, Crime & Correction; Assembly Correction”, chair:“Senate Finance: Sen. Liz Krueger (D)”, notes:“Executive Budget process. ‘Public Protection’ budget function.” },
-{ state:“TX”, budget:3.6,  agency:“TDCJ”, appro:“Senate Finance (Criminal Justice Article); House Appropriations — Article V”, policy:“Senate Criminal Justice; House Corrections”, chair:“Legislative Budget Board (LBB) continuous oversight”, notes:“Biennial budget cycle.” },
-{ state:“FL”, budget:2.8,  agency:“FDC”, appro:“Senate Appropriations on Criminal & Civil Justice; House Justice Appropriations Sub.”, policy:“Senate Criminal Justice; House Criminal Justice & Public Safety”, chair:“Sen. Clay Yarborough (R)”, notes:“Aging facilities (pre-1980, no A/C) are recurring budget flashpoint.” },
-{ state:“PA”, budget:2.4,  agency:“PA DOC”, appro:“Senate Appropriations; House Appropriations”, policy:“Senate Judiciary; House Judiciary”, chair:“Senate Appropriations: Sen. Scott Martin (R)”, notes:“DOC recommended closing SCI Cresson & Pine Grove 2025.” },
-{ state:“MI”, budget:2.0,  agency:“MDOC”, appro:“Senate Corrections Approps Sub.; House Corrections Approps Sub.”, policy:“Senate Judiciary & Public Safety; House Judiciary”, chair:“Sen. Jeremy Moss (D)”, notes:“Rare standalone corrections subcommittees in both chambers.” },
-{ state:“OH”, budget:1.9,  agency:“ODRC”, appro:“Senate Finance; House Finance — Criminal Justice Sub.”, policy:“Senate Judiciary; House Criminal Justice”, chair:“Senate Finance: Sen. Matt Dolan (R)”, notes:“Biennial budget (HB 96 for FY26-27).” },
-{ state:“IL”, budget:1.9,  agency:“IDOC”, appro:“Senate Appropriations II; House Appropriations — Criminal Justice”, policy:“Senate Criminal Law; House Judiciary — Criminal”, chair:“Senate Approps II: Majority Democrat”, notes:“Federal court mandate (Rasho v. Jeffreys) drives mental health spending.” },
-{ state:“NC”, budget:1.5,  agency:“NCDAC”, appro:“Senate & House Appropriations on Justice & Public Safety”, policy:“Senate Judiciary; House Judiciary I & II”, chair:“Sen. Danny Britt (R)”, notes:“New standalone agency 2022. ~25% officer vacancy rate.” },
-{ state:“MA”, budget:1.5,  agency:“MADOC”, appro:“Senate Ways & Means; House Ways & Means”, policy:“Senate Judiciary; House Judiciary”, chair:“Sen. Michael Rodrigues (D)”, notes:“Highest cost/inmate ($284,976/yr). Lowest incarceration rate (118/100K).” },
-{ state:“GA”, budget:1.3,  agency:“GDC”, appro:“Senate Appropriations (Public Safety Sub.); House Appropriations”, policy:“Senate Judiciary; House Judiciary Non-Civil”, chair:“Sen. Blake Tillery (R)”, notes:“DOJ 2023 unconstitutional conditions finding. $600M+ reform underway.” },
-{ state:“WI”, budget:1.3,  agency:“WI DOC”, appro:“Joint Finance Committee (JFC)”, policy:“Senate Judiciary & Public Safety; Assembly Corrections”, chair:“JFC: Sen. Howard Marklein (R) & Rep. Mark Born (R)”, notes:“JFC is dominant budget body.” },
-{ state:“WA”, budget:1.2,  agency:“WADOC”, appro:“Senate Ways & Means; House Appropriations”, policy:“Senate Law & Justice; House Community Safety, Justice & Reentry”, chair:“Sen. June Robinson (D)”, notes:“House committee renamed 2023.” },
-{ state:“VA”, budget:1.2,  agency:“VADOC”, appro:“Senate Finance & Appropriations; House Appropriations”, policy:“Senate Courts of Justice; House Courts of Justice”, chair:“Sen. Janet Howell (D)”, notes:“Biennial budget with annual amendments.” },
-{ state:“NJ”, budget:1.2,  agency:“NJDOC”, appro:“Senate Budget & Appropriations; Assembly Budget”, policy:“Senate Law & Public Safety; Assembly Law & Public Safety”, chair:“Sen. Paul Sarlo (D)”, notes:“Prison population down 45%+ since 2000.” },
-];
+var activeTab='overview', stateSort='b', chamberFilter='ALL';
 
-const TT = ({ active, payload, label }) => {
-if (!active || !payload?.length) return null;
-return (
-<div style={{ background:”#13132a”, border:“1px solid #ef4444”, padding:“10px 14px”, borderRadius:5, fontFamily:“Georgia,serif” }}>
-<p style={{ color:”#ef4444”, fontWeight:700, margin:“0 0 4px” }}>{label}</p>
-{payload.map((p,i) => <p key={i} style={{ color:”#eee”, margin:“2px 0”, fontSize:13 }}>{p.name}: {p.value?.toLocaleString()}</p>)}
-</div>
-);
-};
+function fmt(n){if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n.toLocaleString();}
+function badge(text,color){return '<span class="badge" style="background:'+color+'20;color:'+color+';border:1px solid '+color+'60">'+text+'</span>';}
+function kpi(label,value,sub,accent){return '<div class="kpi" style="border:1px solid '+accent+'30"><div class="kpi-val" style="color:'+accent+'">'+value+'</div><div class="kpi-lbl">'+label+'</div>'+(sub?'<div class="kpi-sub">'+sub+'</div>':'')+'</div>';}
+function bar(label,val,max,color,display){var pct=Math.round(val/max*100);return '<div class="bar-row"><div class="bar-label">'+label+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'">'+display+'</div></div><div class="bar-val">'+display+'</div></div>';}
 
-const Badge = ({ text, color }) => (
-<span style={{ background:color+“20”, color, border:`1px solid ${color}60`, padding:“2px 10px”, borderRadius:4, fontSize:11, fontWeight:700, textTransform:“uppercase”, letterSpacing:1, display:“inline-block” }}>{text}</span>
-);
-
-const KPI = ({ label, value, sub, accent=”#ef4444” }) => (
-
-  <div style={{ background:"rgba(255,255,255,0.03)", border:`1px solid ${accent}30`, borderRadius:8, padding:"14px 18px", flex:"1 1 145px" }}>
-    <div style={{ fontSize:22, fontWeight:800, color:accent }}>{value}</div>
-    <div style={{ fontSize:11, fontWeight:700, color:"#ccc", textTransform:"uppercase", letterSpacing:1 }}>{label}</div>
-    {sub && <div style={{ fontSize:11, color:"#555", marginTop:2 }}>{sub}</div>}
-  </div>
-);
-
-const Card = ({ children, style }) => (
-
-  <div style={{ background:"#0e0e20", border:"1px solid #1e1e3a", borderRadius:10, padding:22, ...style }}>{children}</div>
-);
-
-const CardTitle = ({ children }) => (
-
-  <p style={{ margin:"0 0 16px", color:"#aaa", fontSize:12, textTransform:"uppercase", letterSpacing:"2.5px" }}>{children}</p>
-);
-
-function Dashboard() {
-const [tab, setTab]           = useState(“overview”);
-const [stateSort, setStateSort] = useState(“budget”);
-const [expandedCmte, setExpandedCmte] = useState(null);
-const [expandedState, setExpandedState] = useState(null);
-const [chamberFilter, setChamberFilter] = useState(“ALL”);
-
-const h = DATA.headline_stats;
-const sortedStates = […DATA.states].sort((a,b) => b[stateSort] - a[stateSort]);
-const filteredCmtes = chamberFilter === “ALL” ? FEDERAL_COMMITTEES : FEDERAL_COMMITTEES.filter(c => c.chamber === chamberFilter);
-
-return (
-<div style={{ minHeight:“100vh” }}>
-{/* HEADER */}
-<div style={{ background:“linear-gradient(135deg,#130005 0%,#1a0008 40%,#080810 100%)”, borderBottom:“2px solid #7f1d1d”, padding:“28px 32px 22px”, position:“relative”, overflow:“hidden” }}>
-<div style={{ position:“absolute”,top:0,right:0,width:“40%”,height:“100%”, backgroundImage:“repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(127,29,29,0.04) 12px,rgba(127,29,29,0.04) 24px)” }}/>
-<div style={{ fontSize:10, letterSpacing:5, color:”#7f1d1d”, textTransform:“uppercase”, marginBottom:6 }}>
-Live National Data Dashboard · Last updated: {DATA._meta.last_updated}
-</div>
-<h1 style={{ margin:“0 0 4px”, fontSize:“clamp(20px,4vw,36px)”, fontWeight:800, color:”#fff”, letterSpacing:-1, lineHeight:1.1 }}>
-U.S. Prison & Detention<br/><span style={{ color:”#ef4444” }}>Ecosystem Monitor</span>
-</h1>
-<p style={{ margin:“8px 0 18px”, color:”#555”, fontSize:13, maxWidth:620, lineHeight:1.6 }}>
-Federal · State · Local · Immigration detention · Populations, budgets & congressional oversight · Data as of {h.data_as_of}
-</p>
-<div style={{ display:“inline-flex”, alignItems:“center”, gap:8, background:”#001a0a”, border:“1px solid #14532d”, borderRadius:20, padding:“4px 14px”, marginBottom:18 }}>
-<span style={{ width:8, height:8, borderRadius:“50%”, background:”#22c55e”, display:“inline-block” }}/>
-<span style={{ color:”#4ade80”, fontSize:12 }}>Data current · Next update: {DATA._meta.next_update}</span>
-</div>
-<div className=“kpirow” style={{ display:“flex”, gap:12, flexWrap:“wrap” }}>
-<KPI label=“Total Facilities”    value={`${h.total_facilities.toLocaleString()}+`}    sub=“All types, all jurisdictions”         accent=”#ef4444”/>
-<KPI label=“People Incarcerated” value={`~${(h.total_incarcerated/1e6).toFixed(2)}M`} sub=“All facility types”                   accent=”#f97316”/>
-<KPI label=“ICE Detained Now”    value={`${h.ice_detained_current.toLocaleString()}+`} sub={h.ice_detained_note}                  accent=”#eab308”/>
-<KPI label=“System Cost”         value={`$${h.annual_system_cost_billions}B/yr`}       sub=“Federal + State + Local”              accent=”#22c55e”/>
-<KPI label=“Federal BOP”         value={`$${h.federal_bop_budget_billions}B`}           sub=“FY2025 base + OBBBA supplement”       accent=”#3b82f6”/>
-<KPI label=“ICE Budget”          value={`$${h.ice_detention_budget_billions}B/yr`}      sub=“Post-OBBBA effective rate”            accent=”#8b5cf6”/>
-</div>
-</div>
-
-```
-  {/* TABS */}
-  <div style={{ background:"#0b0b18", borderBottom:"1px solid #1e1e3a", padding:"0 32px", display:"flex", overflowX:"auto" }}>
-    {TABS.map(t => (
-      <button key={t.id} className="tab" onClick={() => setTab(t.id)} style={{
-        color: tab===t.id ? "#ef4444" : "#555",
-        borderBottom: tab===t.id ? "2px solid #ef4444" : "2px solid transparent",
-        fontWeight: tab===t.id ? 700 : 400
-      }}>{t.label}</button>
-    ))}
-  </div>
-
-  <div style={{ padding:"28px 32px", maxWidth:1400, margin:"0 auto" }}>
-
-    {/* OVERVIEW */}
-    {tab==="overview" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>System-Wide Overview</h2>
-        <p style={{ color:"#555", margin:"0 0 22px", fontSize:13 }}>The United States operates the world's largest carceral system across federal, state, local, and immigration detention authorities.</p>
-        {DATA.breaking_news.length > 0 && (
-          <Card style={{ borderLeft:"4px solid #f97316", marginBottom:24 }}>
-            <CardTitle>⚡ Recent Developments</CardTitle>
-            <div className="g3" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:14 }}>
-              {DATA.breaking_news.map(n => (
-                <div key={n.id} style={{ background:"#130a00", border:`1px solid ${n.color}30`, borderLeft:`3px solid ${n.color}`, borderRadius:6, padding:14 }}>
-                  <div style={{ fontSize:11, color:"#666", marginBottom:4 }}>{n.date}</div>
-                  <div style={{ fontWeight:700, color:"#fed7aa", fontSize:13, marginBottom:6 }}>{n.headline}</div>
-                  <div style={{ color:"#888", fontSize:12, lineHeight:1.5 }}>{n.body}</div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
-        <div className="g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, marginBottom:24 }}>
-          <Card>
-            <CardTitle>Population by Facility Type</CardTitle>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={DATA.facility_types} layout="vertical" margin={{ left:20, right:20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1a1a2e"/>
-                <XAxis type="number" tick={{ fill:"#555", fontSize:11 }} tickFormatter={v => (v/1000).toFixed(0)+"K"}/>
-                <YAxis type="category" dataKey="type" tick={{ fill:"#aaa", fontSize:10 }} width={145}/>
-                <Tooltip content={<TT/>}/>
-                <Bar dataKey="population" name="Population" radius={[0,4,4,0]}>
-                  {DATA.facility_types.map((e,i) => <Cell key={i} fill={e.color}/>)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-          <Card>
-            <CardTitle>Annual Budget — ${h.annual_system_cost_billions}B Total</CardTitle>
-            <ResponsiveContainer width="100%" height={280}>
-              <PieChart>
-                <Pie data={DATA.budget_split} cx="50%" cy="50%" outerRadius={100} dataKey="value" label={({ name, percent }) => `${(percent*100).toFixed(0)}%`} fontSize={10}>
-                  {DATA.budget_split.map((e,i) => <Cell key={i} fill={e.color}/>)}
-                </Pie>
-                <Legend formatter={v => <span style={{ color:"#aaa", fontSize:11 }}>{v}</span>}/>
-                <Tooltip formatter={v => `$${v}B`} contentStyle={{ background:"#13132a", border:"1px solid #ef4444", fontFamily:"Georgia" }}/>
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-        <Card>
-          <CardTitle>Facility Count by Type</CardTitle>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={DATA.facility_types} margin={{ left:10, right:20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a2e"/>
-              <XAxis dataKey="type" tick={{ fill:"#888", fontSize:10 }}/>
-              <YAxis tick={{ fill:"#555", fontSize:11 }}/>
-              <Tooltip content={<TT/>}/>
-              <Bar dataKey="count" name="Facilities" radius={[4,4,0,0]}>
-                {DATA.facility_types.map((e,i) => <Cell key={i} fill={e.color}/>)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-      </div>
-    )}
-
-    {/* FACILITY TYPES */}
-    {tab==="types" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>Facility Type Deep Dive</h2>
-        <p style={{ color:"#555", margin:"0 0 22px", fontSize:13 }}>Each type is administered by different agencies, funded through different appropriation streams.</p>
-        {[
-          { type:"State Prisons",         color:"#b91c1c", op:"State Departments of Corrections (50 states)",  app:"State General Fund; each state legislature appropriates independently",                                         note:"MS highest rate (847/100K); MA lowest (118/100K). Houses people convicted of felonies >1 year." },
-          { type:"Federal Prisons (BOP)", color:"#16a34a", op:"Federal Bureau of Prisons (DOJ)",                app:"CJS Appropriations Act — Federal Prison System S&E (acct 15-1060). +$5B OBBBA supplement.",                        note:"98 facilities from minimum camps to ADX Florence supermax. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections." },
-          { type:"Local Jails",           color:"#dc2626", op:"County Sheriffs / City Governments",             app:"Local property taxes, county general funds. Federal reimbursement for federal detainees.",                         note:"69% of jail population pretrial/unconvicted. 7.9M annual admissions." },
-          { type:"Immigration (ICE)",     color:"#d97706", op:"U.S. ICE / DHS",                                 app:"DHS Appropriations Act (base) + OBBBA $45B for new facilities + $29.9B operations.",                              note:"Record 68K+ detained Dec 2025. ~90% in private facilities. OBBBA targets 100K bed capacity." },
-          { type:"Juvenile Facilities",   color:"#ea580c", op:"State juvenile justice agencies + private",      app:"State juvenile justice appropriations + DOJ OJJDP block grants (JJDPA, Title V)",                                note:"57% in private facilities. Juvenile detention down 75% from 2000 peak." },
-          { type:"Indian Country Jails",  color:"#0891b2", op:"Tribal governments + BIA (DOI)",                 app:"Interior Dept. Appropriations — Law Enforcement. Tribal Law and Order Act grants.",                               note:"80 facilities in 23 states. Chronic underfunding per GAO." },
-        ].map(f => {
-          const ft = DATA.facility_types.find(d => d.type === f.type) || {};
-          return (
-            <div key={f.type} style={{ background:"#0e0e20", border:`1px solid ${f.color}30`, borderLeft:`4px solid ${f.color}`, borderRadius:8, padding:20, marginBottom:14 }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:10, marginBottom:14 }}>
-                <div>
-                  <h3 style={{ margin:0, color:f.color, fontSize:17 }}>{f.type}</h3>
-                  <p style={{ color:"#777", margin:"3px 0 0", fontSize:13 }}>{f.op}</p>
-                </div>
-                <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-                  {[{l:"Facilities",v:(ft.count||0).toLocaleString()},{l:"Population",v:(ft.population||0).toLocaleString()}].map(m => (
-                    <div key={m.l} style={{ textAlign:"center", background:"#08080f", padding:"8px 14px", borderRadius:6, border:"1px solid #1e1e3a" }}>
-                      <div style={{ fontSize:14, fontWeight:700, color:"#fff" }}>{m.v}</div>
-                      <div style={{ fontSize:10, color:"#555", textTransform:"uppercase", letterSpacing:1 }}>{m.l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
-                <div>
-                  <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:3 }}>Appropriation Source</div>
-                  <div style={{ fontSize:12, color:"#bbb", lineHeight:1.5 }}>{f.app}</div>
-                </div>
-                <div>
-                  <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:3 }}>Key Notes</div>
-                  <div style={{ fontSize:12, color:"#bbb", lineHeight:1.5 }}>{f.note}</div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    )}
-
-    {/* BY STATE */}
-    {tab==="states" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>State-by-State Data</h2>
-        <p style={{ color:"#555", margin:"0 0 18px", fontSize:13 }}>State prison populations under state jurisdiction. Budgets = corrections appropriations. Rate = per 100K adults.</p>
-        <div style={{ marginBottom:18 }}>
-          <span style={{ color:"#555", fontSize:12, marginRight:8 }}>Sort by:</span>
-          {["population","budget","facilities","rate"].map(s => (
-            <button key={s} className={"sort-btn"+(stateSort===s?" on":"")} onClick={() => setStateSort(s)}>
-              {s==="rate"?"Inc. Rate":s.charAt(0).toUpperCase()+s.slice(1)}
-            </button>
-          ))}
-        </div>
-        <Card style={{ marginBottom:24 }}>
-          <CardTitle>All States — {stateSort==="budget"?"Corrections Budget ($B)":stateSort==="rate"?"Incarceration Rate/100K":stateSort==="population"?"Prison Population":"Facility Count"}</CardTitle>
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={sortedStates.slice(0,30)} margin={{ left:10, right:20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a2e"/>
-              <XAxis dataKey="state" tick={{ fill:"#aaa", fontSize:11 }}/>
-              <YAxis tick={{ fill:"#555", fontSize:11 }} tickFormatter={v => stateSort==="budget"?`$${v}B`:v>1000?`${(v/1000).toFixed(0)}K`:v}/>
-              <Tooltip content={<TT/>}/>
-              <Bar dataKey={stateSort} name={stateSort==="budget"?"Budget ($B)":"Value"} fill="#ef4444" radius={[3,3,0,0]}/>
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-        <div style={{ overflowX:"auto" }}>
-          <table>
-            <thead><tr>
-              {["State","Prisons","Prison Pop.","Budget","Rate/100K"].map(h=><th key={h}>{h}</th>)}
-            </tr></thead>
-            <tbody>
-              {sortedStates.map(s => (
-                <tr key={s.state}>
-                  <td style={{ fontWeight:700, color:"#ef4444" }}>{s.state}</td>
-                  <td style={{ color:"#ccc" }}>{s.facilities}</td>
-                  <td style={{ color:"#ccc" }}>{s.population.toLocaleString()}</td>
-                  <td style={{ color:"#fbbf24" }}>${s.budget}B</td>
-                  <td style={{ color:s.rate>700?"#ef4444":s.rate<200?"#22c55e":"#ccc", fontWeight:s.rate>700||s.rate<200?700:400 }}>{s.rate}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    )}
-
-    {/* FEDERAL BUDGET */}
-    {tab==="federal" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>Federal Budget & Appropriations</h2>
-        <p style={{ color:"#555", margin:"0 0 22px", fontSize:13 }}>The OBBBA (P.L.119-21, July 2025) added $170B for immigration enforcement — dwarfing all prior federal corrections spending.</p>
-        <div className="g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, marginBottom:24 }}>
-          <Card>
-            <CardTitle>Federal Agency Spending (FY2025 Effective, $B)</CardTitle>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={[
-                {name:"ICE (OBBBA+base)",val:14.4},{name:"BOP (base+supp)",val:9.1},
-                {name:"CBP Enforcement",val:8.0},{name:"USMS Detention",val:1.5},
-                {name:"Military/Other",val:0.6},{name:"BIA/Tribal",val:0.14},
-              ]} layout="vertical" margin={{ left:20, right:30 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1a1a2e"/>
-                <XAxis type="number" tick={{ fill:"#555", fontSize:11 }} tickFormatter={v=>`$${v}B`}/>
-                <YAxis type="category" dataKey="name" tick={{ fill:"#aaa", fontSize:10 }} width={165}/>
-                <Tooltip content={<TT/>}/>
-                <Bar dataKey="val" name="Budget ($B)" radius={[0,4,4,0]}>
-                  {["#d97706","#16a34a","#ea580c","#8b5cf6","#4f46e5","#0891b2"].map((c,i)=><Cell key={i} fill={c}/>)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-          <Card>
-            <CardTitle>System Budget Split — ${h.annual_system_cost_billions}B</CardTitle>
-            <ResponsiveContainer width="100%" height={280}>
-              <PieChart>
-                <Pie data={DATA.budget_split} cx="50%" cy="50%" outerRadius={100} dataKey="value" label={({ percent }) => `${(percent*100).toFixed(0)}%`} fontSize={10}>
-                  {DATA.budget_split.map((e,i) => <Cell key={i} fill={e.color}/>)}
-                </Pie>
-                <Legend formatter={v=><span style={{ color:"#aaa", fontSize:11 }}>{v}</span>}/>
-                <Tooltip formatter={v=>`$${v}B`} contentStyle={{ background:"#13132a", border:"1px solid #ef4444" }}/>
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-        {[
-          { title:"Bureau of Prisons — $9.1B base + $5B OBBBA", color:"#16a34a", bill:"Commerce, Justice, Science (CJS) Appropriations Act", acct:"Federal Prison System S&E — Account 15-1060", recent:"OBBBA §100056: $5B over FY2025–2029. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections.", use:"Personnel (35K+ staff), healthcare, programming, food, utilities" },
-          { title:"ICE Detention — $14.4B/yr effective", color:"#d97706", bill:"DHS Appropriations Act (base) + OBBBA reconciliation", acct:"DHS ERO — Custody Operations PPA", recent:"OBBBA: $45B for new detention centers + $29.9B operations over 4 yrs. 90%+ in private facilities.", use:"GEO Group, CoreCivic contracts; county jail agreements; transportation" },
-          { title:"U.S. Marshals Service — $1.5B", color:"#8b5cf6", bill:"CJS Appropriations Act", acct:"USMS S&E + Federal Prisoner Detention Trustee Account", recent:"No OBBBA supplement. Holds ~56K pretrial federal detainees. No USMS-operated facilities.", use:"Per-diem reimbursements to BOP, local jails, and private facilities" },
-          { title:"BIA Indian Country Jails — ~$140M", color:"#0891b2", bill:"Interior, Environment & Related Agencies Appropriations Act", acct:"BIA Law Enforcement — Indian Country Detention", recent:"Tribal Law and Order Act grants. Chronic underfunding per GAO.", use:"80 tribal jails; grants to tribes; training and equipment" },
-        ].map(f => (
-          <div key={f.title} style={{ background:"#0e0e20", borderLeft:`4px solid ${f.color}`, border:`1px solid ${f.color}20`, borderRadius:8, padding:20, marginBottom:14 }}>
-            <h3 style={{ margin:"0 0 14px", color:f.color, fontSize:15 }}>{f.title}</h3>
-            <div className="g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
-              {[{l:"Bill",v:f.bill},{l:"Account",v:f.acct},{l:"Recent Legislation",v:f.recent},{l:"Primary Use",v:f.use}].map(m=>(
-                <div key={m.l}>
-                  <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:3 }}>{m.l}</div>
-                  <div style={{ fontSize:12, color:"#bbb", lineHeight:1.5 }}>{m.v}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-
-    {/* FEDERAL COMMITTEES */}
-    {tab==="fcmte" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>Federal Congressional Oversight Committees</h2>
-        <p style={{ color:"#555", margin:"0 0 18px", fontSize:13 }}>Two tracks: <strong style={{ color:"#ccc" }}>Appropriations</strong> (who fund) and <strong style={{ color:"#ccc" }}>Judiciary/Homeland Security</strong> (who oversee policy).</p>
-        <div style={{ marginBottom:20 }}>
-          {["ALL","SENATE","HOUSE"].map(f => (
-            <button key={f} className={"filter-btn"+(chamberFilter===f?" on":"")} onClick={() => setChamberFilter(f)}>
-              {f==="ALL"?"All Chambers":f}
-            </button>
-          ))}
-        </div>
-        {filteredCmtes.map((c,i) => (
-          <div key={i} className="cmte-card" onClick={() => setExpandedCmte(expandedCmte===i?null:i)}>
-            <div style={{ padding:"16px 20px", display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:12 }}>
-              <div style={{ flex:1 }}>
-                <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-                  <Badge text={c.chamber} color={c.chamber==="SENATE"?"#b91c1c":"#1d4ed8"}/>
-                  <Badge text={c.role}     color={c.role==="Appropriator"?"#d97706":"#7c3aed"}/>
-                </div>
-                <h3 style={{ margin:0, color:"#fff", fontSize:15 }}>{c.committee}</h3>
-                <div style={{ color:"#ef4444", fontSize:13, marginTop:3 }}>↳ {c.subcommittee}</div>
-              </div>
-              <div style={{ textAlign:"right", minWidth:180 }}>
-                <div style={{ fontSize:11, color:"#444", textTransform:"uppercase" }}>Chair</div>
-                <div style={{ color:"#ccc", fontSize:13 }}>{c.chair}</div>
-                {c.ranking && <><div style={{ fontSize:11, color:"#444", marginTop:4, textTransform:"uppercase" }}>Ranking</div><div style={{ color:"#ccc", fontSize:13 }}>{c.ranking}</div></>}
-              </div>
-            </div>
-            {expandedCmte===i && (
-              <div className="expand">
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-                  <div>
-                    <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:4 }}>Jurisdiction</div>
-                    <div>{c.jurisdiction}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:4 }}>Website</div>
-                    <div style={{ color:"#3b82f6" }}>{c.url}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div style={{ background:"#07070e", padding:"5px 20px", borderTop:"1px solid #1e1e3a", fontSize:11, color:"#333" }}>
-              Click to {expandedCmte===i?"collapse ▴":"expand ▾"}
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-
-    {/* STATE COMMITTEES */}
-    {tab==="scmte" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>State Committees — Top 15 by Budget</h2>
-        <p style={{ color:"#555", margin:"0 0 22px", fontSize:13 }}>These 15 states account for ~74% of all state corrections spending.</p>
-        <Card style={{ marginBottom:24 }}>
-          <CardTitle>Top 15 State Corrections Budgets</CardTitle>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={TOP15} margin={{ left:10, right:20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a2e"/>
-              <XAxis dataKey="state" tick={{ fill:"#aaa", fontSize:11 }}/>
-              <YAxis tick={{ fill:"#555", fontSize:11 }} tickFormatter={v=>`$${v}B`}/>
-              <Tooltip content={<TT/>}/>
-              <Bar dataKey="budget" name="Budget ($B)" fill="#ef4444" radius={[3,3,0,0]}/>
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-        {TOP15.map((s,i) => (
-          <div key={s.state} className="cmte-card" onClick={() => setExpandedState(expandedState===s.state?null:s.state)}>
-            <div style={{ padding:"14px 20px", display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
-              <div style={{ flex:1 }}>
-                <div style={{ display:"flex", gap:10, alignItems:"center", marginBottom:6, flexWrap:"wrap" }}>
-                  <span style={{ fontSize:22, fontWeight:800, color:"#ef4444" }}>#{i+1} {s.state}</span>
-                  <Badge text={`$${s.budget}B`} color="#d97706"/>
-                  <span style={{ color:"#555", fontSize:12 }}>{s.agency}</span>
-                </div>
-                <div style={{ fontSize:12, color:"#777" }}><strong style={{ color:"#ef4444" }}>Appropriations: </strong>{s.appro}</div>
-              </div>
-              <div style={{ fontSize:11, color:"#333" }}>Click to {expandedState===s.state?"collapse ▴":"expand ▾"}</div>
-            </div>
-            {expandedState===s.state && (
-              <div className="expand">
-                <div className="g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-                  <div>
-                    <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:4 }}>Policy / Oversight Committees</div>
-                    <div style={{ marginBottom:12 }}>{s.policy}</div>
-                    <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:4 }}>2025 Leadership</div>
-                    <div>{s.chair}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize:10, color:"#ef4444", textTransform:"uppercase", letterSpacing:1.5, marginBottom:4 }}>Key Context</div>
-                    <div>{s.notes}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    )}
-
-    {/* SOURCES */}
-    {tab==="sources" && (
-      <div>
-        <h2 style={{ color:"#ef4444", margin:"0 0 6px", fontSize:20 }}>Data Sources & Monthly Update Guide</h2>
-        <p style={{ color:"#555", margin:"0 0 22px", fontSize:13 }}>To update data: go to your GitHub repository, click on this HTML file, click the pencil icon, find the DATA section at the top, edit the numbers, and click Commit. Your site updates within 2 minutes.</p>
-        <Card style={{ borderLeft:"4px solid #22c55e", marginBottom:24 }}>
-          <CardTitle style={{ color:"#4ade80" }}>📝 How to Update Data Monthly</CardTitle>
-          <div className="g3" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:14 }}>
-            {[
-              { n:"1. Go to GitHub", b:"Open github.com → your prison-dashboard repo → click on index.html" },
-              { n:"2. Click the pencil icon", b:"Click Edit. Find the DATA = { section at the very top of the file. Change any numbers you want to update." },
-              { n:"3. Commit changes", b:"Scroll down and click 'Commit changes'. Your live URL updates automatically within 2 minutes." },
-            ].map(s => (
-              <div key={s.n} style={{ background:"#001a0a", border:"1px solid #14532d", borderRadius:6, padding:14 }}>
-                <div style={{ fontWeight:700, color:"#4ade80", fontSize:13, marginBottom:6 }}>{s.n}</div>
-                <div style={{ color:"#666", fontSize:12, lineHeight:1.5 }}>{s.b}</div>
-              </div>
-            ))}
-          </div>
-        </Card>
-        {[
-          { name:"BOP Population Stats",    url:"bop.gov/about/statistics/population_statistics.jsp", freq:"Weekly",    what:"Total Federal Inmates count" },
-          { name:"ICE Detention Mgmt",      url:"ice.gov/detain/detention-management",                freq:"Monthly",   what:"Total currently detained" },
-          { name:"BJS Prisoners Report",    url:"bjs.ojp.gov",                                        freq:"Annual",    what:"State prison populations by state" },
-          { name:"Vera Institute",           url:"vera.org/publications",                              freq:"Quarterly", what:"Fastest state-level tracking" },
-          { name:"USAFacts State Budgets",  url:"usafacts.org",                                       freq:"Annual",    what:"State corrections spending" },
-          { name:"Senate Appropriations",   url:"appropriations.senate.gov",                          freq:"As needed", what:"New bill markups and passed bills" },
-          { name:"House Judiciary",          url:"judiciary.house.gov",                                freq:"As needed", what:"BOP/ICE oversight hearings" },
-        ].map(s => (
-          <div key={s.name} style={{ background:"#0e0e20", border:"1px solid #1e1e3a", borderRadius:8, padding:16, marginBottom:10, display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:10 }}>
-            <div>
-              <div style={{ fontWeight:700, color:"#fff", fontSize:14 }}>{s.name}</div>
-              <div style={{ color:"#3b82f6", fontSize:12, marginTop:2 }}>{s.url}</div>
-              <div style={{ color:"#666", fontSize:12, marginTop:2 }}>{s.what}</div>
-            </div>
-            <Badge text={s.freq} color="#7c3aed"/>
-          </div>
-        ))}
-      </div>
-    )}
-
-    <div style={{ marginTop:40, borderTop:"1px solid #1e1e3a", paddingTop:18, color:"#333", fontSize:11, lineHeight:1.7 }}>
-      Data from BJS, BOP, ICE, PPI, USAFacts, Urban Institute, OBBBA (P.L.119-21). Congressional committees: 119th Congress. All figures approximate. Last updated: {DATA._meta.last_updated}
-    </div>
-  </div>
-</div>
-```
-
-);
+function renderOverview(){
+  var s=DATA.stats, maxPop=Math.max.apply(null,DATA.facility_types.map(function(f){return f.pop;}));
+  var total=DATA.budget.reduce(function(a,b){return a+b.value;},0);
+  return '<h2 class="section-title">System-Wide Overview</h2><p class="section-sub">The United States operates the world\'s largest carceral system across federal, state, local, and immigration detention authorities.</p>'
+  +'<div class="card" style="border-left:4px solid #f97316"><div class="card-title">Recent Developments</div><div class="grid-3">'
+  +DATA.news.map(function(n){return '<div class="news-card" style="border-left-color:'+n.color+'"><div class="news-date">'+n.date+'</div><div class="news-head">'+n.headline+'</div><div class="news-body">'+n.body+'</div></div>';}).join('')
+  +'</div></div><div class="grid-2">'
+  +'<div class="card"><div class="card-title">Population by Facility Type</div><div class="bar-chart">'+DATA.facility_types.map(function(f){return bar(f.type,f.pop,maxPop,f.color,fmt(f.pop));}).join('')+'</div></div>'
+  +'<div class="card"><div class="card-title">Annual Budget &mdash; $'+total.toFixed(1)+'B Total</div><div class="bar-chart">'+DATA.budget.map(function(b){var pct=(b.value/total*100).toFixed(1);return bar(b.name,b.value,total,b.color,'$'+b.value+'B');}).join('')+'</div></div>'
+  +'</div><div class="card"><div class="card-title">Facility Count by Type</div><div class="bar-chart">'+DATA.facility_types.map(function(f){return bar(f.type,f.count,Math.max.apply(null,DATA.facility_types.map(function(x){return x.count;})),f.color,f.count.toLocaleString());}).join('')+'</div></div>';
 }
 
+function renderTypes(){
+  var details=[
+    {type:"State Prisons",color:"#b91c1c",op:"State Departments of Corrections (50 states)",app:"State General Fund; each state legislature appropriates independently.",note:"MS highest rate (847/100K); MA lowest (118/100K). Houses felony sentences >1 year."},
+    {type:"Federal Prisons (BOP)",color:"#16a34a",op:"Federal Bureau of Prisons (DOJ)",app:"CJS Appropriations Act &mdash; Federal Prison System S&amp;E (acct 15-1060). +$5B OBBBA supplement.",note:"98 facilities. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections."},
+    {type:"Local Jails",color:"#dc2626",op:"County Sheriffs / City Governments",app:"Local property taxes; county general funds. Federal reimbursement for federal detainees.",note:"69% of population is pretrial/unconvicted. 7.9M annual admissions."},
+    {type:"Immigration (ICE)",color:"#d97706",op:"U.S. ICE / DHS",app:"DHS Appropriations (base) + OBBBA $45B for new facilities + $29.9B operations.",note:"Record 68K+ detained Dec 2025. ~90% in private facilities. OBBBA targets 100K beds."},
+    {type:"Juvenile Facilities",color:"#ea580c",op:"State juvenile justice agencies + private operators",app:"State juvenile justice appropriations + DOJ OJJDP block grants.",note:"57% in private facilities. Detention down 75% from 2000 peak."},
+    {type:"Indian Country Jails",color:"#0891b2",op:"Tribal governments + Bureau of Indian Affairs",app:"Interior Dept. Appropriations &mdash; Law Enforcement. Tribal Law and Order Act grants.",note:"80 facilities in 23 states. Chronic underfunding documented by GAO."}
+  ];
+  return '<h2 class="section-title">Facility Type Deep Dive</h2><p class="section-sub">Each type is funded through different appropriation streams and governed under different legal frameworks.</p>'
+  +details.map(function(f){
+    var ft=DATA.facility_types.find(function(d){return d.type===f.type;})||{};
+    return '<div class="fac-card" style="background:#0e0e20;border-color:'+f.color+'30;border-left:4px solid '+f.color+'">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">'
+    +'<div><h3 style="color:'+f.color+';font-size:17px;margin-bottom:3px">'+f.type+'</h3><div style="color:#777;font-size:13px">'+f.op+'</div></div>'
+    +'<div style="display:flex;gap:10px">'
+    +'<div style="text-align:center;background:#08080f;padding:8px 14px;border-radius:6px;border:1px solid #1e1e3a"><div style="font-size:14px;font-weight:700;color:#fff">'+(ft.count||0).toLocaleString()+'</div><div style="font-size:10px;color:#555;text-transform:uppercase">Facilities</div></div>'
+    +'<div style="text-align:center;background:#08080f;padding:8px 14px;border-radius:6px;border:1px solid #1e1e3a"><div style="font-size:14px;font-weight:700;color:#fff">'+fmt(ft.pop||0)+'</div><div style="font-size:10px;color:#555;text-transform:uppercase">Population</div></div>'
+    +'</div></div>'
+    +'<div class="grid-2" style="gap:12px">'
+    +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Appropriation Source</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+f.app+'</div></div>'
+    +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Key Notes</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+f.note+'</div></div>'
+    +'</div></div>';
+  }).join('');
 }
 
-ReactDOM.createRoot(document.getElementById(‘root’)).render(<Dashboard/>);
+function renderStates(){
+  var sorted=DATA.states.slice().sort(function(a,b){return b[stateSort]-a[stateSort];});
+  var maxVal=Math.max.apply(null,sorted.map(function(s){return s[stateSort];}));
+  var labels={p:'Prison Population',b:'Corrections Budget ($B)',f:'Facility Count',r:'Rate/100K'};
+  return '<h2 class="section-title">State-by-State Data</h2><p class="section-sub">State prison populations. Budgets = corrections appropriations. Rate = per 100K adults.</p>'
+  +'<div style="margin-bottom:18px"><span style="color:#555;font-size:12px;margin-right:8px">Sort by:</span>'
+  +['p','b','f','r'].map(function(k){return '<button class="sort-btn'+(stateSort===k?' on':'')+'" onclick="stateSort=\''+k+'\';renderTab(\'states\')">'+(k==='p'?'Population':k==='b'?'Budget':k==='f'?'Facilities':'Inc. Rate')+'</button>';}).join('')+'</div>'
+  +'<div class="card" style="margin-bottom:24px"><div class="card-title">All States &mdash; '+labels[stateSort]+'</div><div class="bar-chart">'
+  +sorted.slice(0,25).map(function(s){
+    var val=s[stateSort];
+    var display=stateSort==='b'?'$'+val+'B':stateSort==='r'?val:val.toLocaleString();
+    var color=stateSort==='r'?(val>700?'#ef4444':val<200?'#22c55e':'#3b82f6'):'#ef4444';
+    return bar(s.s,val,maxVal,color,display);
+  }).join('')+'</div></div>'
+  +'<div class="tbl-wrap"><table><thead><tr><th>State</th><th>Prisons</th><th>Prison Pop.</th><th>Budget</th><th>Rate/100K</th></tr></thead><tbody>'
+  +sorted.map(function(s){return '<tr><td style="font-weight:700;color:#ef4444">'+s.s+'</td><td>'+s.f+'</td><td>'+s.p.toLocaleString()+'</td><td style="color:#fbbf24">$'+s.b+'B</td><td style="color:'+(s.r>700?'#ef4444':s.r<200?'#22c55e':'#ccc')+';font-weight:'+(s.r>700||s.r<200?700:400)+'">'+s.r+'</td></tr>';}).join('')
+  +'</tbody></table></div>';
+}
+
+function renderFederal(){
+  var agencies=[
+    {title:"Bureau of Prisons &mdash; $9.1B base + $5B OBBBA",color:"#16a34a",bill:"Commerce, Justice, Science (CJS) Appropriations Act",acct:"Federal Prison System S&amp;E &mdash; Account 15-1060",recent:"OBBBA: $5B over FY2025-2029. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections.",use:"Personnel (35K+ staff), healthcare, programming, food, utilities"},
+    {title:"ICE Detention &mdash; $14.4B/yr effective",color:"#d97706",bill:"DHS Appropriations Act (base) + OBBBA reconciliation",acct:"DHS ERO &mdash; Custody Operations PPA",recent:"OBBBA: $45B for new facilities + $29.9B operations over 4 yrs. ICE now largest federal law enforcement agency by budget.",use:"GEO Group, CoreCivic contracts; county jail agreements; transportation"},
+    {title:"U.S. Marshals Service &mdash; $1.5B",color:"#8b5cf6",bill:"CJS Appropriations Act",acct:"USMS S&amp;E + Federal Prisoner Detention Trustee Account",recent:"No OBBBA supplement. Holds ~56K pretrial federal detainees. No USMS-operated facilities.",use:"Per-diem reimbursements to BOP, local jails, and private facilities"},
+    {title:"BIA Indian Country Jails &mdash; ~$140M",color:"#0891b2",bill:"Interior, Environment &amp; Related Agencies Appropriations Act",acct:"BIA Law Enforcement &mdash; Indian Country Detention",recent:"Tribal Law and Order Act grants. Chronic underfunding per GAO.",use:"80 tribal jails; grants to tribes; training and equipment"}
+  ];
+  var fedBars=[{name:"ICE (OBBBA+base)",val:14.4,color:"#d97706"},{name:"BOP (base+supp)",val:9.1,color:"#16a34a"},{name:"CBP Enforcement",val:8.0,color:"#ea580c"},{name:"USMS Detention",val:1.5,color:"#8b5cf6"},{name:"Military/Other",val:0.6,color:"#4f46e5"},{name:"BIA/Tribal",val:0.14,color:"#0891b2"}];
+  return '<h2 class="section-title">Federal Budget &amp; Appropriations</h2><p class="section-sub">The OBBBA (P.L.119-21, July 2025) transformed federal carceral spending. The $45B ICE detention appropriation alone exceeds the entire BOP annual budget.</p>'
+  +'<div class="card" style="margin-bottom:24px"><div class="card-title">Federal Agency Spending (FY2025 Effective)</div><div class="bar-chart">'+fedBars.map(function(f){return bar(f.name,f.val,15,f.color,'$'+f.val+'B');}).join('')+'</div></div>'
+  +agencies.map(function(a){return '<div style="background:#0e0e20;border-left:4px solid '+a.color+';border:1px solid '+a.color+'20;border-radius:8px;padding:20px;margin-bottom:14px"><h3 style="color:'+a.color+';font-size:15px;margin-bottom:14px">'+a.title+'</h3><div class="grid-2" style="gap:12px">'
+  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Appropriations Bill</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.bill+'</div></div>'
+  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Budget Account</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.acct+'</div></div>'
+  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Recent Legislation</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.recent+'</div></div>'
+  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Primary Use</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.use+'</div></div>'
+  +'</div></div>';}).join('');
+}
+
+function renderFCmte(){
+  var filtered=chamberFilter==='ALL'?COMMITTEES:COMMITTEES.filter(function(c){return c.chamber===chamberFilter;});
+  return '<h2 class="section-title">Federal Congressional Oversight Committees</h2><p class="section-sub">Two tracks: Appropriations (who fund) and Judiciary/Homeland Security (who oversee policy).</p>'
+  +'<div style="margin-bottom:20px">'+['ALL','SENATE','HOUSE'].map(function(f){return '<button class="filter-btn'+(chamberFilter===f?' on':'')+'" onclick="chamberFilter=\''+f+'\';renderTab(\'fcmte\')">'+(f==='ALL'?'All Chambers':f)+'</button>';}).join('')+'</div>'
+  +filtered.map(function(c,i){
+    return '<div class="cmte-card" onclick="tog(\'cm'+i+'\')">'
+    +'<div class="cmte-header"><div style="flex:1">'+badge(c.chamber,c.chamber==='SENATE'?'#b91c1c':'#1d4ed8')+badge(c.role,c.role==='Appropriator'?'#d97706':'#7c3aed')+'<br><div style="color:#fff;font-size:15px;font-weight:700;margin-top:6px">'+c.name+'</div></div>'
+    +'<div style="text-align:right;min-width:160px"><div style="font-size:11px;color:#444;text-transform:uppercase">Chair</div><div style="color:#ccc;font-size:13px">'+c.chair+'</div>'+(c.ranking?'<div style="font-size:11px;color:#444;text-transform:uppercase;margin-top:4px">Ranking</div><div style="color:#ccc;font-size:13px">'+c.ranking+'</div>':'')+'</div></div>'
+    +'<div class="cmte-expand" id="cm'+i+'"><div class="grid-2" style="gap:16px"><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Jurisdiction</div><div>'+c.detail+'</div></div><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Website</div><div style="color:#3b82f6">'+c.url+'</div></div></div></div>'
+    +'<div style="background:#07070e;padding:5px 20px;border-top:1px solid #1e1e3a;font-size:11px;color:#333">Click to expand</div></div>';
+  }).join('');
+}
+
+function renderSCmte(){
+  var maxB=Math.max.apply(null,TOP15.map(function(s){return s.b;}));
+  return '<h2 class="section-title">State Committees &mdash; Top 15 by Corrections Budget</h2><p class="section-sub">These 15 states account for ~74% of all state corrections spending.</p>'
+  +'<div class="card" style="margin-bottom:24px"><div class="card-title">Top 15 State Corrections Budgets</div><div class="bar-chart">'+TOP15.map(function(s){return bar(s.s,s.b,maxB,'#ef4444','$'+s.b+'B');}).join('')+'</div></div>'
+  +TOP15.map(function(s,i){
+    return '<div class="cmte-card" onclick="tog(\'st'+i+'\')">'
+    +'<div class="cmte-header"><div style="flex:1"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap"><span style="font-size:22px;font-weight:800;color:#ef4444">#'+(i+1)+' '+s.s+'</span>'+badge('$'+s.b+'B','#d97706')+'<span style="color:#555;font-size:12px">'+s.agency+'</span></div><div style="font-size:12px;color:#777"><strong style="color:#ef4444">Appropriations: </strong>'+s.appro+'</div></div><div style="font-size:11px;color:#333">Click to expand</div></div>'
+    +'<div class="cmte-expand" id="st'+i+'"><div class="grid-2" style="gap:16px"><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Policy / Oversight Committees</div><div style="margin-bottom:12px">'+s.policy+'</div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">2025 Leadership</div><div>'+s.chair+'</div></div><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Key Context</div><div>'+s.notes+'</div></div></div></div>'
+    +'</div>';
+  }).join('');
+}
+
+function renderSources(){
+  return '<h2 class="section-title">Data Sources &amp; Monthly Update Guide</h2><p class="section-sub">To update data: go to your GitHub repo, click index.html, click the pencil icon, find the DATA section at the top, edit the numbers, and commit. Your site updates within 2 minutes.</p>'
+  +'<div class="card" style="border-left:4px solid #22c55e;margin-bottom:24px"><div class="card-title" style="color:#4ade80">How to Update Data Monthly</div><div class="grid-3"><div class="how-card"><h4>1. Go to GitHub</h4><p>Open github.com, go to your prison-dashboard repo, click index.html</p></div><div class="how-card"><h4>2. Click the pencil icon</h4><p>Find the DATA section at the top. Change any numbers or news items you want.</p></div><div class="how-card"><h4>3. Commit changes</h4><p>Scroll down and click Commit changes. Your live URL updates within 2 minutes.</p></div></div></div>'
+  +[
+    {name:"BOP Population Stats",url:"bop.gov/about/statistics/population_statistics.jsp",freq:"Weekly",what:"Total Federal Inmates count"},
+    {name:"ICE Detention Mgmt",url:"ice.gov/detain/detention-management",freq:"Monthly",what:"Total currently detained + facility spreadsheet"},
+    {name:"BJS Prisoners Report",url:"bjs.ojp.gov",freq:"Annual",what:"State prison populations (released each fall)"},
+    {name:"Vera Institute",url:"vera.org/publications",freq:"Quarterly",what:"Fastest state-level population tracking"},
+    {name:"USAFacts State Budgets",url:"usafacts.org",freq:"Annual",what:"State corrections spending"},
+    {name:"Senate Appropriations",url:"appropriations.senate.gov",freq:"As needed",what:"New bill markups and passed appropriations"},
+    {name:"House Judiciary",url:"judiciary.house.gov",freq:"As needed",what:"BOP and ICE oversight hearing news"}
+  ].map(function(s){return '<div class="source-row"><div><div style="font-weight:700;color:#fff;font-size:14px">'+s.name+'</div><div style="color:#3b82f6;font-size:12px;margin-top:2px">'+s.url+'</div><div style="color:#666;font-size:12px;margin-top:2px">'+s.what+'</div></div>'+badge(s.freq,'#7c3aed')+'</div>';}).join('');
+}
+
+function tog(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
+
+var TABS=[{id:'overview',label:'Overview'},{id:'types',label:'Facility Types'},{id:'states',label:'By State'},{id:'federal',label:'Federal Budget'},{id:'fcmte',label:'Federal Committees'},{id:'scmte',label:'State Committees'},{id:'sources',label:'Sources'}];
+
+function renderTab(tabId){
+  activeTab=tabId;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tabId);});
+  var renderers={overview:renderOverview,types:renderTypes,states:renderStates,federal:renderFederal,fcmte:renderFCmte,scmte:renderSCmte,sources:renderSources};
+  var fn=renderers[tabId]||renderOverview;
+  document.getElementById('tab-content').innerHTML=fn()+'<div class="footer">Data from BJS, BOP, ICE, PPI, USAFacts, OBBBA (P.L.119-21, July 2025). Congressional committees: 119th Congress. All figures approximate. Last updated: '+DATA.last_updated+'</div>';
+}
+
+function init(){
+  var s=DATA.stats;
+  document.getElementById('app').innerHTML=
+  '<div class="header">'
+  +'<div class="header-label">Live National Data Dashboard &middot; Last updated: '+DATA.last_updated+'</div>'
+  +'<h1>U.S. Prison &amp; Detention<br><span>Ecosystem Monitor</span></h1>'
+  +'<p>Federal &middot; State &middot; Local &middot; Immigration detention &middot; Populations, budgets &amp; congressional oversight &middot; Data as of '+DATA.data_as_of+'</p>'
+  +'<div class="status-pill"><span class="status-dot"></span><span>Data current &middot; Next update: '+DATA.next_update+'</span></div>'
+  +'<div class="kpi-row">'
+  +kpi('Total Facilities',s.total_facilities.toLocaleString()+'+','All types, all jurisdictions','#ef4444')
+  +kpi('People Incarcerated','~'+fmt(s.total_incarcerated),'All facility types','#f97316')
+  +kpi('ICE Detained Now',s.ice_detained.toLocaleString()+'+',s.ice_note,'#eab308')
+  +kpi('System Cost','$'+s.system_cost+'B/yr','Federal + State + Local','#22c55e')
+  +kpi('Federal BOP','$'+s.bop_budget+'B','FY2025 base + OBBBA supplement','#3b82f6')
+  +kpi('ICE Budget','$'+s.ice_budget+'B/yr','Post-OBBBA effective rate','#8b5cf6')
+  +'</div></div>'
+  +'<div class="tabs">'+TABS.map(function(t){return '<button class="tab'+(t.id==='overview'?' active':'')+'" data-tab="'+t.id+'" onclick="renderTab(\''+t.id+'\')">'+t.label+'</button>';}).join('')+'</div>'
+  +'<div class="content"><div id="tab-content"></div></div>';
+  renderTab('overview');
+}
+
+document.addEventListener('DOMContentLoaded', function() { init(); });
 </script>
-
 </body>
 </html>
