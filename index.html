@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,33 +83,33 @@ tr:hover td{background:rgba(34,197,94,0.03)}
 // DATA — UPDATE THIS SECTION MONTHLY
 // ═══════════════════════════════════════════════════════
 var DATA = {
-  last_updated: "2026-02-01",
-  next_update: "2026-03-01",
+  last_updated: "2026-06-01",
+  next_update: "2026-09-01",
 
   national: {
-    est_total_devices: 500000,    // Urban Institute est: 1-in-4 inmates; ~2M total = ~500K
-    annual_seizures: 100000,      // Urban Institute 2020 survey extrapolated nationally
-    seizure_rate_pct: 20,         // ~20% of estimated total devices seized annually
+    est_total_devices: 500000,    // SOC LLC Sept 2024 estimate: ~1-in-4 inmates; FCC NPRM cites this figure
+    annual_seizures: 110000,      // Extrapolated from state reports; Urban Institute 20-state baseline + 2025 increases
+    seizure_rate_pct: 22,         // Rising as detection technology improves
     states_reporting: 31,         // of 50 DOCs surveyed (Urban Institute 2021)
     avg_per_1000: 31,             // Urban Institute: avg 31 phones per 1,000 inmates
-    pct_inmates_with_access: 25,  // Research: ~1 in 4 inmates have access
+    pct_inmates_with_access: 25,  // Research: ~1 in 4 inmates have access (SOC LLC, Urban Institute)
     staff_reporting_serious_threat: 85, // 85% of DOC admins call it serious threat
     known_crimes_linked: "Murders, drug trafficking, gang coordination, extortion, fraud, scams, escapes, sex trafficking",
-    data_as_of: "February 2026"
+    data_as_of: "June 2026"
   },
 
   states: [
     // Documented seizure data with verified sources
-    { s:"GA",  name:"Georgia",        seized2024:15500, seized2023:8074,  seized2022:null, rate_per1k:165, tech:"Managed Access (Securus WCS), RF detection, K9, body scanners, drones 150+ seized 2024", source:"GA AG Press Release 2024-2025", color:"#dc2626", note:"Highest absolute seizures in nation 2024. Gang leader ordered murder of 2 kids at birthday party from inside prison." },
-    { s:"SC",  name:"South Carolina", seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:333, tech:"Managed Access Systems, body scanners, K9. State Grand Jury issued report July 2025 recommending jamming.", source:"NBC News 2017, SC AG 2025", color:"#dc2626", note:"Historically highest rate per inmate in nation (1 per 3 inmates at peak). 2018 riot at Lee CI killed 7 — sparked by phone-based territorial dispute." },
-    { s:"NJ",  name:"New Jersey",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"PocketHound detectors + Cobwebs web intelligence. More phones seized in first 2 months of 2024 than all of 2023.", source:"Prison Insider 2024", color:"#1d4ed8", note:"PocketHound + web intelligence led to dramatic seizure spike in early 2024." },
-    { s:"TX",  name:"Texas",          seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Statewide lockdown 2023 across 100 facilities. Body scanners, K9, shakedown teams.", source:"Prison Insider 2024", color:"#d97706", note:"2023 statewide lockdown across 100 facilities lasting nearly 2 months seized hundreds of phones, weapons, drugs." },
+    { s:"GA",  name:"Georgia",        seized2024:15500, seized2023:8074,  seized2022:null, rate_per1k:165, tech:"Managed Access (Securus WCS), RF detection, K9, body scanners. 150+ drones seized 2024. Counter-drone systems deployed.", source:"GA AG Press Release 2024-2025; Rep. Kustoff Press Release Sept 2025", color:"#dc2626", note:"Highest absolute seizures in nation. Gang leader ordered murder of 2 children at birthday party from inside prison — cited by FCC Chair Carr in Sept 30, 2025 rulemaking. GA AG leads 31-state coalition." },
+    { s:"SC",  name:"South Carolina", seized2024:2600,  seized2023:null,  seized2022:null, rate_per1k:333, tech:"Managed Access Systems, body scanners, K9. Ready to deploy jamming the moment FCC rule takes effect.", source:"SOC LLC Jan 2026; SC Daily Gazette Oct 2025; SC Grand Jury Report July 2025", color:"#dc2626", note:"2,600+ phones seized in 2025 alone (~300 in Aug 2025). SC Grand Jury July 2025 issued rare formal report: 'Jamming is the answer.' Lee CI 2018 riot: 7 killed, phone-coordinated. FCC Chair Carr cited SC Capt. Robert Johnson — shot 6x by hit ordered via contraband phone." },
+    { s:"OK",  name:"Oklahoma",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:167, tech:"Managed access testing, K9, C-UAS perimeter drones. In active talks with jamming vendors (Nov 2025 — day after NPRM published in Federal Register). Planning pilot at max-security facility.", source:"NewsOn6 Apr 2026; Filter Magazine Dec 2025; FCC Commissioner Trusty statement", color:"#7c3aed", note:"1,800+ phones seized in first months of 2026 alone. 14 visitors/smugglers arrested + 3 staff in early 2026. FCC Commissioner Trusty cited Oklahoma inmate who ran $46M drug ring (46 lbs meth, 50+ firearms, 21 convictions) from prison cell via contraband phone. DOC planning first-in-nation state jamming pilot." },
+    { s:"NJ",  name:"New Jersey",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"PocketHound detectors + Cobwebs web intelligence. Gang network linked to Camden, Newark, Trenton disrupted 2024.", source:"Prison Insider 2024", color:"#1d4ed8", note:"More phones seized in first 2 months of 2024 than all of 2023 after intelligence deployment. Active gang coordination with street-level associates in multiple cities confirmed." },
+    { s:"TX",  name:"Texas",          seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Statewide lockdown 2023 across 100 facilities. Body scanners, K9, shakedown teams. Gulf Cartel intelligence network inside TDCJ disrupted by DEA 2023.", source:"Prison Insider 2024; DEA Dallas 2023", color:"#d97706", note:"2023 statewide lockdown across 100 facilities. Gulf Cartel Reynosa faction maintained inmate informant network providing real-time law enforcement intelligence via contraband phones." },
     { s:"MS",  name:"Mississippi",    seized2024:null,  seized2023:1800,  seized2022:null, rate_per1k:100, tech:"MSAG pilot (early managed access), K9, interdiction teams.", source:"NBC News 2017, MDOC", color:"#dc2626", note:"1 phone per 10 inmates. $1,000 black market value per phone. Officers intercept 9M+ texts/transmissions over 5 years in two facilities." },
-    { s:"CA",  name:"California",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, managed access in select facilities, Cellebrite digital forensics.", source:"NIJ, GAO 2011, multiple", color:"#7c3aed", note:"6,900 seized in 2009; 10,700 in 2010 (GAO). Dec 2024: 2 inmates convicted of RICO murder/drug trafficking run from prison cells." },
-    { s:"FL",  name:"Florida",        seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, visitor intake screening enhanced 2023.", source:"GAO 2011, FLDOC", color:"#0891b2", note:"1,509 seized in 2010 (GAO). Systematic scaling of detection technology post-2020." },
-    { s:"MD",  name:"Maryland",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"K9 units trained to detect SIM cards specifically. Electronic detection systems. BOP tested micro-jamming at MD facility 2019.", source:"FBI LEB, BOP/NTIA 2019", color:"#16a34a", note:"Pioneer in K9 phone detection — dogs trained to find SIM cards stored separately from phones." },
-    { s:"NC",  name:"North Carolina", seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Managed access, body scanners, interdiction teams.", source:"GA AG Press Release 2024", color:"#d97706", note:"Gang leader ordered kidnapping of prosecutor's father via contraband prison phone." },
-    { s:"OK",  name:"Oklahoma",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Managed access testing, K9, pat searches. Sen. Lankford (R-OK) lead sponsor of Cellphone Jamming Reform Act 2025.", source:"Lankford Press Release 2025", color:"#7c3aed", note:"Sen. Lankford cited years of work with OK prison leadership in introducing Cellphone Jamming Reform Act 2025." }
+    { s:"CA",  name:"California",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, managed access in select facilities, Cellebrite digital forensics. CDCR June 2025 systemwide lockdown at 21 high-security facilities.", source:"CDCR June 2025; NIJ; DOJ Dec 2024", color:"#7c3aed", note:"Dec 2024: 2 inmates (Mexican Mafia affiliate) convicted of RICO murder/drug trafficking run from prison cells — 14,000+ messages to 47 contacts. June 2025: CDCR locked down 21 Level III-IV facilities after violence surge linked to phone-coordinated gang activity." },
+    { s:"FL",  name:"Florida",        seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, visitor intake screening enhanced 2023.", source:"GAO 2011, FLDOC", color:"#0891b2", note:"1,509 seized in 2010 (GAO). Insurance fraud ring ($1.4M, 200+ false claims) run from Dade CI via contraband phones — convicted 2021." },
+    { s:"MD",  name:"Maryland",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"K9 units trained to detect SIM cards. Electronic detection systems. BOP tested micro-jamming at MD federal facility 2019.", source:"FBI LEB, BOP/NTIA 2019", color:"#16a34a", note:"Pioneer in K9 phone detection — dogs trained to find SIM cards stored separately from phones." },
+    { s:"NC",  name:"North Carolina", seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Managed access, body scanners, interdiction teams.", source:"U.S. Senate Judiciary testimony 2024", color:"#d97706", note:"Inmate orchestrated kidnapping of prosecutor's father via contraband phone — became central exhibit in Senate testimony supporting Cellphone Jamming Reform Act of 2025." }
   ],
 
   smuggling_methods: [
@@ -166,14 +164,14 @@ var DATA = {
     },
     {
       name:"Cell Phone Signal Jamming",
-      status:"ILLEGAL for states (federal only, limited)",
-      statusColor:"#dc2626",
-      how:"Transmits on same radio frequencies as cell phones, disrupting the link between phone and tower. Creates dead zone. Cannot distinguish authorized from unauthorized phones. BOP tested micro-jamming at MD and SC federal facilities (NTIA 2019).",
+      status:"ILLEGAL for states — final rule pending (end 2026)",
+      statusColor:"#f97316",
+      how:"Transmits on same radio frequencies as cell phones, disrupting the link between phone and tower. Creates dead zone. Cannot distinguish authorized from unauthorized phones. BOP tested micro-jamming at MD and SC federal facilities (NTIA 2019). FCC NPRM published Nov 26, 2025 — public comment closed, final rule under development.",
       cost:"$1-5M per facility",
       effectiveness:"Very high for calls/data — but cannot stop WiFi-only use. Risks interfering with 9-1-1 and first responder radios.",
-      deployed:"Federal prisons only (select BOP facilities). States legally barred by 47 U.S.C. § 333.",
-      examples:"Micro-jamming (tested), CellAntenna, Phonejammer (federal pilot only)",
-      limit:"ILLEGAL for states. FCC voted Sept 30, 2025 to open public comment on allowing state use. Cellphone Jamming Reform Act of 2025 (S.1137/H.R.2350) pending in Congress."
+      deployed:"Federal prisons only (select BOP facilities). States legally barred by 47 U.S.C. Section 333. Oklahoma DOC in vendor talks for first state pilot pending final rule.",
+      examples:"Micro-jamming (tested at federal facilities), CellAntenna, Phonejammer (federal pilot only)",
+      limit:"ILLEGAL for states until final FCC rule. CTIA (wireless carriers) oppose strongly — filed Feb 2026 opposition. FCC Chairman Carr seeking compromise. Cellphone Jamming Reform Act of 2025 (S.1137/H.R.2350) also pending in Congress as parallel legislative path."
     },
     {
       name:"K9 Cell Phone Detection Units",
@@ -239,28 +237,31 @@ var DATA = {
     { year:2022, seizures:80000 },
     { year:2023, seizures:90000 },
     { year:2024, seizures:102000 },
-    { year:2025, seizures:110000 },
-    { year:2026, seizures:118000, projected:true },
-    { year:2027, seizures:127000, projected:true },
-    { year:2028, seizures:136000, projected:true }
+    { year:2025, seizures:115000 },
+    { year:2026, seizures:122000, projected:true },
+    { year:2027, seizures:130000, projected:true },
+    { year:2028, seizures:138000, projected:true }
   ],
 
   legislation: [
-    { year:"2025", event:"Cellphone Jamming Reform Act of 2025 introduced", detail:"S.1137 (Sen. Cotton R-AR + Sen. Lankford R-OK) / H.R.2350 (Rep. Kustoff R-TN). Would allow states to use jamming. Bipartisan coalition of 31 AGs urging passage. As of Feb 2026, pending in Congress." },
-    { year:"Sept 30, 2025", event:"FCC votes unanimously to open public comment on state jamming", detail:"FCC Chairman Brendan Carr (Trump appointee) announced Sept 5; unanimous vote Sept 30. Public comment period open. Second vote to follow at TBD date. Would allow targeted micro-jamming in state prisons for the first time." },
-    { year:"2024-25", event:"FCC Contraband Interdiction System (CIS) approvals accelerate", detail:"Phase 1/2 CIS approvals: SDF Inc. (2024), Trace-Tek (2024), Hawks Ear Communications (2025), CellBlox portable (2025). 34 Phase 2 self-certifications issued. New FCC framework enables faster carrier notification pipeline." },
-    { year:"Sept 2024", event:"Lt. Osvaldo Albarati Stopping Prison Contraband Act passes Senate", detail:"S.5284 passed Senate September 2024. Named for BOP officer murdered in 2013 for disrupting prison phone business. Companion to House legislation on BOP-specific contraband interdiction." },
-    { year:"Jan 2023", event:"22-state AG coalition urges Congress on jamming", detail:"Led by GA AG Chris Carr. 22 state attorneys general urge Congressional leaders to pass jamming legislation. Grew to 31 AGs by March 2025." },
-    { year:"2019", event:"DOJ/NTIA releases micro-jamming test results from MD and SC", detail:"BOP tested micro-jamming at federal prisons in Maryland and South Carolina. NTIA technical report TR-19-541 documented results. Federal prisons in select locations have used jamming since." },
-    { year:"2010", event:"GAO report documents explosive state-level growth", detail:"GAO-11-893: CA went from 900 seizures (2007) to 10,700 (2010). SC, MS, FL all showing exponential increases. Congress tasks NTIA/FCC/BOP/NIJ with coordinated technology evaluation plan." }
+    { year:"2026", event:"FCC jamming final rule: decision expected by end of 2026", detail:"After public comment period closed, FCC Chairman Brendan Carr faces significant carrier opposition from CTIA (Feb 12, 2026 letter) arguing interference risks and existing alternatives. FCC weighing compromise approach — potentially starting with a limited state pilot. Final rule could be ready by late 2026 per FCC's own timeline. Oklahoma DOC in active vendor talks, planning first state pilot at a maximum-security facility." },
+    { year:"Feb 2026", event:"CTIA renews opposition to FCC jamming NPRM", detail:"CTIA's Feb 10, 2026 letter to FCC argued that no commenter provided technical explanation of how jamming can be deployed without blocking legitimate communications, and that safe, effective alternatives already exist. Wireless carriers including AT&T, Verizon, T-Mobile oppose the rule. FCC Commissioner Gomez (the lone Democrat) also flagged unintended consequences risk, calling for a limited pilot first." },
+    { year:"Nov 26, 2025", event:"FCC jamming NPRM published in Federal Register — comment period opens", detail:"The proposed rule formally entered the regulatory pipeline. Oklahoma DOC immediately announced vendor talks for a pilot. FCC's proposed 'safe harbor' provision shields carriers from liability if a contraband phone connects to their network, unless they fail to negotiate in good faith with a licensed prison jammer." },
+    { year:"Sept 30, 2025", event:"FCC votes unanimously to advance state prison jamming", detail:"Historic unanimous vote (3-0) issued Third Further Notice of Proposed Rulemaking under GN Docket No. 13-111. FCC Chair Brendan Carr named the proceeding after SC Capt. Robert Johnson, shot 6 times at home by a hit ordered via contraband prison phone. Proposes voluntary, targeted micro-jamming — not a federal mandate." },
+    { year:"July 2025", event:"SC State Grand Jury issues rare formal report: 'Jamming is the answer'", detail:"South Carolina grand jury issued an extraordinary formal report on organized crime run from state prisons via contraband phones. Explicitly named signal jamming as the solution. SC DOC positioned to deploy as soon as federal rule takes effect — technology and vendor contracts already in preparation." },
+    { year:"Mar 2025", event:"Cellphone Jamming Reform Act of 2025 introduced in Congress", detail:"S.1137 (Sen. Tom Cotton R-AR) / H.R.2350 (Rep. David Kustoff R-TN). Would override FCC and allow states to jam without federal permission. 31 AGs from bipartisan coalition urging passage as of Mar 2025. Pending in Senate Judiciary and House Energy & Commerce committees." },
+    { year:"2024-25", event:"FCC Contraband Interdiction System (CIS) approvals accelerate", detail:"Phase 1/2 CIS approvals: SDF Inc. (2024), Trace-Tek (2024), Hawks Ear Communications (2025), CellBlox portable (2025). 34 Phase 2 self-certifications issued. Passive detection systems now widely available as legal alternative while jamming debate continues." },
+    { year:"2019", event:"DOJ/NTIA releases micro-jamming test results from MD and SC", detail:"BOP tested micro-jamming at federal prisons in Maryland and South Carolina. NTIA technical report TR-19-541 documented results. Federal prisons in select locations have used jamming since — state prisons remained legally barred under 47 U.S.C. Section 333." }
   ],
 
   news: [
-    { date:"Sept 30, 2025", headline:"FCC Votes Unanimously to Advance Prison Cell Phone Jamming", body:"Historic unanimous FCC vote opens public comment on allowing state prisons to jam contraband phones for the first time. FCC Chair Brendan Carr named the policy after Capt. Robert Johnson (SC), shot 6 times at home by hit ordered via prison contraband phone.", color:"#22c55e" },
-    { date:"June 2025", headline:"31 State AGs + Corrections Leaders Cite Phones as Top 3 Prison Crisis", body:"Bipartisan coalition of 31 attorneys general urged Congress to pass H.R.2350/S.1137. Correctional Leaders Association Capitol Hill trip June 2025: phones named one of top 3 problems. 'Full blown domestic security crisis.'", color:"#f97316" },
-    { date:"Dec 2024", headline:"CA Inmates Convicted of RICO Murder & Drug Trafficking Run from Prison", body:"Two California inmates convicted of murder, racketeering, and RICO-related crimes for running heroin and meth trafficking from their prison cells using contraband phones.", color:"#dc2626" },
-    { date:"2024", headline:"Georgia Seizes 15,500+ Phones + 150+ Drones in Single Year", body:"GDC shattered previous seizure records. 15,500 contraband phones + 150+ drone seizures in 2024. YSL gang leader used phone to order murder of 88-year-old veteran in Tattnall County.", color:"#dc2626" },
-    { date:"July 2025", headline:"SC State Grand Jury Issues Rare Report: 'Jamming Is the Answer'", body:"South Carolina grand jury issued rare formal report July 2025 on organized crime run from state prisons via contraband phones. Explicitly recommended jamming as the solution. SC will be ready to deploy as soon as FCC rule change takes effect.", color:"#d97706" }
+    { date:"Apr 2026", headline:"Oklahoma DOC: 1,800 Phones Seized in First Months of 2026 Alone", body:"Oklahoma DOC announced 1,800+ cell phones seized in just the first few months of 2026, along with 1,000 weapons and pounds of illegal drugs. 14 visitors and outside smugglers arrested plus 3 staff. DOC in active talks with jamming technology vendors following November 2025 FCC NPRM publication.", color:"#dc2626" },
+    { date:"Feb 2026", headline:"CTIA Renews Opposition to FCC Prison Jamming — Carriers vs. Corrections", body:"The wireless trade group CTIA filed a Feb 10 letter to FCC arguing jamming poses unacceptable interference risk and that managed access systems are already sufficient. FCC Chair Carr faces a 'tough decision' with carriers on one side and 31 state AGs and correctional groups on the other. Final rule expected by end of 2026.", color:"#f97316" },
+    { date:"Jan 2026", headline:"SOC LLC Report: Phones at Center of Deadliest Prison Crime — Officers Agree", body:"A January 2026 industry report documented that correctional officers rank contraband cell phones among the greatest daily threats to their safety — equal to or exceeding physical weapons. FCC Chair Carr stated prison officials told him phones are 'at the center of some of the most dangerous criminal activity happening both inside and outside of prison walls.'", color:"#d97706" },
+    { date:"Sept 30, 2025", headline:"FCC Votes Unanimously to Advance Prison Cell Phone Jamming", body:"Historic unanimous FCC vote opens public comment on allowing state prisons to jam contraband phones for the first time. FCC Chair Brendan Carr named the policy after SC Capt. Robert Johnson, shot 6 times at home by a hit ordered via prison contraband phone. Proposed rule is voluntary and targeted — not a blanket federal mandate.", color:"#22c55e" },
+    { date:"July 2025", headline:"SC State Grand Jury Issues Rare Report: 'Jamming Is the Answer'", body:"South Carolina grand jury issued rare formal report July 2025 on organized crime run from state prisons via contraband phones. Explicitly recommended jamming as the solution. SC will be ready to deploy as soon as FCC rule change takes effect — vendors and contracts in preparation.", color:"#d97706" },
+    { date:"June 2025", headline:"31 State AGs + Corrections Leaders Cite Phones as Top 3 Prison Crisis", body:"Bipartisan coalition of 31 attorneys general urged Congress to pass H.R.2350/S.1137. Correctional leaders made a Capitol Hill trip in June 2025 citing phones as one of the top 3 problems facing state corrections agencies, calling it a 'full blown domestic security crisis.'", color:"#f97316" },
+    { date:"Dec 2024", headline:"CA Inmates Convicted of RICO Murder and Drug Trafficking Run from Prison", body:"Two California inmates (Mexican Mafia affiliate) convicted of murder, racketeering, and RICO-related crimes for running heroin and meth trafficking from their prison cells. Evidence included 14,000+ messages to 47 distinct contacts across the supply chain on a single seized phone.", color:"#dc2626" }
   ]
 };
 // ═══════════════════════════════════════════════════════
