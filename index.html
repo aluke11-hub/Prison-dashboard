@@ -284,7 +284,7 @@ function renderOverview(){
   var maxSmug = Math.max.apply(null, DATA.smuggling_methods.map(function(m){return m.pct;}));
   var maxUse  = Math.max.apply(null, DATA.usage_breakdown.map(function(u){return u.pct;}));
   return '<h2 class="sec-title">National Overview</h2>'
-  +'<p class="sec-sub">An estimated 500,000 contraband cell phones are in active use across U.S. prisons at any given time — roughly 1 in 4 inmates has access. Seizures represent only ~20% of estimated total devices, as detection rates remain low without jamming technology.</p>'
+  +'<p class="sec-sub">An estimated 500,000 contraband cell phones are in active circulation across U.S. prisons — roughly 1 in 4 inmates has access per FCC and SOC LLC estimates cited in the September 2025 NPRM. Oklahoma DOC seized 1,800+ phones in just the first months of 2026. Georgia seized 15,500 in all of 2024. Detection rates remain low, and the FCC final rule on state jamming is expected by end of 2026 — with major carrier opposition from CTIA standing in the way.</p>'
   +'<div class="card" style="border-left:3px solid #22c55e;margin-bottom:18px"><div class="ct">Breaking Developments</div><div class="g3">'
   +DATA.news.map(function(n){return '<div class="news-card" style="border-left-color:'+n.color+'"><div class="ndate">'+n.date+'</div><div class="nhead">'+n.headline+'</div><div class="nbody">'+n.body+'</div></div>';}).join('')
   +'</div></div>'
@@ -350,7 +350,14 @@ function renderThreats(){
   var sevOrder = {'Critical':0,'High':1,'Medium':2,'Low':3};
   var sorted = DATA.threats.slice().sort(function(a,b){return sevOrder[a.severity]-sevOrder[b.severity];});
   return '<h2 class="sec-title">Security Threats & Criminal Uses</h2>'
-  +'<p class="sec-sub">Contraband phones enable incarcerated individuals to operate as if they were outside — with full unmonitored access. The consequences range from fatal violence to large-scale organized crime.</p>'
+  +'<p class="sec-sub">FCC Chair Brendan Carr told WGXA News in January 2026 that prison officials across the country said contraband phones are "at the center of some of the most dangerous criminal activity happening both inside and outside of prison walls." The cases below represent the documented threat spectrum — from fatal violence directed from a cell to transnational cartel command operations.</p>'
+  +'<div class="card" style="border-left:3px solid #dc2626;margin-bottom:20px"><div class="ct" style="color:#dc2626">2025–2026 Headline Cases</div>'
+  +'<div class="g2" style="gap:12px">'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#dc2626;font-weight:700;font-size:12px;margin-bottom:5px">Apr 2026 — Oklahoma DOC: 1,800 Phones in Months</div><div style="font-size:11px;color:#6b7280;line-height:1.6">Oklahoma seized 1,800+ contraband phones, 1,000 weapons, and pounds of drugs in the first few months of 2026. 14 smuggling arrests (visitors + outside) and 3 staff arrests. DOC states phones are the single biggest issue because inmates use them to run drugs, order assaults, and coordinate murders from outside.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#dc2626;font-weight:700;font-size:12px;margin-bottom:5px">2025 — SC: 2,600 Phones, Grand Jury Calls for Jamming</div><div style="font-size:11px;color:#6b7280;line-height:1.6">South Carolina seized 2,600+ phones in 2025 (~300 in August alone). SC State Grand Jury issued a rare formal report July 2025 documenting organized crime networks run entirely via contraband phones from inside state prisons, explicitly naming jamming as the only effective solution.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#f97316;font-weight:700;font-size:12px;margin-bottom:5px">2025 — FCC: Commissioner Trusty Cites Oklahoma $46M Drug Ring</div><div style="font-size:11px;color:#6b7280;line-height:1.6">FCC Commissioner Olivia Trusty cited an Oklahoma case in her NPRM statement: an inmate serving 30 years used a contraband phone to run a drug trafficking operation resulting in seizure of 46 lbs of meth and heroin, 50+ firearms, $35,000 in drug proceeds, and 21 convictions.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#f97316;font-weight:700;font-size:12px;margin-bottom:5px">June 2025 — CA: CDCR Locks Down 21 Facilities After Phone-Linked Violence Surge</div><div style="font-size:11px;color:#6b7280;line-height:1.6">California CDCR initiated modified programming at 21 Level III-IV high-security institutions on June 12, 2025 following a surge of violence against staff and inmates. Systematic searches found phones, weapons, and drugs at scale. Normal operations restored only after comprehensive phone seizures.</div></div>'
+  +'</div></div>'
   +sorted.map(function(t){
     return '<div class="threat-card" style="background:#09091a;border-color:'+t.color+'30;border-left-color:'+t.color+'">'
     +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">'
@@ -363,7 +370,7 @@ function renderThreats(){
 
 function renderTechnology(){
   return '<h2 class="sec-title">Interdiction Technologies</h2>'
-  +'<p class="sec-sub">Seven categories of technology address the contraband phone problem — from legal detection systems to federally-restricted jamming. The FCC voted Sept 30, 2025 to open public comment on allowing state-level jamming for the first time.</p>'
+  +'<p class="sec-sub">Seven technology categories address the contraband phone problem. The FCC voted unanimously on Sept 30, 2025 to open public comment on state-level jamming — the first such move in FCC history. As of June 2026, the final rule is pending with fierce carrier opposition from CTIA. Oklahoma DOC is in active vendor talks for the first state pilot. All other detection technologies below are legal today.</p>'
   +DATA.technology.map(function(t,i){
     var id='tech-'+i;
     return '<div class="ec" onclick="tog(\''+id+'\')">'
@@ -389,7 +396,7 @@ function renderTechnology(){
 function renderSmuggling(){
   var maxS=Math.max.apply(null,DATA.smuggling_methods.map(function(m){return m.pct;}));
   return '<h2 class="sec-title">Smuggling Methods — Deep Dive</h2>'
-  +'<p class="sec-sub">Six documented entry vectors, each requiring different countermeasures. Staff corruption is the single largest documented vector and the hardest to address through technology alone.</p>'
+  +'<p class="sec-sub">Six documented entry vectors, each requiring different countermeasures. Staff corruption remains the single largest documented vector and the hardest to address through technology alone. In early 2026, Oklahoma DOC arrested 3 staff members alongside 14 outside smugglers in a single enforcement period — illustrating that the corruption problem is ongoing at scale.</p>'
   +'<div class="card" style="margin-bottom:18px"><div class="ct">Entry Method Distribution (estimated)</div><div class="bchart">'
   +DATA.smuggling_methods.map(function(m){return bar(m.method,m.pct,maxS,m.color,m.pct+'%');}).join('')
   +'</div></div>'
@@ -401,21 +408,21 @@ function renderSmuggling(){
     +'<div style="font-size:12px;color:#6b7280;line-height:1.6">'+m.detail+'</div>'
     +'</div>';
   }).join('')
-  +'<div class="card" style="margin-top:18px;border-left:3px solid #d97706"><div class="ct">Market Economics</div>'
+  +'<div class="card" style="margin-top:18px;border-left:3px solid #d97706"><div class="ct">Market Economics — 2026</div>'
   +'<div class="g3">'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#d97706;font-size:22px;font-weight:800;margin-bottom:4px">$300-450</div><div style="color:#4b5563;font-size:11px">Street price inside prison (vs $80 retail for Android 15)</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#dc2626;font-size:22px;font-weight:800;margin-bottom:4px">$200-400</div><div style="color:#4b5563;font-size:11px">Typical guard bribe per device smuggled</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#f97316;font-size:22px;font-weight:800;margin-bottom:4px">$100K+</div><div style="color:#4b5563;font-size:11px">One officer earned via systematic phone smuggling (FBI case)</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#22c55e;font-size:22px;font-weight:800;margin-bottom:4px">$50</div><div style="color:#4b5563;font-size:11px">Charge per call placed on inmate-owned phone (inmate economy)</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#7c3aed;font-size:22px;font-weight:800;margin-bottom:4px">$1,000</div><div style="color:#4b5563;font-size:11px">Black market phone value in Mississippi (2x an officer weekly salary)</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#0891b2;font-size:22px;font-weight:800;margin-bottom:4px">$8/gram</div><div style="color:#4b5563;font-size:11px">Drone delivery surcharge (charged by gram for payload weight)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#d97706;font-size:22px;font-weight:800;margin-bottom:4px">$300–450</div><div style="color:#4b5563;font-size:11px">Inside prison street price (vs ~$80 retail for mid-range Android)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#dc2626;font-size:22px;font-weight:800;margin-bottom:4px">$200–400</div><div style="color:#4b5563;font-size:11px">Typical guard bribe per device; MDC Brooklyn officer earned $40K+ in 7 months ($400/device)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#f97316;font-size:22px;font-weight:800;margin-bottom:4px">$100K+</div><div style="color:#4b5563;font-size:11px">One officer earned via systematic smuggling before FBI arrest (documented case)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#22c55e;font-size:22px;font-weight:800;margin-bottom:4px">$50–100</div><div style="color:#4b5563;font-size:11px">Weekly rental fee charged by gangs to inmates without phones (MS black market)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#7c3aed;font-size:22px;font-weight:800;margin-bottom:4px">$1,000</div><div style="color:#4b5563;font-size:11px">Black market phone value in Mississippi — 12x retail; equivalent to 2+ weeks officer pay</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#0891b2;font-size:22px;font-weight:800;margin-bottom:4px">150+</div><div style="color:#4b5563;font-size:11px">Drones seized at Georgia facilities in 2024 alone; OK deploying counter-drone systems in 2026</div></div>'
   +'</div></div>';
 }
 
 function renderSeizureTypes(){
   var maxST=Math.max.apply(null,DATA.seizure_types.map(function(s){return s.pct;}));
   return '<h2 class="sec-title">Seizure Types & Projections</h2>'
-  +'<p class="sec-sub">What gets seized and the national trajectory. Seizures are a floor, not a ceiling — they reflect detection capability as much as device prevalence.</p>'
+  +'<p class="sec-sub">What gets seized and the national trajectory. Oklahoma DOC seized 1,800+ phones in just the first few months of 2026 — underscoring that national totals remain dramatically undercounted. Smart watches are an emerging category being flagged for the first time in 2024-2025 interdiction reports. Seizures are a floor, not a ceiling.</p>'
   +'<div class="g2">'
   +'<div class="card"><div class="ct">Seized Device Types — Distribution</div><div class="bchart">'
   +DATA.seizure_types.map(function(s){return bar(s.type,s.pct,maxST,s.color,s.pct+'%');}).join('')
@@ -447,43 +454,45 @@ function renderSeizureTypes(){
 
 function renderLegislation(){
   return '<h2 class="sec-title">Legislative & Policy Timeline</h2>'
-  +'<p class="sec-sub">The policy debate has centered on one question for 15+ years: should states be allowed to jam cell phone signals in prisons? The FCC voted Sept 30, 2025 to advance public comment on this question for the first time.</p>'
+  +'<p class="sec-sub">The core policy debate has run for 15+ years: should states be allowed to jam cell phone signals in prisons? The FCC took its first-ever vote to advance this question on Sept 30, 2025. As of June 2026, the final rule is still pending — FCC Chair Carr faces fierce carrier opposition from CTIA while Oklahoma DOC prepares to be the first state to run a jamming pilot.</p>'
   +'<div class="timeline">'
   +DATA.legislation.map(function(l){
     return '<div class="tev"><div class="tyr">'+l.year+'</div><div style="font-weight:700;color:#d1fae5;font-size:13px;margin-bottom:3px">'+l.event+'</div><div class="ttxt">'+l.detail+'</div></div>';
   }).join('')
   +'</div>'
-  +'<div class="card" style="margin-top:22px;border-left:3px solid #22c55e"><div class="ct">Current Legislative Status (Feb 2026)</div>'
+  +'<div class="card" style="margin-top:22px;border-left:3px solid #22c55e"><div class="ct">Current Status — June 2026</div>'
   +'<div class="g2" style="gap:14px">'
   +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Federal Legislation</div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#d1fae5;font-weight:700;font-size:12px">S.1137 — Cellphone Jamming Reform Act of 2025</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Sen. Cotton (R-AR) + Sen. Lankford (R-OK). Companion: H.R.2350 (Rep. Kustoff, R-TN). 9 Senate cosponsors. Would allow state/federal prisons to operate jamming systems. Status: Pending committee action as of Feb 2026.</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">Lt. Albarati Stopping Prison Contraband Act</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Passed Senate September 2024. Addresses BOP contraband interdiction. Named for officer murdered 2013. Awaiting House action.</div></div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#d1fae5;font-weight:700;font-size:12px">S.1137 — Cellphone Jamming Reform Act of 2025</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Sen. Cotton (R-AR) + Sen. Lankford (R-OK). Companion: H.R.2350 (Rep. Kustoff, R-TN). Would allow state/federal prisons to operate jamming systems independent of FCC. Status: Pending committee action as of June 2026. Provides parallel legislative path to FCC rulemaking.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">Lt. Albarati Stopping Prison Contraband Act</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Passed Senate September 2024. Addresses BOP-specific contraband interdiction. Named for BOP officer murdered in 2013 after an inmate used a contraband phone to order the hit. Awaiting House action as of June 2026.</div></div></div>'
   +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">FCC Regulatory Track</div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#22c55e;font-weight:700;font-size:12px">✓ Sept 30, 2025: FCC votes to advance jamming NPRM</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Unanimous 3-0 vote. Public comment period open. Second vote at TBD date. Commissioner Gomez raised concern about 9-1-1 interference; proposed pilot program approach.</div></div>'
-  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">CIS Approvals Accelerating (Phase 1/2)</div><div style="color:#4b5563;font-size:11px;margin-top:4px">FCC GN Docket No. 13-111. 34 Phase 2 self-certifications as of 2025. New SOC SignalSecure platform enables real-time detection + automated carrier disconnection in minutes. Legally available to states now.</div></div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#22c55e;font-weight:700;font-size:12px">Sept 30, 2025: Unanimous NPRM vote — comment period closed</div><div style="color:#4b5563;font-size:11px;margin-top:4px">CTIA filed Feb 10, 2026 opposition arguing jamming cannot be deployed without blocking legitimate communications. FCC Chair Carr seeking compromise — possibly a limited state pilot program per Commissioner Gomez suggestion. Final rule expected by end of 2026.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#f97316;font-weight:700;font-size:12px">Oklahoma DOC: First State Pilot in Preparation</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Oklahoma DOC publicly announced vendor talks the day after the NPRM was published in the Federal Register (Nov 27, 2025). Planning a pilot at a maximum-security facility. Will be the first state to deploy legal jamming if FCC rule takes effect in 2026.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">CIS Approvals Accelerating (Phase 1/2)</div><div style="color:#4b5563;font-size:11px;margin-top:4px">FCC GN Docket No. 13-111. 34 Phase 2 self-certifications as of 2025. Passive detection systems (CellBlox, Hawks Ear, Trace-Tek, SDF SignalSecure) legally available to states now while jamming decision pending. Cellebrite digital forensics widely deployed for post-seizure intelligence.</div></div>'
   +'</div></div>';
 }
 
 function renderSources(){
   return '<h2 class="sec-title">Data Sources & Update Guide</h2>'
-  +'<p class="sec-sub">To update: GitHub → your repo → index.html → pencil icon → find DATA section → edit numbers or news → Commit. Site updates in 2 minutes.</p>'
+  +'<p class="sec-sub">To update: GitHub repo → index.html → pencil icon → find DATA section → edit numbers or news → Commit changes. Site updates in ~2 minutes. Last updated June 2026.</p>'
   +'<div class="card" style="border-left:3px solid #22c55e;margin-bottom:20px"><div class="ct" style="color:#22c55e">Update Schedule</div>'
   +'<div class="g3">'
-  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Monthly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Check GA, SC, NJ DOC for new seizure reports. Update news section with major incidents. Check FCC docket for jamming ruling updates.</div></div>'
-  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Quarterly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute publications. BOP annual stats. State AG press releases. Congressional hearing records. FCC GN Docket 13-111 updates.</div></div>'
-  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Annually</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute needs assessment updates. BJS prison statistics. GAO prison technology reports. National data recalibration.</div></div>'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Monthly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Check GA, SC, OK DOC for new seizure reports. Update news section with major incidents. Check FCC GN Docket 13-111 for jamming rule progress. Monitor CTIA and carrier filings.</div></div>'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Quarterly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute publications. BOP annual stats. State AG press releases. Congressional hearing records. FCC GN Docket 13-111 updates. Cellebrite and SOC LLC case studies.</div></div>'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Annually</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute needs assessment updates. BJS prison statistics. GAO prison technology reports. USSC prison contraband data briefings. National data recalibration.</div></div>'
   +'</div></div>'
   +[
-    {name:"Urban Institute — Contraband Cell Phones Needs Assessment 2024",url:"urban.org",freq:"Annual",what:"Best national survey. 20 state DOCs with comprehensive statistical data. Foundation for all national estimates."},
-    {name:"FCC — GN Docket No. 13-111 (CIS Approvals)",url:"fcc.gov",freq:"Ongoing",what:"Contraband Interdiction System approvals, NPRM updates, jamming policy developments."},
-    {name:"Georgia DOC / GA Attorney General",url:"law.georgia.gov",freq:"Monthly",what:"Highest-volume state. Press releases with seizure totals. Best source for current national numbers."},
-    {name:"South Carolina DOC / SC AG",url:"scag.gov",freq:"Quarterly",what:"Pioneer state on managed access and policy advocacy. Grand jury reports. Highest per-inmate rate historically."},
-    {name:"WOLA — Prison Tech Monitoring",url:"wola.org",freq:"Monthly",what:"Washington Office on Latin America also covers US prison technology policy."},
-    {name:"Prison Policy Initiative — Contraband Phones",url:"prisonpolicy.org",freq:"Monthly",what:"Critical analysis of jamming policy, FCC regulation, telecom contractor interests. Filter Magazine (filtermag.org) is sister publication."},
-    {name:"Insight Crime — Prison Gangs",url:"insightcrime.org",freq:"Monthly",what:"Best source for gang-phone connection, organized crime run from prison cells."},
-    {name:"Congressional Research Service / GAO",url:"gao.gov / crs.gov",freq:"Annual",what:"GAO-11-893 is the foundational state-level historical dataset. Periodic updates on BOP technology programs."},
-    {name:"BOP Annual Statistics",url:"bop.gov/about/statistics",freq:"Annual",what:"Federal prison contraband seizure data. Federal-only but useful for trend comparison."},
-    {name:"FCC Sept 9, 2025 Fact Sheet — Jamming NPRM",url:"docs.fcc.gov/public/attachments/DOC-414416A1.pdf",freq:"One-time",what:"The primary FCC document on current jamming policy proposal. Essential reference for technology section."}
+    {name:"Urban Institute — Contraband Cell Phones Needs Assessment",url:"urban.org",freq:"Annual",what:"Best national survey. 20 state DOCs with comprehensive statistical data. Foundation for all national estimates on phone prevalence and seizure rates."},
+    {name:"FCC — GN Docket No. 13-111 (Jamming NPRM + CIS Approvals)",url:"fcc.gov/ecfs",freq:"Ongoing",what:"Primary regulatory docket. Contraband Interdiction System approvals, NPRM updates, CTIA opposition filings, jamming policy developments. Check for final rule by end of 2026."},
+    {name:"Georgia DOC / GA Attorney General",url:"law.georgia.gov",freq:"Monthly",what:"Highest-volume state. 15,500 phones seized in 2024. Press releases with seizure totals. Best source for current national headline numbers."},
+    {name:"South Carolina DOC / SC AG",url:"scag.gov",freq:"Quarterly",what:"Pioneer state on managed access and policy advocacy. 2,600+ phones seized in 2025. Grand Jury report July 2025. Highest per-inmate seizure rate historically. Ready to deploy jamming day-one if FCC approves."},
+    {name:"Oklahoma DOC",url:"ok.gov/doc",freq:"Monthly",what:"1,800+ phones seized in first months of 2026. In active vendor talks for first state jamming pilot. Most active state on enforcement transparency in 2026."},
+    {name:"USSC — Prison Contraband Offenses Data Briefing 2025",url:"ussc.gov",freq:"Annual",what:"U.S. Sentencing Commission data on federal prison contraband cases FY2019-2023. 407 cell phone cases analyzed. Demographic and sentencing data."},
+    {name:"Prison Policy Initiative / Filter Magazine",url:"prisonpolicy.org / filtermag.org",freq:"Monthly",what:"Critical analysis of jamming policy, FCC regulation, carrier interests, and unintended consequences. Essential counterweight to DOC and carrier narratives."},
+    {name:"Cellebrite — Digital Intelligence for Correctional Facilities",url:"cellebrite.com",freq:"Quarterly",what:"Industry reports on digital forensics deployment in corrections. Best source for technology capability updates and case study documentation."},
+    {name:"Insight Crime — Prison Gang Operations",url:"insightcrime.org",freq:"Monthly",what:"Best source for cartel and gang phone operations, organized crime run from prison cells, Mexico-U.S. transnational cases."},
+    {name:"FCC Sept 9, 2025 Fact Sheet — Jamming NPRM",url:"docs.fcc.gov/public/attachments/DOC-414416A1.pdf",freq:"Reference",what:"The definitive FCC document on the current jamming proposal. Covers legislative history, Section 333 analysis, technical parameters, and state pilot framework."},
+    {name:"CTIA — Feb 10, 2026 Opposition Letter to FCC",url:"fcc.gov/ecfs (GN Docket 13-111)",freq:"Reference",what:"Wireless carrier trade group opposition to jamming NPRM. Key document for understanding the regulatory obstacle facing state jamming authorization."}
   ].map(function(s){
     return '<div class="src-row"><div><div style="font-weight:700;color:#fff;font-size:13px">'+s.name+'</div><div style="color:#3b82f6;font-size:11px;margin-top:2px">'+s.url+'</div><div style="color:#4b5563;font-size:11px;margin-top:2px">'+s.what+'</div></div>'+badge(s.freq,'#22c55e')+'</div>';
   }).join('');
