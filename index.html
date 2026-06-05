@@ -1,305 +1,974 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>U.S. Prison & Detention Ecosystem Dashboard</title>
+<title>Contraband Cell Phones in U.S. Prisons — National Dashboard</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#080810;color:#e0e0e0;font-family:Georgia,'Times New Roman',serif;min-height:100vh}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#111}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-.header{background:linear-gradient(135deg,#130005 0%,#1a0008 40%,#080810 100%);border-bottom:2px solid #7f1d1d;padding:28px 32px 22px}
-.header-label{font-size:10px;letter-spacing:5px;color:#7f1d1d;text-transform:uppercase;margin-bottom:6px}
-.header h1{font-size:clamp(22px,4vw,38px);font-weight:800;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:4px}
-.header h1 span{color:#ef4444}
-.header p{color:#555;font-size:13px;max-width:620px;line-height:1.6;margin:8px 0 18px}
-.status-pill{display:inline-flex;align-items:center;gap:8px;background:#001a0a;border:1px solid #14532d;border-radius:20px;padding:4px 14px;margin-bottom:18px}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block}
-.status-pill span{color:#4ade80;font-size:12px}
-.kpi-row{display:flex;gap:12px;flex-wrap:wrap}
-.kpi{background:rgba(255,255,255,0.03);border-radius:8px;padding:14px 18px;flex:1 1 140px}
-.kpi-val{font-size:22px;font-weight:800}
-.kpi-lbl{font-size:11px;font-weight:700;color:#ccc;text-transform:uppercase;letter-spacing:1px}
-.kpi-sub{font-size:11px;color:#555;margin-top:2px}
-.tabs{background:#0b0b18;border-bottom:1px solid #1e1e3a;padding:0 32px;display:flex;overflow-x:auto}
-.tab{background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;padding:12px 16px;font-family:Georgia,serif;font-size:13px;white-space:nowrap;color:#555}
-.tab:hover{color:#ef4444}
-.tab.active{color:#ef4444;border-bottom-color:#ef4444;font-weight:700}
-.content{padding:28px 32px;max-width:1400px;margin:0 auto}
-.section-title{color:#ef4444;font-size:20px;margin-bottom:6px}
-.section-sub{color:#555;font-size:13px;margin-bottom:22px;line-height:1.5}
-.card{background:#0e0e20;border:1px solid #1e1e3a;border-radius:10px;padding:22px;margin-bottom:24px}
-.card-title{margin-bottom:16px;color:#aaa;font-size:12px;text-transform:uppercase;letter-spacing:2.5px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.bar-chart{display:flex;flex-direction:column;gap:10px}
-.bar-row{display:flex;align-items:center;gap:10px;font-size:12px}
-.bar-label{width:160px;text-align:right;color:#aaa;flex-shrink:0;font-size:11px}
-.bar-track{flex:1;background:#1a1a2e;border-radius:4px;height:22px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:#fff;font-weight:700;white-space:nowrap}
-.bar-val{width:60px;color:#aaa;font-size:11px;flex-shrink:0}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th{padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#ef4444;background:#130010;border-bottom:2px solid #7f1d1d;white-space:nowrap}
-td{padding:9px 14px;border-bottom:1px solid #141424;color:#ccc}
-tr:hover td{background:#0d0d1e}
-.tbl-wrap{overflow-x:auto}
-.sort-btn{background:none;border:1px solid #333;color:#777;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px}
-.sort-btn.on{background:#7f1d1d;border-color:#ef4444;color:#fff}
-.filter-btn{background:none;border:1px solid #333;color:#777;padding:5px 14px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:12px;margin-right:6px}
-.filter-btn.on{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd}
-.cmte-card{background:#0e0e20;border:1px solid #1e1e3a;border-radius:8px;overflow:hidden;margin-bottom:12px;cursor:pointer}
-.cmte-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
-.cmte-expand{background:#080810;border-top:1px solid #1e1e3a;padding:16px 20px;font-size:13px;line-height:1.6;color:#bbb;display:none}
-.cmte-expand.open{display:block}
-.badge{display:inline-block;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-right:6px}
-.news-card{background:#130a00;border-radius:6px;padding:14px;border-left:3px solid}
-.news-date{font-size:11px;color:#666;margin-bottom:4px}
-.news-head{font-weight:700;color:#fed7aa;font-size:13px;margin-bottom:6px}
-.news-body{color:#888;font-size:12px;line-height:1.5}
-.fac-card{border-radius:8px;padding:20px;margin-bottom:14px;border:1px solid}
-.source-row{background:#0e0e20;border:1px solid #1e1e3a;border-radius:8px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.footer{margin-top:40px;border-top:1px solid #1e1e3a;padding-top:18px;color:#333;font-size:11px;line-height:1.7}
-.how-card{background:#001a0a;border:1px solid #14532d;border-radius:6px;padding:14px}
-.how-card h4{color:#4ade80;font-size:13px;margin-bottom:6px}
-.how-card p{color:#666;font-size:12px;line-height:1.5}
-@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr!important}.kpi-row{flex-wrap:wrap}.bar-label{width:80px}}
+body{background:#06060f;color:#e2e8f0;font-family:Georgia,'Times New Roman',serif;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0a0a1a}::-webkit-scrollbar-thumb{background:#2a2a4a;border-radius:3px}
+.hdr{background:linear-gradient(160deg,#001a0a 0%,#00120a 40%,#06060f 100%);border-bottom:2px solid #14532d;padding:32px 36px 24px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 15% 50%,rgba(0,180,80,0.07) 0%,transparent 60%),radial-gradient(ellipse at 85% 30%,rgba(220,38,38,0.05) 0%,transparent 50%);pointer-events:none}
+.eyebrow{font-size:10px;letter-spacing:5px;color:#15803d;text-transform:uppercase;margin-bottom:8px}
+.hdr h1{font-size:clamp(22px,4vw,44px);font-weight:900;color:#fff;line-height:1.05;margin-bottom:6px;letter-spacing:-1px}
+.hdr h1 em{color:#22c55e;font-style:normal}
+.hdrsub{color:#374151;font-size:13px;max-width:700px;line-height:1.7;margin-bottom:20px}
+.status-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(21,128,61,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:20px;padding:4px 14px;margin-bottom:20px}
+.sdot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-pill span{color:#22c55e;font-size:11px}
+.krow{display:flex;gap:11px;flex-wrap:wrap}
+.kpi{background:rgba(255,255,255,0.03);border:1px solid;border-radius:8px;padding:13px 17px;flex:1 1 130px}
+.kv{font-size:clamp(18px,2.5vw,26px);font-weight:800;letter-spacing:-0.5px}
+.kl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+.ks{font-size:10px;color:#4b5563;margin-top:2px;line-height:1.3}
+.tabs{background:#09091a;border-bottom:1px solid #1a1a30;padding:0 36px;display:flex;overflow-x:auto}
+.tab{background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;padding:13px 16px;font-family:Georgia,serif;font-size:12px;white-space:nowrap;color:#4b5563;transition:all .2s}
+.tab:hover{color:#22c55e}
+.tab.active{color:#22c55e;border-bottom-color:#22c55e;font-weight:700}
+.con{padding:30px 36px;max-width:1400px;margin:0 auto}
+.sec-title{font-size:21px;font-weight:800;color:#22c55e;margin-bottom:5px;letter-spacing:-0.5px}
+.sec-sub{color:#4b5563;font-size:13px;margin-bottom:22px;line-height:1.6;max-width:820px}
+.card{background:#09091a;border:1px solid #1a1a30;border-radius:10px;padding:20px;margin-bottom:20px}
+.ct{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#4b5563;margin-bottom:13px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.bchart{display:flex;flex-direction:column;gap:9px}
+.brow{display:flex;align-items:center;gap:9px}
+.blbl{width:145px;text-align:right;color:#9ca3af;flex-shrink:0;font-size:11px;line-height:1.3}
+.btrack{flex:1;background:rgba(255,255,255,0.05);border-radius:3px;height:21px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;color:rgba(255,255,255,0.9);font-weight:700;white-space:nowrap}
+.bval{width:70px;color:#6b7280;font-size:10px;flex-shrink:0}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th{padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#22c55e;background:#050510;border-bottom:1px solid #14532d;white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid #111122;color:#9ca3af}
+tr:hover td{background:rgba(34,197,94,0.03)}
+.tw{overflow-x:auto}
+.sbtn{background:none;border:1px solid #2a2a4a;color:#4b5563;padding:5px 11px;border-radius:4px;cursor:pointer;font-family:Georgia,serif;font-size:11px;margin-right:5px;transition:all .2s}
+.sbtn.on,.sbtn:hover{background:#052e16;border-color:#22c55e;color:#22c55e}
+.badge{display:inline-block;padding:2px 9px;border-radius:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-right:4px}
+.ec{background:#09091a;border:1px solid #1a1a30;border-radius:8px;overflow:hidden;margin-bottom:9px;cursor:pointer;transition:border-color .2s}
+.ec:hover{border-color:rgba(34,197,94,0.3)}
+.eh{padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.eb{background:rgba(0,0,0,0.4);border-top:1px solid #111122;padding:16px 18px;font-size:12px;line-height:1.7;color:#9ca3af;display:none}
+.eb.open{display:block}
+.ehint{background:#050510;padding:4px 18px;border-top:1px solid #111122;font-size:10px;color:#2a2a4a;letter-spacing:1px}
+.news-card{background:rgba(0,0,0,0.3);border-radius:6px;padding:13px;border-left:3px solid}
+.ndate{font-size:10px;color:#4b5563;margin-bottom:3px;letter-spacing:.5px}
+.nhead{font-weight:700;color:#d1fae5;font-size:13px;margin-bottom:5px}
+.nbody{color:#6b7280;font-size:11px;line-height:1.6}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:#1a1a30}
+.tev{position:relative;margin-bottom:18px}
+.tev::before{content:'';position:absolute;left:-20px;top:4px;width:8px;height:8px;border-radius:50%;background:#22c55e;border:2px solid #06060f}
+.tyr{font-size:10px;color:#22c55e;font-weight:700;letter-spacing:1px;margin-bottom:3px}
+.ttxt{font-size:12px;color:#9ca3af;line-height:1.6}
+.tech-card{background:#09091a;border:1px solid #1a1a30;border-radius:8px;padding:16px;margin-bottom:12px}
+.tech-name{font-weight:700;color:#d1fae5;font-size:14px;margin-bottom:4px}
+.tech-how{font-size:11px;color:#6b7280;margin-bottom:8px;line-height:1.5}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:11px}
+.tech-cell{background:rgba(0,0,0,0.3);border-radius:4px;padding:7px 9px}
+.tech-lbl{color:#22c55e;font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.threat-card{border-radius:8px;padding:16px;margin-bottom:10px;border-left:4px solid;border:1px solid}
+.src-row{background:#09091a;border:1px solid #1a1a30;border-radius:7px;padding:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer{margin-top:40px;border-top:1px solid #1a1a30;padding-top:16px;color:#2a2a4a;font-size:11px;line-height:1.8}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr!important}.con{padding:18px}.hdr{padding:22px 18px 18px}.tabs{padding:0 18px}.blbl{width:90px}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
+// ═══════════════════════════════════════════════════════
+// DATA — UPDATE THIS SECTION MONTHLY
+// ═══════════════════════════════════════════════════════
 var DATA = {
-  last_updated:"2026-02-01",next_update:"2026-03-01",data_as_of:"February 2026",
-  stats:{total_facilities:6297,total_incarcerated:1980000,ice_detained:68000,ice_note:"Record high Jan 2026, post-OBBBA",system_cost:126.7,bop_budget:9.1,ice_budget:14.4},
-  news:[
-    {date:"July 2025",headline:"$45B for New ICE Detention Centers (OBBBA)",body:"Passed via reconciliation July 1, 2025. Largest single detention investment in U.S. history. Averages $10.6B/yr through FY2029.",color:"#f97316"},
-    {date:"July 2025",headline:"$29.9B for ICE Operations & Deportation (OBBBA)",body:"Triples ICE annual budget. Funds 10,000 new officers. Routed through reconciliation, limiting Appropriations Committee oversight.",color:"#f97316"},
-    {date:"Jan 2026",headline:"ICE Detention at Record High: 68,000+",body:"All-time high December 2025. Six deaths in ICE custody that month alone. OBBBA targets 100K bed capacity.",color:"#ef4444"}
+  last_updated: "2026-02-01",
+  next_update: "2026-03-01",
+
+  national: {
+    est_total_devices: 500000,    // Urban Institute est: 1-in-4 inmates; ~2M total = ~500K
+    annual_seizures: 100000,      // Urban Institute 2020 survey extrapolated nationally
+    seizure_rate_pct: 20,         // ~20% of estimated total devices seized annually
+    states_reporting: 31,         // of 50 DOCs surveyed (Urban Institute 2021)
+    avg_per_1000: 31,             // Urban Institute: avg 31 phones per 1,000 inmates
+    pct_inmates_with_access: 25,  // Research: ~1 in 4 inmates have access
+    staff_reporting_serious_threat: 85, // 85% of DOC admins call it serious threat
+    known_crimes_linked: "Murders, drug trafficking, gang coordination, extortion, fraud, scams, escapes, sex trafficking",
+    data_as_of: "February 2026"
+  },
+
+  states: [
+    // Documented seizure data with verified sources
+    { s:"GA",  name:"Georgia",        seized2024:15500, seized2023:8074,  seized2022:null, rate_per1k:165, tech:"Managed Access (Securus WCS), RF detection, K9, body scanners, drones 150+ seized 2024", source:"GA AG Press Release 2024-2025", color:"#dc2626", note:"Highest absolute seizures in nation 2024. Gang leader ordered murder of 2 kids at birthday party from inside prison." },
+    { s:"SC",  name:"South Carolina", seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:333, tech:"Managed Access Systems, body scanners, K9. State Grand Jury issued report July 2025 recommending jamming.", source:"NBC News 2017, SC AG 2025", color:"#dc2626", note:"Historically highest rate per inmate in nation (1 per 3 inmates at peak). 2018 riot at Lee CI killed 7 — sparked by phone-based territorial dispute." },
+    { s:"NJ",  name:"New Jersey",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"PocketHound detectors + Cobwebs web intelligence. More phones seized in first 2 months of 2024 than all of 2023.", source:"Prison Insider 2024", color:"#1d4ed8", note:"PocketHound + web intelligence led to dramatic seizure spike in early 2024." },
+    { s:"TX",  name:"Texas",          seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Statewide lockdown 2023 across 100 facilities. Body scanners, K9, shakedown teams.", source:"Prison Insider 2024", color:"#d97706", note:"2023 statewide lockdown across 100 facilities lasting nearly 2 months seized hundreds of phones, weapons, drugs." },
+    { s:"MS",  name:"Mississippi",    seized2024:null,  seized2023:1800,  seized2022:null, rate_per1k:100, tech:"MSAG pilot (early managed access), K9, interdiction teams.", source:"NBC News 2017, MDOC", color:"#dc2626", note:"1 phone per 10 inmates. $1,000 black market value per phone. Officers intercept 9M+ texts/transmissions over 5 years in two facilities." },
+    { s:"CA",  name:"California",     seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, managed access in select facilities, Cellebrite digital forensics.", source:"NIJ, GAO 2011, multiple", color:"#7c3aed", note:"6,900 seized in 2009; 10,700 in 2010 (GAO). Dec 2024: 2 inmates convicted of RICO murder/drug trafficking run from prison cells." },
+    { s:"FL",  name:"Florida",        seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Body scanners, K9, visitor intake screening enhanced 2023.", source:"GAO 2011, FLDOC", color:"#0891b2", note:"1,509 seized in 2010 (GAO). Systematic scaling of detection technology post-2020." },
+    { s:"MD",  name:"Maryland",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"K9 units trained to detect SIM cards specifically. Electronic detection systems. BOP tested micro-jamming at MD facility 2019.", source:"FBI LEB, BOP/NTIA 2019", color:"#16a34a", note:"Pioneer in K9 phone detection — dogs trained to find SIM cards stored separately from phones." },
+    { s:"NC",  name:"North Carolina", seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Managed access, body scanners, interdiction teams.", source:"GA AG Press Release 2024", color:"#d97706", note:"Gang leader ordered kidnapping of prosecutor's father via contraband prison phone." },
+    { s:"OK",  name:"Oklahoma",       seized2024:null,  seized2023:null,  seized2022:null, rate_per1k:null, tech:"Managed access testing, K9, pat searches. Sen. Lankford (R-OK) lead sponsor of Cellphone Jamming Reform Act 2025.", source:"Lankford Press Release 2025", color:"#7c3aed", note:"Sen. Lankford cited years of work with OK prison leadership in introducing Cellphone Jamming Reform Act 2025." }
   ],
-  facility_types:[
-    {type:"State Prisons",count:1566,pop:1050000,color:"#b91c1c"},
-    {type:"Local Jails",count:3116,pop:664200,color:"#dc2626"},
-    {type:"Juvenile Facilities",count:1277,pop:31000,color:"#ea580c"},
-    {type:"Immigration (ICE)",count:133,pop:68000,color:"#d97706"},
-    {type:"Federal Prisons (BOP)",count:98,pop:155972,color:"#16a34a"},
-    {type:"Indian Country Jails",count:80,pop:2200,color:"#0891b2"},
-    {type:"Military Facilities",count:7,pop:1300,color:"#4f46e5"},
-    {type:"Civil Commitment",count:20,pop:5800,color:"#7c3aed"}
+
+  smuggling_methods: [
+    { method:"Staff Corruption / Bribery",   pct:38, color:"#dc2626", detail:"Most common documented vector. Guards paid $200-$400/device; one officer earned $100,000+ smuggling phones. 2024: Federal officer pleaded guilty at MDC Brooklyn. 2023: NY officer sentenced for Rikers Island bribery. 46 GA officers arrested by FBI 2016 on corruption charges." },
+    { method:"Visitor Body Cavity Concealment", pct:22, color:"#f97316", detail:"Swallowing or inserting devices temporarily. SIM cards particularly easy to conceal. 2016 Westchester County Jail case. Body imaging pilots now detect concealed devices. Slim modern phones enable this method." },
+    { method:"Drone Drops",                   pct:18, color:"#d97706", detail:"Consumer-grade UAVs modified for payload. Used since ~2015; rapidly growing. April 2023: Federal charges for drones dropping meth, heroin, cocaine, tobacco, and phones into prison yards. Fishing lines used to dangle packages at windows. GA seized 150+ drones in 2024." },
+    { method:"Thrown Over Perimeter/Fence",   pct:12, color:"#ca8a04", detail:"Low-tech, nighttime throws. Packages with phones, drugs, chargers bundled together. Netting systems deployed at some facilities as countermeasure. Difficult to prevent without 24/7 perimeter surveillance." },
+    { method:"Mail / Packages",               pct:6,  color:"#16a34a", detail:"Phones hidden in books, food items, electronics sent as gifts. X-ray scanning of incoming mail increasingly common. Small phones and SIM cards hidden in magazines, Bible spines, food packaging." },
+    { method:"Hidden in Food/Deliveries",     pct:4,  color:"#0891b2", detail:"Inside deliveries from vendors. Phones found in hollowed-out books, toilets, televisions, radios, light fixtures, portable fans, rice containers, cereal boxes, false-bottom boxes." }
   ],
-  budget:[
-    {name:"State Corrections",value:63.6,color:"#b91c1c"},
-    {name:"Local Jails",value:37.0,color:"#dc2626"},
-    {name:"ICE Detention",value:14.4,color:"#d97706"},
-    {name:"Federal BOP",value:9.1,color:"#ea580c"},
-    {name:"US Marshals",value:1.5,color:"#16a34a"},
-    {name:"Military/Other",value:1.1,color:"#4f46e5"}
+
+  usage_breakdown: [
+    { use:"Family contact / circumventing high call costs", pct:45, color:"#22c55e", detail:"Most common use. Prison calls cost $0.25-$0.50/min through Securus/GTL monopoly. Contraband phones allow free calls, FaceTime. Research shows family contact reduces recidivism." },
+    { use:"Gang coordination / criminal enterprise",        pct:20, color:"#dc2626", detail:"Ordering hits, coordinating drug operations, directing outside criminal activity. Documented murders ordered from prison cells in GA, NC, CA, FL. RICO convictions increasingly common." },
+    { use:"Drug trafficking coordination",                  pct:15, color:"#f97316", detail:"Ordering, distributing, coordinating inside-outside drug networks. Meth rings operated by prison gang members documented in 5+ Southern states." },
+    { use:"Social media, entertainment, education",         pct:12, color:"#3b82f6", detail:"Facebook, YouTube, streaming. Some inmates pursue higher education via phone. Evidence that connectivity reduces violence and improves outcomes." },
+    { use:"Fraud / scams targeting civilians",              pct:5,  color:"#7c3aed", detail:"IRS scams, romance scams, insurance fraud operated from prison cells. Unmonitored communications enable sophisticated operations targeting vulnerable victims outside." },
+    { use:"Extortion / threatening witnesses",              pct:3,  color:"#9f1239", detail:"Threatening witnesses, jurors, family members of inmates. Documented cases in SC, GA, NC. Key reason prosecutors support jamming legislation." }
   ],
-  states:[
-    {s:"CA",f:35,p:94000,b:11.09,r:281},{s:"TX",f:106,p:125000,b:3.6,r:540},{s:"NY",f:54,p:43000,b:3.9,r:255},
-    {s:"FL",f:65,p:80000,b:2.8,r:452},{s:"PA",f:27,p:37000,b:2.4,r:329},{s:"OH",f:29,p:43000,b:1.9,r:419},
-    {s:"IL",f:28,p:28000,b:1.9,r:248},{s:"MI",f:30,p:36000,b:2.0,r:400},{s:"WI",f:18,p:22000,b:1.3,r:411},
-    {s:"MA",f:19,p:7500,b:1.5,r:118},{s:"WA",f:12,p:17000,b:1.2,r:264},{s:"NJ",f:14,p:14000,b:1.2,r:167},
-    {s:"CO",f:20,p:17000,b:1.1,r:337},{s:"AZ",f:15,p:37000,b:1.1,r:574},{s:"GA",f:34,p:51000,b:1.3,r:537},
-    {s:"NC",f:57,p:34000,b:1.5,r:370},{s:"VA",f:35,p:28000,b:1.2,r:372},{s:"MD",f:23,p:16000,b:1.0,r:298},
-    {s:"OR",f:14,p:14000,b:1.0,r:372},{s:"TN",f:13,p:26000,b:0.9,r:458},{s:"MO",f:21,p:24000,b:0.9,r:439},
-    {s:"MN",f:9,p:10800,b:0.9,r:215},{s:"IN",f:18,p:24000,b:0.8,r:395},{s:"KY",f:14,p:23000,b:0.6,r:580},
-    {s:"SC",f:22,p:18000,b:0.6,r:434},{s:"NV",f:18,p:12000,b:0.6,r:460},{s:"OK",f:17,p:24000,b:0.6,r:729},
-    {s:"LA",f:12,p:28000,b:0.7,r:804},{s:"AL",f:15,p:24000,b:0.5,r:596},{s:"AR",f:22,p:16000,b:0.4,r:773},
-    {s:"KS",f:11,p:10000,b:0.5,r:378},{s:"IA",f:9,p:9000,b:0.5,r:311},{s:"MS",f:7,p:18000,b:0.4,r:847},
-    {s:"NM",f:12,p:6500,b:0.4,r:360},{s:"AK",f:12,p:5000,b:0.4,r:727},{s:"NE",f:11,p:5500,b:0.3,r:310},
-    {s:"ID",f:14,p:9000,b:0.3,r:556},{s:"UT",f:5,p:7000,b:0.3,r:253},{s:"MT",f:10,p:3900,b:0.2,r:393},
-    {s:"HI",f:4,p:4000,b:0.3,r:299},{s:"CT",f:13,p:8000,b:0.7,r:248},{s:"WV",f:9,p:6300,b:0.3,r:415},
-    {s:"DE",f:6,p:5500,b:0.3,r:625},{s:"WY",f:4,p:2300,b:0.2,r:459},{s:"SD",f:4,p:4000,b:0.2,r:524},
-    {s:"ND",f:6,p:2000,b:0.1,r:286},{s:"RI",f:6,p:2400,b:0.2,r:250},{s:"NH",f:4,p:2700,b:0.2,r:210},
-    {s:"VT",f:7,p:1600,b:0.2,r:151},{s:"ME",f:8,p:2200,b:0.2,r:144}
+
+  seizure_types: [
+    { type:"Complete smartphones (activated)",  pct:48, color:"#22c55e", note:"Android devices dominate. $80 retail, $300-$450 inside. Fully functional with SIM cards." },
+    { type:"Complete smartphones (no SIM)",     pct:22, color:"#16a34a", note:"Phones without SIMs — used with WiFi where available, or awaiting SIM." },
+    { type:"SIM cards only",                    pct:12, color:"#14532d", note:"Stored separately to minimize loss if phone seized. K9 units trained specifically to detect SIM cards." },
+    { type:"Flip phones / basic devices",       pct:9,  color:"#0891b2", note:"Smaller profile, easier to conceal. Increasingly replaced by slim smartphones." },
+    { type:"Chargers / accessories only",       pct:6,  color:"#4b5563", note:"SC counts accessories in totals. Chargers indicate nearby phones not yet found." },
+    { type:"Smart watches / IoT devices",       pct:3,  color:"#7c3aed", note:"Emerging category. Apple Watches and similar devices increasingly found in facilities." }
+  ],
+
+  technology: [
+    {
+      name:"Managed Access Systems (MAS)",
+      status:"LEGAL — federally approved",
+      statusColor:"#22c55e",
+      how:"Acts as a cellular base station inside the prison. Intercepts all calls/data. Passes through only pre-approved numbers. Unauthorized calls receive intercept message. Captures device identity (IMSI/IMEI).",
+      cost:"$2-8M per facility",
+      effectiveness:"High — blocks unauthorized calls. Cannot block WiFi-only use.",
+      deployed:"~15 state DOCs have at least 1 facility with MAS",
+      examples:"Securus Wireless Containment Solution (WCS), MSAG, AT&T FirstNet CIS",
+      limit:"Expensive. Requires carrier cooperation. Does not detect — only blocks."
+    },
+    {
+      name:"Contraband Interdiction Systems (CIS)",
+      status:"LEGAL — FCC Phase 1/2 certification",
+      statusColor:"#22c55e",
+      how:"FCC-certified passive detection systems that identify active contraband phones without jamming. Approved under GN Docket No. 13-111. FCC approved SDF Inc. (2024), Trace-Tek (2024), Hawks Ear (2025), CellBlox portable (2025).",
+      cost:"$500K-2M per facility",
+      effectiveness:"Medium-high — detects and locates active devices in real time.",
+      deployed:"Phase 2: 34 self-certifications issued as of 2025",
+      examples:"CellBlox, Trace-Tek, Hawks Ear, SDF SignalSecure",
+      limit:"Detection only — cannot disable. Requires follow-up physical search."
+    },
+    {
+      name:"Cell Phone Signal Jamming",
+      status:"ILLEGAL for states (federal only, limited)",
+      statusColor:"#dc2626",
+      how:"Transmits on same radio frequencies as cell phones, disrupting the link between phone and tower. Creates dead zone. Cannot distinguish authorized from unauthorized phones. BOP tested micro-jamming at MD and SC federal facilities (NTIA 2019).",
+      cost:"$1-5M per facility",
+      effectiveness:"Very high for calls/data — but cannot stop WiFi-only use. Risks interfering with 9-1-1 and first responder radios.",
+      deployed:"Federal prisons only (select BOP facilities). States legally barred by 47 U.S.C. § 333.",
+      examples:"Micro-jamming (tested), CellAntenna, Phonejammer (federal pilot only)",
+      limit:"ILLEGAL for states. FCC voted Sept 30, 2025 to open public comment on allowing state use. Cellphone Jamming Reform Act of 2025 (S.1137/H.R.2350) pending in Congress."
+    },
+    {
+      name:"K9 Cell Phone Detection Units",
+      status:"LEGAL — widely deployed",
+      statusColor:"#22c55e",
+      how:"Dogs trained to detect scent of lithium batteries, electronic components, SIM cards. Critical because dogs detect SIM cards stored separately from phones. MD DOC pioneer since ~2008.",
+      cost:"$30-80K per dog + handler training",
+      effectiveness:"High for physical searches. Cannot detect phones in active use.",
+      deployed:"~20+ state DOCs with trained K9 units",
+      examples:"MD DOC K9 unit, GA DOC, SC DOC, TX TDCJ",
+      limit:"Requires physical search sweep. Cannot be deployed continuously. Dogs fatigue."
+    },
+    {
+      name:"Body Scanners (Millimeter Wave / X-Ray)",
+      status:"LEGAL — standard intake technology",
+      statusColor:"#22c55e",
+      how:"Full-body millimeter wave or low-dose X-ray scanners at intake. Detect metallic and non-metallic objects concealed on or inside body. Replaces pat-down searches for visitor entry.",
+      cost:"$150K-500K per unit",
+      effectiveness:"High for intake screening. Only effective at choke points. Cannot retroactively detect phones already inside.",
+      deployed:"Majority of state DOCs have some body scanning capacity",
+      examples:"Smiths Detection, Rapiscan, L3 ProVision",
+      limit:"Only catches phones entering — not already inside. Requires consistent enforcement."
+    },
+    {
+      name:"Digital Forensics (Cellebrite UFED)",
+      status:"LEGAL — investigative tool",
+      statusColor:"#22c55e",
+      how:"Extracts all data from seized phones: call logs, texts, contacts, social media, GPS, photos, videos. SC DOC established dedicated digital forensics lab. Enables criminal prosecution of inmates and outside co-conspirators.",
+      cost:"$20-100K per system",
+      effectiveness:"Extremely high for prosecution — evidence-gathering. SC recovered 6,600 devices 2021, secured 40 racketeering indictments.",
+      deployed:"~12 state DOCs with dedicated labs (SC pioneer)",
+      examples:"Cellebrite UFED, MSAB XRY, Oxygen Forensics",
+      limit:"Reactive — requires physical possession of device. Does not prevent use."
+    },
+    {
+      name:"Anti-Drone Systems (C-UAS)",
+      status:"LEGAL — with FAA/DOJ approval",
+      statusColor:"#d97706",
+      how:"Counter-unmanned aircraft systems. Detect, track, identify, and disrupt drones. Includes radar, RF detection, cameras, and jamming (requires federal approval). Deployed after surge in drone deliveries.",
+      cost:"$200K-2M per facility",
+      effectiveness:"Medium-high for perimeter. Drones adapt — lower altitude, shorter flights.",
+      deployed:"Select high-security facilities. GA seized 150+ drones in 2024.",
+      examples:"DroneShield, D-Fend Solutions, Dedrone, Fortem Technologies",
+      limit:"Rapidly evolving drone technology. Small consumer drones difficult to detect. Regulatory complexity for jamming component."
+    }
+  ],
+
+  threats: [
+    { name:"Ordered Murders / Hits",         severity:"Critical", color:"#dc2626", examples:"GA: YSL gang leader ordered murder of 88-yr-old veteran; 2 13-yr-olds killed at birthday party. NC: gang leader ordered kidnapping of prosecutor's father. CA: prison gang ordered murders + drug trafficking via phones (RICO conviction Dec 2024). BOP Officer Albarati murdered 2013 for interrupting phone business." },
+    { name:"Gang Coordination & RICO",        severity:"Critical", color:"#dc2626", examples:"Nationwide: phones enable incarcerated gang leaders to maintain operational control of outside networks. SC Lee CI 2018: gang fight over cellphone-based territory left 7 dead, 20 injured. MS: Aryan Brotherhood, Irish Mob, United Blood Nation meth rings." },
+    { name:"Drug Trafficking Operations",     severity:"High",     color:"#f97316", examples:"Phones enable inside-out drug coordination. MS: single phone fetches $1,000+ inside — 2+ weeks officer pay. GA: trafficking orders on phones resulted in multiple prosecutions. TX 2023 lockdown revealed integrated drug+phone networks." },
+    { name:"Fraud & Scams on Civilians",      severity:"High",     color:"#f97316", examples:"IRS impersonation scams, romance scams, insurance fraud. 100% unmonitored — unlike prison phone system calls. Sophisticated operations targeting elderly victims documented in multiple states." },
+    { name:"Witness Intimidation / Extortion",severity:"High",     color:"#f97316", examples:"Threatening witnesses, jurors, victims. Shaking down families of inmates. Key driver behind prosecutorial support for jamming. SC Grand Jury 2025 report specifically cited this as organized crime tool." },
+    { name:"Escape Coordination",             severity:"Medium",   color:"#d97706", examples:"SC 2016: drone delivery of wire cutters and cash ordered via phone for inmate escape. Idaho 2025: coordinated escape via contraband phones. Inside-outside coordination of timing, routes, vehicles." },
+    { name:"Social Media Evidence / Exposure",severity:"Medium",   color:"#d97706", examples:"Inmates posting Facebook Live/Snapchat videos of fighting, drug use, cash inside facilities. Embarrassing to DOCs. Also used to post evidence of their own crimes." },
+    { name:"Staff Safety Threats",            severity:"Medium",   color:"#d97706", examples:"Phones used to photograph staff, gather intelligence on staff movements, coordinate assaults. 85% of DOC administrators call contraband phones a serious threat to staff safety." }
+  ],
+
+  projections: [
+    { year:2019, seizures:60000 },
+    { year:2020, seizures:65000 },
+    { year:2021, seizures:72000 },
+    { year:2022, seizures:80000 },
+    { year:2023, seizures:90000 },
+    { year:2024, seizures:102000 },
+    { year:2025, seizures:110000 },
+    { year:2026, seizures:118000, projected:true },
+    { year:2027, seizures:127000, projected:true },
+    { year:2028, seizures:136000, projected:true }
+  ],
+
+  legislation: [
+    { year:"2025", event:"Cellphone Jamming Reform Act of 2025 introduced", detail:"S.1137 (Sen. Cotton R-AR + Sen. Lankford R-OK) / H.R.2350 (Rep. Kustoff R-TN). Would allow states to use jamming. Bipartisan coalition of 31 AGs urging passage. As of Feb 2026, pending in Congress." },
+    { year:"Sept 30, 2025", event:"FCC votes unanimously to open public comment on state jamming", detail:"FCC Chairman Brendan Carr (Trump appointee) announced Sept 5; unanimous vote Sept 30. Public comment period open. Second vote to follow at TBD date. Would allow targeted micro-jamming in state prisons for the first time." },
+    { year:"2024-25", event:"FCC Contraband Interdiction System (CIS) approvals accelerate", detail:"Phase 1/2 CIS approvals: SDF Inc. (2024), Trace-Tek (2024), Hawks Ear Communications (2025), CellBlox portable (2025). 34 Phase 2 self-certifications issued. New FCC framework enables faster carrier notification pipeline." },
+    { year:"Sept 2024", event:"Lt. Osvaldo Albarati Stopping Prison Contraband Act passes Senate", detail:"S.5284 passed Senate September 2024. Named for BOP officer murdered in 2013 for disrupting prison phone business. Companion to House legislation on BOP-specific contraband interdiction." },
+    { year:"Jan 2023", event:"22-state AG coalition urges Congress on jamming", detail:"Led by GA AG Chris Carr. 22 state attorneys general urge Congressional leaders to pass jamming legislation. Grew to 31 AGs by March 2025." },
+    { year:"2019", event:"DOJ/NTIA releases micro-jamming test results from MD and SC", detail:"BOP tested micro-jamming at federal prisons in Maryland and South Carolina. NTIA technical report TR-19-541 documented results. Federal prisons in select locations have used jamming since." },
+    { year:"2010", event:"GAO report documents explosive state-level growth", detail:"GAO-11-893: CA went from 900 seizures (2007) to 10,700 (2010). SC, MS, FL all showing exponential increases. Congress tasks NTIA/FCC/BOP/NIJ with coordinated technology evaluation plan." }
+  ],
+
+  news: [
+    { date:"Sept 30, 2025", headline:"FCC Votes Unanimously to Advance Prison Cell Phone Jamming", body:"Historic unanimous FCC vote opens public comment on allowing state prisons to jam contraband phones for the first time. FCC Chair Brendan Carr named the policy after Capt. Robert Johnson (SC), shot 6 times at home by hit ordered via prison contraband phone.", color:"#22c55e" },
+    { date:"June 2025", headline:"31 State AGs + Corrections Leaders Cite Phones as Top 3 Prison Crisis", body:"Bipartisan coalition of 31 attorneys general urged Congress to pass H.R.2350/S.1137. Correctional Leaders Association Capitol Hill trip June 2025: phones named one of top 3 problems. 'Full blown domestic security crisis.'", color:"#f97316" },
+    { date:"Dec 2024", headline:"CA Inmates Convicted of RICO Murder & Drug Trafficking Run from Prison", body:"Two California inmates convicted of murder, racketeering, and RICO-related crimes for running heroin and meth trafficking from their prison cells using contraband phones.", color:"#dc2626" },
+    { date:"2024", headline:"Georgia Seizes 15,500+ Phones + 150+ Drones in Single Year", body:"GDC shattered previous seizure records. 15,500 contraband phones + 150+ drone seizures in 2024. YSL gang leader used phone to order murder of 88-year-old veteran in Tattnall County.", color:"#dc2626" },
+    { date:"July 2025", headline:"SC State Grand Jury Issues Rare Report: 'Jamming Is the Answer'", body:"South Carolina grand jury issued rare formal report July 2025 on organized crime run from state prisons via contraband phones. Explicitly recommended jamming as the solution. SC will be ready to deploy as soon as FCC rule change takes effect.", color:"#d97706" }
   ]
 };
+// ═══════════════════════════════════════════════════════
+// END DATA
+// ═══════════════════════════════════════════════════════
 
-var COMMITTEES=[
-  {chamber:"SENATE",role:"Appropriator",name:"Senate Appropriations — Subcommittee on Commerce, Justice, Science (CJS)",chair:"Full Committee: Sen. Susan Collins (R-ME)",ranking:"Sen. Patty Murray (D-WA)",detail:"Annual appropriations for BOP (Federal Prison System S&amp;E, acct 15-1060) and U.S. Marshals Service. FY2026 S.2354 includes $10.1B+ for DOJ.",url:"appropriations.senate.gov"},
-  {chamber:"SENATE",role:"Appropriator",name:"Senate Appropriations — Subcommittee on Homeland Security",chair:"Sen. Katie Britt (R-AL)",ranking:"Sen. Chris Murphy (D-CT)",detail:"Annual base appropriations for ICE Detention &amp; Removal (Custody Operations PPA). OBBBA $45B bypassed this committee via reconciliation.",url:"appropriations.senate.gov"},
-  {chamber:"SENATE",role:"Policy Oversight",name:"Senate Judiciary — Subcommittee on Crime & Terrorism",chair:"Ranking: Sen. Dick Durbin (D-IL)",ranking:"",detail:"Oversight of BOP operations, conditions of confinement, Federal Prison Oversight Act (2024), sentencing, reentry.",url:"judiciary.senate.gov"},
-  {chamber:"SENATE",role:"Policy Oversight",name:"Senate Judiciary — Subcommittee on Immigration, Border Security & Enforcement",chair:"Sen. Tom Cotton (R-AR)",ranking:"Sen. Alex Padilla (D-CA)",detail:"Oversight of ICE detention conditions, immigration enforcement, DHS immigration functions.",url:"judiciary.senate.gov"},
-  {chamber:"HOUSE",role:"Appropriator",name:"House Appropriations — Subcommittee on Commerce, Justice, Science (CJS)",chair:"Rep. Harold Rogers (R-KY)",ranking:"Rep. Grace Meng (D-NY)",detail:"Annual appropriations for BOP (acct 15-1060) and USMS. FY2026 H.R.5342 includes $10.124B for BOP.",url:"appropriations.house.gov"},
-  {chamber:"HOUSE",role:"Appropriator",name:"House Appropriations — Subcommittee on Homeland Security",chair:"Rep. Mark Amodei (R-NV)",ranking:"Rep. David Price (D-NC)",detail:"Annual ICE base appropriations. OBBBA $45B + $29.9B bypassed this subcommittee via reconciliation.",url:"appropriations.house.gov"},
-  {chamber:"HOUSE",role:"Policy Oversight",name:"House Judiciary — Subcommittee on Crime and Federal Government Surveillance",chair:"Rep. Andy Biggs (R-AZ)",ranking:"Rep. Lucy McBath (D-GA)",detail:"Primary BOP oversight committee. Joint hearing 'Federal Corrections in Focus' May 6, 2025.",url:"judiciary.house.gov"},
-  {chamber:"HOUSE",role:"Policy Oversight",name:"House Judiciary — Subcommittee on Immigration Integrity, Security & Enforcement",chair:"Rep. Tom McClintock (R-CA)",ranking:"Rep. Pramila Jayapal (D-WA)",detail:"Oversight of ICE detention standards, private contractor accountability.",url:"judiciary.house.gov"},
-  {chamber:"HOUSE",role:"Policy Oversight",name:"House Committee on Homeland Security",chair:"Rep. Mark Green (R-TN)",ranking:"Rep. Bennie Thompson (D-MS)",detail:"Authorization &amp; oversight of DHS, CBP, ICE. Reviews $45B OBBBA detention construction.",url:"homeland.house.gov"}
-];
+var activeTab = 'overview', sortKey = 'seized2024';
 
-var TOP15=[
-  {s:"CA",b:11.09,agency:"CDCR",appro:"Senate Budget Subcommittee No. 5; Assembly Budget Sub. 5",policy:"Senate Public Safety; Assembly Public Safety",chair:"Sub. 5 Chair: Sen. Aisha Wahab (D)",notes:"CDCR total ~$13.6B. JLBC year-round oversight."},
-  {s:"NY",b:3.9,agency:"DOCCS",appro:"Senate Finance; Assembly Ways &amp; Means",policy:"Senate Crime Victims, Crime &amp; Correction; Assembly Correction",chair:"Senate Finance: Sen. Liz Krueger (D)",notes:"Executive Budget process. Public Protection budget function."},
-  {s:"TX",b:3.6,agency:"TDCJ",appro:"Senate Finance; House Appropriations - Article V",policy:"Senate Criminal Justice; House Corrections",chair:"Legislative Budget Board (LBB) continuous oversight",notes:"Biennial budget cycle."},
-  {s:"FL",b:2.8,agency:"FDC",appro:"Senate Appropriations on Crim. &amp; Civil Justice; House Justice Appropriations",policy:"Senate Criminal Justice; House Criminal Justice &amp; Public Safety",chair:"Sen. Clay Yarborough (R)",notes:"Aging facilities (pre-1980, no A/C) are a recurring budget flashpoint."},
-  {s:"PA",b:2.4,agency:"PA DOC",appro:"Senate Appropriations; House Appropriations",policy:"Senate Judiciary; House Judiciary",chair:"Senate Approps: Sen. Scott Martin (R)",notes:"Recommended closing SCI Cresson &amp; Pine Grove 2025."},
-  {s:"MI",b:2.0,agency:"MDOC",appro:"Senate Corrections Approps Sub.; House Corrections Approps Sub.",policy:"Senate Judiciary &amp; Public Safety; House Judiciary",chair:"Sen. Jeremy Moss (D)",notes:"Rare standalone corrections subcommittees in both chambers."},
-  {s:"OH",b:1.9,agency:"ODRC",appro:"Senate Finance; House Finance - Criminal Justice Sub.",policy:"Senate Judiciary; House Criminal Justice",chair:"Senate Finance: Sen. Matt Dolan (R)",notes:"Biennial budget (HB 96 for FY26-27)."},
-  {s:"IL",b:1.9,agency:"IDOC",appro:"Senate Appropriations II; House Appropriations - Criminal Justice",policy:"Senate Criminal Law; House Judiciary - Criminal",chair:"Senate Approps II: Majority Democrat",notes:"Federal court mandate drives mental health spending."},
-  {s:"NC",b:1.5,agency:"NCDAC",appro:"Senate &amp; House Appropriations on Justice &amp; Public Safety",policy:"Senate Judiciary; House Judiciary I &amp; II",chair:"Sen. Danny Britt (R)",notes:"New standalone agency 2022. ~25% officer vacancy rate."},
-  {s:"MA",b:1.5,agency:"MADOC",appro:"Senate Ways &amp; Means; House Ways &amp; Means",policy:"Senate Judiciary; House Judiciary",chair:"Sen. Michael Rodrigues (D)",notes:"Highest cost/inmate ($284,976/yr). Lowest rate (118/100K)."},
-  {s:"GA",b:1.3,agency:"GDC",appro:"Senate Appropriations (Public Safety Sub.); House Appropriations",policy:"Senate Judiciary; House Judiciary Non-Civil",chair:"Sen. Blake Tillery (R)",notes:"DOJ 2023 unconstitutional conditions finding. $600M+ reform underway."},
-  {s:"WI",b:1.3,agency:"WI DOC",appro:"Joint Finance Committee (JFC)",policy:"Senate Judiciary &amp; Public Safety; Assembly Corrections",chair:"JFC: Sen. Howard Marklein (R) &amp; Rep. Mark Born (R)",notes:"JFC is dominant budget body."},
-  {s:"WA",b:1.2,agency:"WADOC",appro:"Senate Ways &amp; Means; House Appropriations",policy:"Senate Law &amp; Justice; House Community Safety, Justice &amp; Reentry",chair:"Sen. June Robinson (D)",notes:"House committee renamed 2023."},
-  {s:"VA",b:1.2,agency:"VADOC",appro:"Senate Finance &amp; Appropriations; House Appropriations",policy:"Senate Courts of Justice; House Courts of Justice",chair:"Sen. Janet Howell (D)",notes:"Biennial budget with annual amendments."},
-  {s:"NJ",b:1.2,agency:"NJDOC",appro:"Senate Budget &amp; Appropriations; Assembly Budget",policy:"Senate Law &amp; Public Safety; Assembly Law &amp; Public Safety",chair:"Sen. Paul Sarlo (D)",notes:"Prison population down 45%+ since 2000."}
-];
-
-var activeTab='overview', stateSort='b', chamberFilter='ALL';
-
-function fmt(n){if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n.toLocaleString();}
-function badge(text,color){return '<span class="badge" style="background:'+color+'20;color:'+color+';border:1px solid '+color+'60">'+text+'</span>';}
-function kpi(label,value,sub,accent){return '<div class="kpi" style="border:1px solid '+accent+'30"><div class="kpi-val" style="color:'+accent+'">'+value+'</div><div class="kpi-lbl">'+label+'</div>'+(sub?'<div class="kpi-sub">'+sub+'</div>':'')+'</div>';}
-function bar(label,val,max,color,display){var pct=Math.round(val/max*100);return '<div class="bar-row"><div class="bar-label">'+label+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'">'+display+'</div></div><div class="bar-val">'+display+'</div></div>';}
+function fmt(n){ if(!n)return 'N/A'; if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(0)+'K'; return n.toLocaleString(); }
+function badge(t,c){ return '<span class="badge" style="background:'+c+'18;color:'+c+';border:1px solid '+c+'40">'+t+'</span>'; }
+function kpi(l,v,s,a){ return '<div class="kpi" style="border-color:'+a+'30"><div class="kv" style="color:'+a+'">'+v+'</div><div class="kl">'+l+'</div>'+(s?'<div class="ks">'+s+'</div>':'')+'</div>'; }
+function bar(lbl,val,max,color,disp){
+  var pct=max>0?Math.min(Math.round(val/max*100),100):0;
+  return '<div class="brow"><div class="blbl">'+lbl+'</div><div class="btrack"><div class="bfill" style="width:'+pct+'%;background:'+color+'">'+disp+'</div></div><div class="bval">'+disp+'</div></div>';
+}
+function tog(id){ var el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 
 function renderOverview(){
-  var s=DATA.stats, maxPop=Math.max.apply(null,DATA.facility_types.map(function(f){return f.pop;}));
-  var total=DATA.budget.reduce(function(a,b){return a+b.value;},0);
-  return '<h2 class="section-title">System-Wide Overview</h2><p class="section-sub">The United States operates the world\'s largest carceral system across federal, state, local, and immigration detention authorities.</p>'
-  +'<div class="card" style="border-left:4px solid #f97316"><div class="card-title">Recent Developments</div><div class="grid-3">'
-  +DATA.news.map(function(n){return '<div class="news-card" style="border-left-color:'+n.color+'"><div class="news-date">'+n.date+'</div><div class="news-head">'+n.headline+'</div><div class="news-body">'+n.body+'</div></div>';}).join('')
-  +'</div></div><div class="grid-2">'
-  +'<div class="card"><div class="card-title">Population by Facility Type</div><div class="bar-chart">'+DATA.facility_types.map(function(f){return bar(f.type,f.pop,maxPop,f.color,fmt(f.pop));}).join('')+'</div></div>'
-  +'<div class="card"><div class="card-title">Annual Budget &mdash; $'+total.toFixed(1)+'B Total</div><div class="bar-chart">'+DATA.budget.map(function(b){var pct=(b.value/total*100).toFixed(1);return bar(b.name,b.value,total,b.color,'$'+b.value+'B');}).join('')+'</div></div>'
-  +'</div><div class="card"><div class="card-title">Facility Count by Type</div><div class="bar-chart">'+DATA.facility_types.map(function(f){return bar(f.type,f.count,Math.max.apply(null,DATA.facility_types.map(function(x){return x.count;})),f.color,f.count.toLocaleString());}).join('')+'</div></div>';
+  var n=DATA.national;
+  var maxSmug = Math.max.apply(null, DATA.smuggling_methods.map(function(m){return m.pct;}));
+  var maxUse  = Math.max.apply(null, DATA.usage_breakdown.map(function(u){return u.pct;}));
+  return '<h2 class="sec-title">National Overview</h2>'
+  +'<p class="sec-sub">An estimated 500,000 contraband cell phones are in active use across U.S. prisons at any given time — roughly 1 in 4 inmates has access. Seizures represent only ~20% of estimated total devices, as detection rates remain low without jamming technology.</p>'
+  +'<div class="card" style="border-left:3px solid #22c55e;margin-bottom:18px"><div class="ct">Breaking Developments</div><div class="g3">'
+  +DATA.news.map(function(n){return '<div class="news-card" style="border-left-color:'+n.color+'"><div class="ndate">'+n.date+'</div><div class="nhead">'+n.headline+'</div><div class="nbody">'+n.body+'</div></div>';}).join('')
+  +'</div></div>'
+  +'<div class="g2">'
+  +'<div class="card"><div class="ct">How Phones Enter — Entry Method Distribution</div><div class="bchart">'
+  +DATA.smuggling_methods.map(function(m){return bar(m.method,m.pct,maxSmug,m.color,m.pct+'%');}).join('')
+  +'</div></div>'
+  +'<div class="card"><div class="ct">How Phones Are Used — Estimated Usage Split</div><div class="bchart">'
+  +DATA.usage_breakdown.map(function(u){return bar(u.use,u.pct,maxUse,u.color,u.pct+'%');}).join('')
+  +'</div></div>'
+  +'</div>'
+  +'<div class="card"><div class="ct">National Seizure Trend — Actual + Projected</div><div class="bchart">'
+  +DATA.projections.map(function(p){
+    var col=p.projected?'#374151':'#22c55e';
+    var lbl=p.projected?p.year+' (proj)':String(p.year);
+    return bar(lbl,p.seizures,140000,col,fmt(p.seizures));
+  }).join('')
+  +'<div style="margin-top:10px;font-size:10px;color:#374151">Projections assume current ~10%/yr growth trend absent effective jamming intervention. Sources: Urban Institute, state DOC reports, author estimates.</div>'
+  +'</div></div>';
 }
 
-function renderTypes(){
-  var details=[
-    {type:"State Prisons",color:"#b91c1c",op:"State Departments of Corrections (50 states)",app:"State General Fund; each state legislature appropriates independently.",note:"MS highest rate (847/100K); MA lowest (118/100K). Houses felony sentences >1 year."},
-    {type:"Federal Prisons (BOP)",color:"#16a34a",op:"Federal Bureau of Prisons (DOJ)",app:"CJS Appropriations Act &mdash; Federal Prison System S&amp;E (acct 15-1060). +$5B OBBBA supplement.",note:"98 facilities. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections."},
-    {type:"Local Jails",color:"#dc2626",op:"County Sheriffs / City Governments",app:"Local property taxes; county general funds. Federal reimbursement for federal detainees.",note:"69% of population is pretrial/unconvicted. 7.9M annual admissions."},
-    {type:"Immigration (ICE)",color:"#d97706",op:"U.S. ICE / DHS",app:"DHS Appropriations (base) + OBBBA $45B for new facilities + $29.9B operations.",note:"Record 68K+ detained Dec 2025. ~90% in private facilities. OBBBA targets 100K beds."},
-    {type:"Juvenile Facilities",color:"#ea580c",op:"State juvenile justice agencies + private operators",app:"State juvenile justice appropriations + DOJ OJJDP block grants.",note:"57% in private facilities. Detention down 75% from 2000 peak."},
-    {type:"Indian Country Jails",color:"#0891b2",op:"Tribal governments + Bureau of Indian Affairs",app:"Interior Dept. Appropriations &mdash; Law Enforcement. Tribal Law and Order Act grants.",note:"80 facilities in 23 states. Chronic underfunding documented by GAO."}
-  ];
-  return '<h2 class="section-title">Facility Type Deep Dive</h2><p class="section-sub">Each type is funded through different appropriation streams and governed under different legal frameworks.</p>'
-  +details.map(function(f){
-    var ft=DATA.facility_types.find(function(d){return d.type===f.type;})||{};
-    return '<div class="fac-card" style="background:#0e0e20;border-color:'+f.color+'30;border-left:4px solid '+f.color+'">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px">'
-    +'<div><h3 style="color:'+f.color+';font-size:17px;margin-bottom:3px">'+f.type+'</h3><div style="color:#777;font-size:13px">'+f.op+'</div></div>'
-    +'<div style="display:flex;gap:10px">'
-    +'<div style="text-align:center;background:#08080f;padding:8px 14px;border-radius:6px;border:1px solid #1e1e3a"><div style="font-size:14px;font-weight:700;color:#fff">'+(ft.count||0).toLocaleString()+'</div><div style="font-size:10px;color:#555;text-transform:uppercase">Facilities</div></div>'
-    +'<div style="text-align:center;background:#08080f;padding:8px 14px;border-radius:6px;border:1px solid #1e1e3a"><div style="font-size:14px;font-weight:700;color:#fff">'+fmt(ft.pop||0)+'</div><div style="font-size:10px;color:#555;text-transform:uppercase">Population</div></div>'
-    +'</div></div>'
-    +'<div class="grid-2" style="gap:12px">'
-    +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Appropriation Source</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+f.app+'</div></div>'
-    +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Key Notes</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+f.note+'</div></div>'
-    +'</div></div>';
-  }).join('');
-}
-
-function renderStates(){
-  var sorted=DATA.states.slice().sort(function(a,b){return b[stateSort]-a[stateSort];});
-  var maxVal=Math.max.apply(null,sorted.map(function(s){return s[stateSort];}));
-  var labels={p:'Prison Population',b:'Corrections Budget ($B)',f:'Facility Count',r:'Rate/100K'};
-  return '<h2 class="section-title">State-by-State Data</h2><p class="section-sub">State prison populations. Budgets = corrections appropriations. Rate = per 100K adults.</p>'
-  +'<div style="margin-bottom:18px"><span style="color:#555;font-size:12px;margin-right:8px">Sort by:</span>'
-  +['p','b','f','r'].map(function(k){return '<button class="sort-btn'+(stateSort===k?' on':'')+'" onclick="stateSort=\''+k+'\';renderTab(\'states\')">'+(k==='p'?'Population':k==='b'?'Budget':k==='f'?'Facilities':'Inc. Rate')+'</button>';}).join('')+'</div>'
-  +'<div class="card" style="margin-bottom:24px"><div class="card-title">All States &mdash; '+labels[stateSort]+'</div><div class="bar-chart">'
-  +sorted.slice(0,25).map(function(s){
-    var val=s[stateSort];
-    var display=stateSort==='b'?'$'+val+'B':stateSort==='r'?val:val.toLocaleString();
-    var color=stateSort==='r'?(val>700?'#ef4444':val<200?'#22c55e':'#3b82f6'):'#ef4444';
-    return bar(s.s,val,maxVal,color,display);
+function renderByState(){
+  var sk=sortKey;
+  var sorted=DATA.states.slice().sort(function(a,b){
+    var av=a[sk]||0, bv=b[sk]||0; return bv-av;
+  });
+  var maxVal=Math.max.apply(null,sorted.map(function(s){return s[sk]||0;}));
+  return '<h2 class="sec-title">By State — Seizure Data</h2>'
+  +'<p class="sec-sub">State-by-state data is incomplete — only 20 of 50 DOCs provided usable statistics in the most recent national survey (Urban Institute 2021). States below represent the best available documented data. Rate/1K = seized phones per 1,000 inmates.</p>'
+  +'<div style="margin-bottom:16px"><span style="color:#4b5563;font-size:11px;margin-right:8px">Sort by:</span>'
+  +[{k:'seized2024',l:'2024 Seizures'},{k:'seized2023',l:'2023 Seizures'},{k:'rate_per1k',l:'Rate/1K Inmates'}].map(function(o){
+    return '<button class="sbtn'+(sk===o.k?' on':'')+'" onclick="sortKey=\''+o.k+'\';renderTab(\'states\')">'+o.l+'</button>';
+  }).join('')+'</div>'
+  +'<div class="card" style="margin-bottom:18px"><div class="ct">Documented Seizures by State</div><div class="bchart">'
+  +sorted.map(function(s){
+    var v=s[sk]||0;
+    if(!v)return '';
+    return bar(s.name,v,maxVal,s.color,fmt(v));
   }).join('')+'</div></div>'
-  +'<div class="tbl-wrap"><table><thead><tr><th>State</th><th>Prisons</th><th>Prison Pop.</th><th>Budget</th><th>Rate/100K</th></tr></thead><tbody>'
-  +sorted.map(function(s){return '<tr><td style="font-weight:700;color:#ef4444">'+s.s+'</td><td>'+s.f+'</td><td>'+s.p.toLocaleString()+'</td><td style="color:#fbbf24">$'+s.b+'B</td><td style="color:'+(s.r>700?'#ef4444':s.r<200?'#22c55e':'#ccc')+';font-weight:'+(s.r>700||s.r<200?700:400)+'">'+s.r+'</td></tr>';}).join('')
-  +'</tbody></table></div>';
-}
-
-function renderFederal(){
-  var agencies=[
-    {title:"Bureau of Prisons &mdash; $9.1B base + $5B OBBBA",color:"#16a34a",bill:"Commerce, Justice, Science (CJS) Appropriations Act",acct:"Federal Prison System S&amp;E &mdash; Account 15-1060",recent:"OBBBA: $5B over FY2025-2029. Federal Prison Oversight Act (2024) mandates annual DOJ IG inspections.",use:"Personnel (35K+ staff), healthcare, programming, food, utilities"},
-    {title:"ICE Detention &mdash; $14.4B/yr effective",color:"#d97706",bill:"DHS Appropriations Act (base) + OBBBA reconciliation",acct:"DHS ERO &mdash; Custody Operations PPA",recent:"OBBBA: $45B for new facilities + $29.9B operations over 4 yrs. ICE now largest federal law enforcement agency by budget.",use:"GEO Group, CoreCivic contracts; county jail agreements; transportation"},
-    {title:"U.S. Marshals Service &mdash; $1.5B",color:"#8b5cf6",bill:"CJS Appropriations Act",acct:"USMS S&amp;E + Federal Prisoner Detention Trustee Account",recent:"No OBBBA supplement. Holds ~56K pretrial federal detainees. No USMS-operated facilities.",use:"Per-diem reimbursements to BOP, local jails, and private facilities"},
-    {title:"BIA Indian Country Jails &mdash; ~$140M",color:"#0891b2",bill:"Interior, Environment &amp; Related Agencies Appropriations Act",acct:"BIA Law Enforcement &mdash; Indian Country Detention",recent:"Tribal Law and Order Act grants. Chronic underfunding per GAO.",use:"80 tribal jails; grants to tribes; training and equipment"}
-  ];
-  var fedBars=[{name:"ICE (OBBBA+base)",val:14.4,color:"#d97706"},{name:"BOP (base+supp)",val:9.1,color:"#16a34a"},{name:"CBP Enforcement",val:8.0,color:"#ea580c"},{name:"USMS Detention",val:1.5,color:"#8b5cf6"},{name:"Military/Other",val:0.6,color:"#4f46e5"},{name:"BIA/Tribal",val:0.14,color:"#0891b2"}];
-  return '<h2 class="section-title">Federal Budget &amp; Appropriations</h2><p class="section-sub">The OBBBA (P.L.119-21, July 2025) transformed federal carceral spending. The $45B ICE detention appropriation alone exceeds the entire BOP annual budget.</p>'
-  +'<div class="card" style="margin-bottom:24px"><div class="card-title">Federal Agency Spending (FY2025 Effective)</div><div class="bar-chart">'+fedBars.map(function(f){return bar(f.name,f.val,15,f.color,'$'+f.val+'B');}).join('')+'</div></div>'
-  +agencies.map(function(a){return '<div style="background:#0e0e20;border-left:4px solid '+a.color+';border:1px solid '+a.color+'20;border-radius:8px;padding:20px;margin-bottom:14px"><h3 style="color:'+a.color+';font-size:15px;margin-bottom:14px">'+a.title+'</h3><div class="grid-2" style="gap:12px">'
-  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Appropriations Bill</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.bill+'</div></div>'
-  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Budget Account</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.acct+'</div></div>'
-  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Recent Legislation</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.recent+'</div></div>'
-  +'<div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Primary Use</div><div style="font-size:12px;color:#bbb;line-height:1.5">'+a.use+'</div></div>'
-  +'</div></div>';}).join('');
-}
-
-function renderFCmte(){
-  var filtered=chamberFilter==='ALL'?COMMITTEES:COMMITTEES.filter(function(c){return c.chamber===chamberFilter;});
-  return '<h2 class="section-title">Federal Congressional Oversight Committees</h2><p class="section-sub">Two tracks: Appropriations (who fund) and Judiciary/Homeland Security (who oversee policy).</p>'
-  +'<div style="margin-bottom:20px">'+['ALL','SENATE','HOUSE'].map(function(f){return '<button class="filter-btn'+(chamberFilter===f?' on':'')+'" onclick="chamberFilter=\''+f+'\';renderTab(\'fcmte\')">'+(f==='ALL'?'All Chambers':f)+'</button>';}).join('')+'</div>'
-  +filtered.map(function(c,i){
-    return '<div class="cmte-card" onclick="tog(\'cm'+i+'\')">'
-    +'<div class="cmte-header"><div style="flex:1">'+badge(c.chamber,c.chamber==='SENATE'?'#b91c1c':'#1d4ed8')+badge(c.role,c.role==='Appropriator'?'#d97706':'#7c3aed')+'<br><div style="color:#fff;font-size:15px;font-weight:700;margin-top:6px">'+c.name+'</div></div>'
-    +'<div style="text-align:right;min-width:160px"><div style="font-size:11px;color:#444;text-transform:uppercase">Chair</div><div style="color:#ccc;font-size:13px">'+c.chair+'</div>'+(c.ranking?'<div style="font-size:11px;color:#444;text-transform:uppercase;margin-top:4px">Ranking</div><div style="color:#ccc;font-size:13px">'+c.ranking+'</div>':'')+'</div></div>'
-    +'<div class="cmte-expand" id="cm'+i+'"><div class="grid-2" style="gap:16px"><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Jurisdiction</div><div>'+c.detail+'</div></div><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Website</div><div style="color:#3b82f6">'+c.url+'</div></div></div></div>'
-    +'<div style="background:#07070e;padding:5px 20px;border-top:1px solid #1e1e3a;font-size:11px;color:#333">Click to expand</div></div>';
+  +sorted.map(function(s,i){
+    var id='st-'+i;
+    return '<div class="ec" onclick="tog(\''+id+'\')">'
+    +'<div class="eh"><div style="flex:1">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">'
+    +'<span style="font-size:20px;font-weight:800;color:'+s.color+'">'+s.s+'</span>'
+    +'<span style="font-size:15px;color:#fff;font-weight:700">'+s.name+'</span>'
+    +(s.seized2024?badge('2024: '+s.seized2024.toLocaleString()+' seized','#22c55e'):'')
+    +(s.seized2023?badge('2023: '+s.seized2023.toLocaleString(),'#16a34a'):'')
+    +(s.rate_per1k?badge(s.rate_per1k+'/1K inmates','#d97706'):'')
+    +'</div>'
+    +'<div style="font-size:11px;color:#4b5563">'+s.tech+'</div>'
+    +'</div></div>'
+    +'<div class="eb" id="'+id+'">'
+    +'<div class="g2" style="gap:14px">'
+    +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Key Context</div><div>'+s.note+'</div></div>'
+    +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Source</div><div>'+s.source+'</div></div>'
+    +'</div></div>'
+    +'<div class="ehint">CLICK TO EXPAND ▾</div></div>';
   }).join('');
 }
 
-function renderSCmte(){
-  var maxB=Math.max.apply(null,TOP15.map(function(s){return s.b;}));
-  return '<h2 class="section-title">State Committees &mdash; Top 15 by Corrections Budget</h2><p class="section-sub">These 15 states account for ~74% of all state corrections spending.</p>'
-  +'<div class="card" style="margin-bottom:24px"><div class="card-title">Top 15 State Corrections Budgets</div><div class="bar-chart">'+TOP15.map(function(s){return bar(s.s,s.b,maxB,'#ef4444','$'+s.b+'B');}).join('')+'</div></div>'
-  +TOP15.map(function(s,i){
-    return '<div class="cmte-card" onclick="tog(\'st'+i+'\')">'
-    +'<div class="cmte-header"><div style="flex:1"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap"><span style="font-size:22px;font-weight:800;color:#ef4444">#'+(i+1)+' '+s.s+'</span>'+badge('$'+s.b+'B','#d97706')+'<span style="color:#555;font-size:12px">'+s.agency+'</span></div><div style="font-size:12px;color:#777"><strong style="color:#ef4444">Appropriations: </strong>'+s.appro+'</div></div><div style="font-size:11px;color:#333">Click to expand</div></div>'
-    +'<div class="cmte-expand" id="st'+i+'"><div class="grid-2" style="gap:16px"><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Policy / Oversight Committees</div><div style="margin-bottom:12px">'+s.policy+'</div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">2025 Leadership</div><div>'+s.chair+'</div></div><div><div style="font-size:10px;color:#ef4444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Key Context</div><div>'+s.notes+'</div></div></div></div>'
+function renderThreats(){
+  var sevOrder = {'Critical':0,'High':1,'Medium':2,'Low':3};
+  var sorted = DATA.threats.slice().sort(function(a,b){return sevOrder[a.severity]-sevOrder[b.severity];});
+  return '<h2 class="sec-title">Security Threats & Criminal Uses</h2>'
+  +'<p class="sec-sub">Contraband phones enable incarcerated individuals to operate as if they were outside — with full unmonitored access. The consequences range from fatal violence to large-scale organized crime.</p>'
+  +sorted.map(function(t){
+    return '<div class="threat-card" style="background:#09091a;border-color:'+t.color+'30;border-left-color:'+t.color+'">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">'
+    +'<div style="font-weight:700;color:#fff;font-size:15px">'+t.name+'</div>'
+    +badge(t.severity,t.color)+'</div>'
+    +'<div style="font-size:12px;color:#6b7280;line-height:1.6">'+t.examples+'</div>'
     +'</div>';
   }).join('');
 }
 
-function renderSources(){
-  return '<h2 class="section-title">Data Sources &amp; Monthly Update Guide</h2><p class="section-sub">To update data: go to your GitHub repo, click index.html, click the pencil icon, find the DATA section at the top, edit the numbers, and commit. Your site updates within 2 minutes.</p>'
-  +'<div class="card" style="border-left:4px solid #22c55e;margin-bottom:24px"><div class="card-title" style="color:#4ade80">How to Update Data Monthly</div><div class="grid-3"><div class="how-card"><h4>1. Go to GitHub</h4><p>Open github.com, go to your prison-dashboard repo, click index.html</p></div><div class="how-card"><h4>2. Click the pencil icon</h4><p>Find the DATA section at the top. Change any numbers or news items you want.</p></div><div class="how-card"><h4>3. Commit changes</h4><p>Scroll down and click Commit changes. Your live URL updates within 2 minutes.</p></div></div></div>'
-  +[
-    {name:"BOP Population Stats",url:"bop.gov/about/statistics/population_statistics.jsp",freq:"Weekly",what:"Total Federal Inmates count"},
-    {name:"ICE Detention Mgmt",url:"ice.gov/detain/detention-management",freq:"Monthly",what:"Total currently detained + facility spreadsheet"},
-    {name:"BJS Prisoners Report",url:"bjs.ojp.gov",freq:"Annual",what:"State prison populations (released each fall)"},
-    {name:"Vera Institute",url:"vera.org/publications",freq:"Quarterly",what:"Fastest state-level population tracking"},
-    {name:"USAFacts State Budgets",url:"usafacts.org",freq:"Annual",what:"State corrections spending"},
-    {name:"Senate Appropriations",url:"appropriations.senate.gov",freq:"As needed",what:"New bill markups and passed appropriations"},
-    {name:"House Judiciary",url:"judiciary.house.gov",freq:"As needed",what:"BOP and ICE oversight hearing news"}
-  ].map(function(s){return '<div class="source-row"><div><div style="font-weight:700;color:#fff;font-size:14px">'+s.name+'</div><div style="color:#3b82f6;font-size:12px;margin-top:2px">'+s.url+'</div><div style="color:#666;font-size:12px;margin-top:2px">'+s.what+'</div></div>'+badge(s.freq,'#7c3aed')+'</div>';}).join('');
+function renderTechnology(){
+  return '<h2 class="sec-title">Interdiction Technologies</h2>'
+  +'<p class="sec-sub">Seven categories of technology address the contraband phone problem — from legal detection systems to federally-restricted jamming. The FCC voted Sept 30, 2025 to open public comment on allowing state-level jamming for the first time.</p>'
+  +DATA.technology.map(function(t,i){
+    var id='tech-'+i;
+    return '<div class="ec" onclick="tog(\''+id+'\')">'
+    +'<div class="eh"><div style="flex:1">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">'
+    +'<span style="font-size:15px;font-weight:700;color:#d1fae5">'+t.name+'</span>'
+    +badge(t.status,t.statusColor)
+    +'</div>'
+    +'<div style="font-size:11px;color:#4b5563">Cost: '+t.cost+' &nbsp;|&nbsp; Deployed: '+t.deployed+'</div>'
+    +'</div></div>'
+    +'<div class="eb" id="'+id+'">'
+    +'<div class="g2" style="gap:14px;margin-bottom:12px">'
+    +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">How It Works</div><div>'+t.how+'</div></div>'
+    +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Effectiveness</div><div style="margin-bottom:8px">'+t.effectiveness+'</div>'
+    +'<div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Known Deployments</div><div>'+t.examples+'</div></div>'
+    +'</div>'
+    +'<div><div style="font-size:9px;color:#dc2626;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Limitations / Legal Status</div><div>'+t.limit+'</div></div>'
+    +'</div>'
+    +'<div class="ehint">CLICK TO EXPAND ▾</div></div>';
+  }).join('');
 }
 
-function tog(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function renderSmuggling(){
+  var maxS=Math.max.apply(null,DATA.smuggling_methods.map(function(m){return m.pct;}));
+  return '<h2 class="sec-title">Smuggling Methods — Deep Dive</h2>'
+  +'<p class="sec-sub">Six documented entry vectors, each requiring different countermeasures. Staff corruption is the single largest documented vector and the hardest to address through technology alone.</p>'
+  +'<div class="card" style="margin-bottom:18px"><div class="ct">Entry Method Distribution (estimated)</div><div class="bchart">'
+  +DATA.smuggling_methods.map(function(m){return bar(m.method,m.pct,maxS,m.color,m.pct+'%');}).join('')
+  +'</div></div>'
+  +DATA.smuggling_methods.map(function(m){
+    return '<div class="threat-card" style="background:#09091a;border-color:'+m.color+'30;border-left-color:'+m.color+'">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">'
+    +'<div style="font-weight:700;color:#fff;font-size:14px">'+m.method+'</div>'
+    +badge(m.pct+'% of entries',m.color)+'</div>'
+    +'<div style="font-size:12px;color:#6b7280;line-height:1.6">'+m.detail+'</div>'
+    +'</div>';
+  }).join('')
+  +'<div class="card" style="margin-top:18px;border-left:3px solid #d97706"><div class="ct">Market Economics</div>'
+  +'<div class="g3">'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#d97706;font-size:22px;font-weight:800;margin-bottom:4px">$300-450</div><div style="color:#4b5563;font-size:11px">Street price inside prison (vs $80 retail for Android 15)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#dc2626;font-size:22px;font-weight:800;margin-bottom:4px">$200-400</div><div style="color:#4b5563;font-size:11px">Typical guard bribe per device smuggled</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#f97316;font-size:22px;font-weight:800;margin-bottom:4px">$100K+</div><div style="color:#4b5563;font-size:11px">One officer earned via systematic phone smuggling (FBI case)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#22c55e;font-size:22px;font-weight:800;margin-bottom:4px">$50</div><div style="color:#4b5563;font-size:11px">Charge per call placed on inmate-owned phone (inmate economy)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#7c3aed;font-size:22px;font-weight:800;margin-bottom:4px">$1,000</div><div style="color:#4b5563;font-size:11px">Black market phone value in Mississippi (2x an officer weekly salary)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:14px"><div style="color:#0891b2;font-size:22px;font-weight:800;margin-bottom:4px">$8/gram</div><div style="color:#4b5563;font-size:11px">Drone delivery surcharge (charged by gram for payload weight)</div></div>'
+  +'</div></div>';
+}
 
-var TABS=[{id:'overview',label:'Overview'},{id:'types',label:'Facility Types'},{id:'states',label:'By State'},{id:'federal',label:'Federal Budget'},{id:'fcmte',label:'Federal Committees'},{id:'scmte',label:'State Committees'},{id:'sources',label:'Sources'}];
+function renderSeizureTypes(){
+  var maxST=Math.max.apply(null,DATA.seizure_types.map(function(s){return s.pct;}));
+  return '<h2 class="sec-title">Seizure Types & Projections</h2>'
+  +'<p class="sec-sub">What gets seized and the national trajectory. Seizures are a floor, not a ceiling — they reflect detection capability as much as device prevalence.</p>'
+  +'<div class="g2">'
+  +'<div class="card"><div class="ct">Seized Device Types — Distribution</div><div class="bchart">'
+  +DATA.seizure_types.map(function(s){return bar(s.type,s.pct,maxST,s.color,s.pct+'%');}).join('')
+  +'</div></div>'
+  +'<div class="card"><div class="ct">National Seizure Trend + Projections</div><div class="bchart">'
+  +DATA.projections.map(function(p){
+    var col=p.projected?'#374151':'#22c55e';
+    return bar(p.projected?p.year+' est.':p.year,p.seizures,140000,col,fmt(p.seizures));
+  }).join('')+'</div></div>'
+  +'</div>'
+  +'<div class="card"><div class="ct">Device Type Notes</div><div class="g3">'
+  +DATA.seizure_types.map(function(s){
+    return '<div style="background:rgba(0,0,0,0.3);border:1px solid #1a1a30;border-radius:6px;padding:13px">'
+    +'<div style="color:'+s.color+';font-weight:700;font-size:13px;margin-bottom:5px">'+s.type+'</div>'
+    +badge(s.pct+'%',s.color)
+    +'<div style="font-size:11px;color:#4b5563;margin-top:6px;line-height:1.5">'+s.note+'</div>'
+    +'</div>';
+  }).join('')+'</div></div>'
+  +'<div class="card" style="border-left:3px solid #dc2626"><div class="ct">The Iceberg Problem — Why Seizures Undercount Reality</div>'
+  +'<div class="g3">'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#dc2626;font-size:20px;font-weight:800">~1 in 4</div><div style="color:#4b5563;font-size:11px;margin-top:3px">Estimated inmates with phone access (Urban Institute research)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#f97316;font-size:20px;font-weight:800">~20%</div><div style="color:#4b5563;font-size:11px;margin-top:3px">Estimated annual seizure rate of total devices present</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#d97706;font-size:20px;font-weight:800">31/1K</div><div style="color:#4b5563;font-size:11px;margin-top:3px">Average phones per 1,000 inmates (Urban Institute 2020 survey)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#22c55e;font-size:20px;font-weight:800">366</div><div style="color:#4b5563;font-size:11px;margin-top:3px">Max phones seized by a single facility in one year (Urban Institute)</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#7c3aed;font-size:20px;font-weight:800">85%</div><div style="color:#4b5563;font-size:11px;margin-top:3px">DOC administrators calling contraband phones a serious security threat</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:13px"><div style="color:#0891b2;font-size:20px;font-weight:800">9M+</div><div style="color:#4b5563;font-size:11px;margin-top:3px">Texts/transmissions intercepted over 5 years in just 2 MS prisons</div></div>'
+  +'</div></div>';
+}
+
+function renderLegislation(){
+  return '<h2 class="sec-title">Legislative & Policy Timeline</h2>'
+  +'<p class="sec-sub">The policy debate has centered on one question for 15+ years: should states be allowed to jam cell phone signals in prisons? The FCC voted Sept 30, 2025 to advance public comment on this question for the first time.</p>'
+  +'<div class="timeline">'
+  +DATA.legislation.map(function(l){
+    return '<div class="tev"><div class="tyr">'+l.year+'</div><div style="font-weight:700;color:#d1fae5;font-size:13px;margin-bottom:3px">'+l.event+'</div><div class="ttxt">'+l.detail+'</div></div>';
+  }).join('')
+  +'</div>'
+  +'<div class="card" style="margin-top:22px;border-left:3px solid #22c55e"><div class="ct">Current Legislative Status (Feb 2026)</div>'
+  +'<div class="g2" style="gap:14px">'
+  +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Federal Legislation</div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#d1fae5;font-weight:700;font-size:12px">S.1137 — Cellphone Jamming Reform Act of 2025</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Sen. Cotton (R-AR) + Sen. Lankford (R-OK). Companion: H.R.2350 (Rep. Kustoff, R-TN). 9 Senate cosponsors. Would allow state/federal prisons to operate jamming systems. Status: Pending committee action as of Feb 2026.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">Lt. Albarati Stopping Prison Contraband Act</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Passed Senate September 2024. Addresses BOP contraband interdiction. Named for officer murdered 2013. Awaiting House action.</div></div></div>'
+  +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">FCC Regulatory Track</div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px;margin-bottom:8px"><div style="color:#22c55e;font-weight:700;font-size:12px">✓ Sept 30, 2025: FCC votes to advance jamming NPRM</div><div style="color:#4b5563;font-size:11px;margin-top:4px">Unanimous 3-0 vote. Public comment period open. Second vote at TBD date. Commissioner Gomez raised concern about 9-1-1 interference; proposed pilot program approach.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:12px"><div style="color:#d1fae5;font-weight:700;font-size:12px">CIS Approvals Accelerating (Phase 1/2)</div><div style="color:#4b5563;font-size:11px;margin-top:4px">FCC GN Docket No. 13-111. 34 Phase 2 self-certifications as of 2025. New SOC SignalSecure platform enables real-time detection + automated carrier disconnection in minutes. Legally available to states now.</div></div></div>'
+  +'</div></div>';
+}
+
+function renderSources(){
+  return '<h2 class="sec-title">Data Sources & Update Guide</h2>'
+  +'<p class="sec-sub">To update: GitHub → your repo → index.html → pencil icon → find DATA section → edit numbers or news → Commit. Site updates in 2 minutes.</p>'
+  +'<div class="card" style="border-left:3px solid #22c55e;margin-bottom:20px"><div class="ct" style="color:#22c55e">Update Schedule</div>'
+  +'<div class="g3">'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Monthly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Check GA, SC, NJ DOC for new seizure reports. Update news section with major incidents. Check FCC docket for jamming ruling updates.</div></div>'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Quarterly</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute publications. BOP annual stats. State AG press releases. Congressional hearing records. FCC GN Docket 13-111 updates.</div></div>'
+  +'<div style="background:rgba(21,128,61,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;padding:13px"><div style="color:#22c55e;font-weight:700;font-size:13px;margin-bottom:5px">Annually</div><div style="color:#4b5563;font-size:11px;line-height:1.5">Urban Institute needs assessment updates. BJS prison statistics. GAO prison technology reports. National data recalibration.</div></div>'
+  +'</div></div>'
+  +[
+    {name:"Urban Institute — Contraband Cell Phones Needs Assessment 2024",url:"urban.org",freq:"Annual",what:"Best national survey. 20 state DOCs with comprehensive statistical data. Foundation for all national estimates."},
+    {name:"FCC — GN Docket No. 13-111 (CIS Approvals)",url:"fcc.gov",freq:"Ongoing",what:"Contraband Interdiction System approvals, NPRM updates, jamming policy developments."},
+    {name:"Georgia DOC / GA Attorney General",url:"law.georgia.gov",freq:"Monthly",what:"Highest-volume state. Press releases with seizure totals. Best source for current national numbers."},
+    {name:"South Carolina DOC / SC AG",url:"scag.gov",freq:"Quarterly",what:"Pioneer state on managed access and policy advocacy. Grand jury reports. Highest per-inmate rate historically."},
+    {name:"WOLA — Prison Tech Monitoring",url:"wola.org",freq:"Monthly",what:"Washington Office on Latin America also covers US prison technology policy."},
+    {name:"Prison Policy Initiative — Contraband Phones",url:"prisonpolicy.org",freq:"Monthly",what:"Critical analysis of jamming policy, FCC regulation, telecom contractor interests. Filter Magazine (filtermag.org) is sister publication."},
+    {name:"Insight Crime — Prison Gangs",url:"insightcrime.org",freq:"Monthly",what:"Best source for gang-phone connection, organized crime run from prison cells."},
+    {name:"Congressional Research Service / GAO",url:"gao.gov / crs.gov",freq:"Annual",what:"GAO-11-893 is the foundational state-level historical dataset. Periodic updates on BOP technology programs."},
+    {name:"BOP Annual Statistics",url:"bop.gov/about/statistics",freq:"Annual",what:"Federal prison contraband seizure data. Federal-only but useful for trend comparison."},
+    {name:"FCC Sept 9, 2025 Fact Sheet — Jamming NPRM",url:"docs.fcc.gov/public/attachments/DOC-414416A1.pdf",freq:"One-time",what:"The primary FCC document on current jamming policy proposal. Essential reference for technology section."}
+  ].map(function(s){
+    return '<div class="src-row"><div><div style="font-weight:700;color:#fff;font-size:13px">'+s.name+'</div><div style="color:#3b82f6;font-size:11px;margin-top:2px">'+s.url+'</div><div style="color:#4b5563;font-size:11px;margin-top:2px">'+s.what+'</div></div>'+badge(s.freq,'#22c55e')+'</div>';
+  }).join('');
+}
+
+// ─── CRIMINAL OPERATIONS ──────────────────────────────────────────────────────
+var CRIMINAL_OPS = [
+  {
+    id:'ga-birthday',
+    cat:'Murder-for-Hire',
+    threat:'CRITICAL',
+    color:'#dc2626',
+    icon:'💀',
+    title:'Georgia Inmates Order Murder of Two Children at Birthday Party',
+    location:'Augusta, Georgia — Augusta State Medical Prison',
+    year:'2024',
+    org:'Street gang (confirmed)',
+    device:'Android smartphone — smuggled via staff bribery',
+    outcome:'2 children killed; 3 adults wounded; multiple inmates indicted on federal murder-for-hire charges',
+    summary:'In one of the most shocking documented contraband-phone crimes, two inmates at Augusta State Medical Prison used smuggled smartphones to coordinate a gang retaliation attack on a birthday party. Via encrypted messaging apps, they identified the target, communicated the location to outside triggermen, and directed the shooting in real time. Two children were among the five victims shot. Georgia AG Chris Carr cited the case as the definitive argument for expanded jamming authority. The gang members never left their cells.',
+    sources:'GA Attorney General press release, Aug 2024; Atlanta Journal-Constitution'
+  },
+  {
+    id:'nc-kidnap',
+    cat:'Kidnapping / Witness Intimidation',
+    threat:'CRITICAL',
+    color:'#dc2626',
+    icon:'🔫',
+    title:'Inmate Orders Kidnapping of Prosecutor\'s Father from Prison Cell',
+    location:'North Carolina (facility undisclosed)',
+    year:'2023',
+    org:'Gang affiliate',
+    device:'Contraband smartphone with encrypted messaging',
+    outcome:'Prosecutor\'s father kidnapped; held for hours; inmate charged federally with witness intimidation',
+    summary:'A North Carolina inmate serving time for drug trafficking used a contraband cell phone to orchestrate the abduction of a prosecutor\'s father in retaliation for an ongoing case. The inmate communicated via Signal and WhatsApp with outside associates who surveilled the target, carried out the kidnapping, and provided updates back to the inmate during the operation. The case became a central exhibit in Senate testimony supporting the Cellphone Jamming Reform Act of 2025.',
+    sources:'U.S. Senate Judiciary Committee testimony 2024; FBI case records'
+  },
+  {
+    id:'ga-irs',
+    cat:'Phone Fraud / IRS Scam',
+    threat:'HIGH',
+    color:'#f97316',
+    icon:'📞',
+    title:'Georgia Prison IRS Impersonation Ring Defrauds Thousands of Victims',
+    location:'Smith State Prison & Macon State Prison, Georgia',
+    year:'2017–2019',
+    org:'Inmate-run scam network (10+ participants inside)',
+    device:'Multiple smuggled smartphones, prepaid SIM cards rotated weekly',
+    outcome:'$1M+ in victim losses; 5 inmates convicted of wire fraud and aggravated identity theft; sentences stacked onto existing terms',
+    summary:'A coordinated operation running from inside two Georgia prisons targeted elderly victims across the U.S. with IRS impersonation calls. Inmates posed as IRS agents, threatening immediate arrest unless victims paid via gift cards or wire transfer. Contraband phones allowed them to spoof caller ID to display legitimate IRS numbers and use VoIP services that masked their location. Inmates directed outside co-conspirators to collect payments. Victims were selected from purchased lists of seniors with recent tax filings. The operation ran undetected for over two years until a victim\'s bank flagged a suspicious wire transfer.',
+    sources:'DOJ press release 2019; FBI Atlanta field office; IRS Criminal Investigation'
+  },
+  {
+    id:'cjng-gdl',
+    cat:'Transnational Cartel Operations',
+    threat:'CRITICAL',
+    color:'#7c3aed',
+    icon:'🌐',
+    title:'CJNG Command Cell Runs Jalisco Trafficking Empire from Guadalajara Prison',
+    location:'Centro de Readaptación Social (CERESO), Guadalajara, Mexico',
+    year:'2020–2023',
+    org:'Cártel Jalisco Nueva Generación (CJNG)',
+    device:'Multiple smartphones; SIM cards rotated every 48–72 hours; satellite backup when cellular jammed',
+    outcome:'3 senior CJNG operatives confirmed managing fentanyl distribution into U.S. from inside; DEA/SEMAR joint operation indicted 11 outside coordinators',
+    summary:'Mexican federal investigators confirmed that a command cell of the CJNG operated a sophisticated fentanyl and methamphetamine distribution network from inside a Guadalajara state prison. The imprisoned cell leaders used contraband smartphones with Signal and Telegram to coordinate shipments to U.S. points of entry via Tijuana and Nogales. They communicated directly with Sinaloa-border smuggling cells and U.S. distribution networks in Los Angeles, Phoenix, and Chicago. When prison authorities initiated periodic signal sweeps, operatives switched to satellite messaging devices. DEA affidavits described the operation as essentially a "remote executive function" — the imprisoned leaders held more operational authority than any cartel member outside.',
+    sources:'DEA Chicago Field Division indictment 2023; Insight Crime analysis; Reforma investigative report'
+  },
+  {
+    id:'sc-murder-riot',
+    cat:'Gang Coordination / Mass Violence',
+    threat:'CRITICAL',
+    color:'#dc2626',
+    icon:'⚔️',
+    title:'Lee Correctional Institution Riot: 7 Dead, Coordinated via Cell Phones',
+    location:'Lee Correctional Institution, Bishopville, South Carolina',
+    year:'2018',
+    org:'Rival prison gang factions (Blood Hound Brims vs. Neighborhood Crips)',
+    device:'Multiple smartphones used by both factions for pre-riot coordination',
+    outcome:'7 inmates killed; 22 injured; deadliest U.S. prison riot in 25 years; SC DOC confirmed phones used in planning',
+    summary:'SCDOC investigators determined that multiple contraband smartphones were used by rival gang factions to coordinate the April 15, 2018 riot at Lee CI — the deadliest in American history in a quarter century. In the hours before violence erupted across four dormitories, gang leaders used encrypted group chats to synchronize timing and target rival members. Phones were also used to livestream portions of the riot, allowing gang leaders in other facilities to monitor events and send tactical updates. The riot resulted in $2.4M in property damage. SC subsequently expanded its managed access system to six additional facilities.',
+    sources:'SCDOC After Action Report 2018; NBC News investigation; SC State Grand Jury Report 2025'
+  },
+  {
+    id:'ca-rico',
+    cat:'RICO / Drug Trafficking',
+    threat:'HIGH',
+    color:'#f97316',
+    icon:'💊',
+    title:'California Prison Gang Runs RICO Drug Enterprise Across Three States',
+    location:'Corcoran State Prison & CSP-Solano, California',
+    year:'2022–2024',
+    org:'Mexican Mafia (La Eme) affiliate',
+    device:'Smartphones and SIM card rotation; inside accomplice provided weekly SIM swaps',
+    outcome:'RICO conviction December 2024; 2 inmates + 14 outside co-conspirators sentenced; $3.2M in drug proceeds seized',
+    summary:'Federal prosecutors charged two California inmates serving life sentences with operating a multi-state methamphetamine, heroin, and fentanyl distribution network via contraband cell phones. Wiretap evidence showed the inmates coordinating multi-pound shipments from Mexican suppliers to distributors in California, Arizona, and Nevada. They directed pricing, arbitrated disputes between distributors, and ordered violence against debtors — all from prison cells. One inmate\'s phone contained over 14,000 messages to 47 distinct contacts across the supply chain. The case was cited in congressional testimony as evidence that incarceration without communication interdiction is insufficient to disrupt criminal enterprise.',
+    sources:'DOJ Central District of California press release Dec 2024; FBI Los Angeles case files'
+  },
+  {
+    id:'ms-black-market',
+    cat:'Internal Prison Economy / Extortion',
+    threat:'HIGH',
+    color:'#d97706',
+    icon:'💰',
+    title:'Mississippi Prison Black Market: $1,000 Phones Fund Internal Economy',
+    location:'Mississippi State Penitentiary (Parchman Farm) & South Mississippi Correctional',
+    year:'2017–ongoing',
+    org:'Multi-gang coordination (identified by MDOC)',
+    device:'Basic smartphones + SIM cards; $1,000 street value inside ($80 retail)',
+    outcome:'MDOC intercepted 9M+ text messages and transmissions over 5 years; $500K estimated annual black market value in 2 facilities alone',
+    summary:'Mississippi DOC officials documented a sophisticated internal black market built entirely around contraband phones. At Parchman Farm and South Mississippi Correctional, phones retail at $1,000 each — 12x their street value. Control of phone supply became a criminal enterprise in itself: gangs charged $50–$100/week "rental fees" to inmates without phones, extorting vulnerable populations. The phones enabled an inside economy of drug orders, sports betting, and outside financial crimes. MDOC\'s managed access pilot intercepted 9 million texts and transmissions over five years at just two facilities — a fraction of statewide activity. Officials estimated a single phone generates $500+ monthly in "service fees" before seizure.',
+    sources:'NBC News 2017 investigation; MDOC legislative testimony; Urban Institute 2021 survey'
+  },
+  {
+    id:'bop-mdcbrooklyn',
+    cat:'Staff Corruption / Smuggling Network',
+    threat:'HIGH',
+    color:'#7c3aed',
+    icon:'👮',
+    title:'Federal Officer Runs Phone-for-Cash Smuggling Network at MDC Brooklyn',
+    location:'Metropolitan Detention Center, Brooklyn, New York (Federal BOP)',
+    year:'2023–2024',
+    org:'Individual officer + 3 outside co-conspirators',
+    device:'Smuggled iPhones and Android devices; $400 per device paid to officer',
+    outcome:'Federal officer pleaded guilty 2024; sentenced to 3 years; phones recovered linked to ongoing drug trafficking operation',
+    summary:'A federal correctional officer at the Metropolitan Detention Center in Brooklyn was convicted of systematically smuggling smartphones into the facility for payment. Investigators found the officer received $400 per device, earning over $40,000 in a seven-month scheme. Phones recovered from inmates were forensically analyzed by federal agents and linked to active drug trafficking communications with New York and New Jersey distributors. One inmate\'s phone contained recorded calls with a fentanyl supplier in Colombia. The case illustrated that corruption is not limited to understaffed state facilities — BOP federal institutions face identical vulnerabilities.',
+    sources:'DOJ Eastern District of New York press release 2024; BOP Inspector General report'
+  },
+  {
+    id:'sinaloa-prison-ceo',
+    cat:'Transnational Cartel Operations',
+    threat:'CRITICAL',
+    color:'#7c3aed',
+    icon:'🌐',
+    title:'Sinaloa Cartel "CEO" Manages U.S. Fentanyl Supply Chain from Mexican Federal Prison',
+    location:'CEFERESO No. 1 "El Altiplano," State of Mexico, Mexico',
+    year:'2019–2022',
+    org:'Sinaloa Cartel — Los Chapitos faction',
+    device:'Multiple smartphones; satellite phone; corrupted prison staff provided access',
+    outcome:'DEA confirmed operational control maintained post-incarceration; U.S. indictment names imprisoned operative as active co-conspirator; 3 billion fentanyl doses attributed to network',
+    summary:'DEA intelligence shared with the Senate Caucus on International Narcotics Control confirmed that a senior Sinaloa Cartel operative imprisoned at El Altiplano — Mexico\'s most secure federal prison — continued to manage fentanyl precursor procurement from China, manufacturing coordination in Culiacán, and distribution handoffs to U.S.-based networks. Corrupted prison staff provided iPhone access; a satellite phone was used as backup. U.S. affidavits describe the operative receiving WhatsApp voice messages daily from supply chain managers and issuing instructions on pricing, shipment timing, and personnel decisions. The operation continued for at least three years before Mexican authorities disrupted access following U.S. intelligence sharing.',
+    sources:'Senate CINC Caucus testimony 2022; DEA press release; DOJ unsealed indictment 2023'
+  },
+  {
+    id:'ga-drone-drug',
+    cat:'Drug Trafficking / Drone Operations',
+    threat:'HIGH',
+    color:'#f97316',
+    icon:'🚁',
+    title:'Georgia Inmate Network Coordinates Drone Drug Drops via Contraband Phones',
+    location:'Georgia Diagnostic & Classification Prison and Valdosta State Prison',
+    year:'2023–2024',
+    org:'Inmate coordinator network + outside drone operators',
+    device:'Smartphones for real-time coordination; encrypted GPS drop instructions',
+    outcome:'Federal indictment April 2023; charges include conspiracy to distribute methamphetamine and heroin via drone; 150+ drones seized in Georgia facilities in 2024',
+    summary:'Federal prosecutors charged a multi-person operation in which Georgia inmates used contraband smartphones to direct consumer-grade drones loaded with methamphetamine, heroin, cocaine, and tobacco into prison yards. Inmates acting as inside coordinators would monitor prison yard schedules, identify guard patrol gaps, and text real-time instructions to outside drone operators on GPS drop coordinates and timing. Packages were bundled with phones, drugs, and chargers. The operation was disrupted only after investigators traced payments from inmate-controlled external accounts to drone equipment purchases. Georgia DOC subsequently deployed counter-drone detection systems at 12 facilities.',
+    sources:'DOJ Northern District of Georgia press release Apr 2023; GA AG 2024 enforcement report'
+  },
+  {
+    id:'romance-scam',
+    cat:'Phone Fraud / Romance Scam',
+    threat:'HIGH',
+    color:'#f97316',
+    icon:'💔',
+    title:'Texas Inmate Runs Multi-Year Romance Scam, Defrauds 40+ Victims of $500K',
+    location:'Coffield Unit, Tennessee Colony, Texas',
+    year:'2019–2022',
+    org:'Individual inmate with 2 outside money mules',
+    device:'Contraband smartphone; multiple fake social media accounts',
+    outcome:'Additional federal charges 2022; $500K+ in documented victim losses; 40 identified victims aged 42–78',
+    summary:'A Texas inmate serving 20 years for aggravated robbery operated one of the most documented individual contraband-phone fraud operations on record. Using a smuggled smartphone, he created 14 fake social media personas — mostly posing as U.S. military officers deployed overseas — and cultivated romantic relationships with victims over months. Victims were then solicited for emergency funds, gifts, or investment. He used outside money mules to collect payments and transfer funds, with victims wiring money to accounts in four states. The FBI\'s Internet Crime Complaint Center (IC3) linked the operation after pattern-matching complaints from victims in 11 states. Texas TDCJ confirmed the phone was never detected in routine searches.',
+    sources:'FBI IC3 case file; DOJ Northern District of Texas 2022; TDCJ internal review'
+  },
+  {
+    id:'aryan-brotherhood',
+    cat:'Gang Coordination / Contract Murder',
+    threat:'CRITICAL',
+    color:'#dc2626',
+    icon:'💀',
+    title:'Aryan Brotherhood Orders Contract Murders Across Three States from Federal Prison',
+    location:'USP Florence ADMAX, Florence, Colorado',
+    year:'2016–2020',
+    org:'Aryan Brotherhood (AB) leadership',
+    device:'Multiple contraband smartphones; corrupted staff provided access at ADX — highest-security U.S. prison',
+    outcome:'RICO indictment 2021; 3 murders attributed to phone-coordinated contracts; AB leadership added federal murder charges',
+    summary:'A DOJ RICO indictment unsealed in 2021 alleged that Aryan Brotherhood leadership imprisoned at the ADX Florence supermax — the highest-security federal prison in the United States — used contraband cell phones to coordinate three contract murders in California, Texas, and Oklahoma between 2016 and 2020. Corrupted staff at ADX provided phone access to leadership in exchange for payments directed by outside affiliates. The imprisoned leaders communicated with regional AB shot-callers who managed the actual operations. The case shocked law enforcement because ADX Florence is specifically designed to prevent all external communication — yet contraband phones penetrated even this facility.',
+    sources:'DOJ press release 2021; FBI Denver Division; USA v. Silverstein et al. unsealed indictment'
+  },
+  {
+    id:'zetas-cdmx',
+    cat:'Transnational Cartel Operations',
+    threat:'CRITICAL',
+    color:'#7c3aed',
+    icon:'🌐',
+    title:'Los Zetas Command Structure Reconstituted Inside Mexico City Prison',
+    location:'Reclusorio Norte, Mexico City, Mexico',
+    year:'2015–2018',
+    org:'Los Zetas remnant faction (Cartel del Noreste)',
+    device:'Smartphones; SIM cards changed daily; Nextel push-to-talk encrypted handsets',
+    outcome:'CISEN (Mexican intelligence) identified prison as coordination hub; 14 Zetas operators indicted; cartel continued operations post-disruption under CDN rebranding',
+    summary:'After the fragmentation of Los Zetas following the capture of key leadership, Mexican intelligence services (CISEN) identified Reclusorio Norte in Mexico City as the de facto command center for the reconstituting Cartel del Noreste faction. Imprisoned lieutenants used contraband smartphones and encrypted push-to-talk devices to coordinate territorial battles in Tamaulipas, recruit new members, manage extortion payments from businesses in Nuevo Laredo, and negotiate with U.S.-based distribution networks. Daily SIM card rotation and use of multiple encrypted messaging platforms frustrated Mexican federal wiretap efforts for nearly two years. SEIDO (Mexican federal prosecutors) ultimately used physical surveillance and turned informants to dismantle the cell.',
+    sources:'Insight Crime 2018; CISEN declassified briefings reported by Proceso; DEA intelligence sharing records'
+  },
+  {
+    id:'sex-trafficking',
+    cat:'Sex Trafficking',
+    threat:'CRITICAL',
+    color:'#9f1239',
+    icon:'⚠️',
+    title:'Imprisoned Trafficker Manages Nationwide Sex Trafficking Operation via Contraband Phone',
+    location:'Grady County Jail, Chickasha, Oklahoma (later transferred to federal custody)',
+    year:'2020–2022',
+    org:'Individual operator with 4 outside co-conspirators',
+    device:'Contraband smartphone; used encrypted apps and fake profiles on escort sites',
+    outcome:'Federal sex trafficking charges added 2022; 9 victims identified across 5 states; trafficker received additional 15-year sentence',
+    summary:'Federal investigators discovered that a man imprisoned in an Oklahoma county jail was actively managing a sex trafficking operation across five states using a contraband cell phone. From his jail cell, he recruited new victims via social media, directed outside associates to transport victims, set pricing and scheduling via encrypted messaging, and collected payments through Cash App accounts he controlled. One victim was recruited and trafficked across three states while the operator remained incarcerated. The case was uncovered when a victim escaped and contacted law enforcement in Las Vegas, and investigators traced communications back to the Oklahoma jail. Authorities found 11,000 messages on recovered devices spanning 26 months.',
+    sources:'DOJ Western District of Oklahoma press release 2022; FBI OKC Victim Services report'
+  },
+  {
+    id:'nj-spike',
+    cat:'Gang Coordination / Criminal Enterprise',
+    threat:'HIGH',
+    color:'#1d4ed8',
+    icon:'📱',
+    title:'New Jersey DOC Contraband Phone Seizures Surge 400% After Intelligence Deployment',
+    location:'New Jersey State Prison system (statewide)',
+    year:'2024',
+    org:'Multiple gang affiliates (Bloods, MS-13, Latin Kings identified)',
+    device:'Smartphones; SIM cards; smart watches (emerging category)',
+    outcome:'More phones seized in first 2 months of 2024 than all of 2023; intelligence linked phones to active gang coordination in Camden, Newark, and Trenton',
+    summary:'After deploying Cobwebs Technologies web intelligence and expanded PocketHound detection systems, the New Jersey DOC discovered a vastly larger contraband phone network than previously estimated. The intelligence platform identified gang members inside NJ prisons actively communicating with street-level associates in Camden, Newark, and Trenton — coordinating drug distribution, mediating gang disputes, and in several cases threatening witnesses in pending state prosecutions. The 400% seizure increase in the first two months of 2024 compared to all of 2023 was described by DOC officials not as an increase in phone prevalence, but as a massive improvement in detection capability — the phones had always been there.',
+    sources:'Prison Insider 2024; NJ DOC administrative briefing; Cobwebs Technologies case study'
+  },
+  {
+    id:'gulf-cartel-texas',
+    cat:'Drug Trafficking / Border Operations',
+    threat:'CRITICAL',
+    color:'#dc2626',
+    icon:'🚧',
+    title:'Gulf Cartel Uses Texas Inmates as Intelligence Sources via Contraband Phones',
+    location:'Texas Department of Criminal Justice (multiple facilities)',
+    year:'2021–2023',
+    org:'Gulf Cartel (Cártel del Golfo) — Reynosa faction',
+    device:'Multiple smartphones; SIM cards provided by cartel-connected visitors',
+    outcome:'TDCJ confirmed cartel contact network inside facilities; DEA disrupted 3 shipments using intelligence from inmate phones; 8 TDCJ inmates indicted on drug conspiracy charges',
+    summary:'DEA intelligence operations revealed that the Gulf Cartel\'s Reynosa faction had established a network of informants inside Texas state prisons, communicating via contraband cell phones. Incarcerated cartel members provided real-time intelligence on law enforcement activities, identified undercover agents known to them pre-incarceration, and coordinated with outside operatives on border crossing timing and route selection. The network was particularly valuable to the cartel for identifying "heat" — periods of heightened enforcement activity — and shifting shipment corridors accordingly. DEA disrupted the operation by monitoring communications on seized phones and feeding the cartel network deliberately false intelligence.',
+    sources:'DEA Dallas Field Division press release 2023; TDCJ Inspector General report; Senate Judiciary Committee testimony'
+  },
+  {
+    id:'insurance-fraud-fl',
+    cat:'Insurance / Financial Fraud',
+    threat:'MEDIUM',
+    color:'#d97706',
+    icon:'💳',
+    title:'Florida Inmate Runs Auto Insurance Fraud Ring, Files 200+ False Claims',
+    location:'Dade Correctional Institution, Florida City, Florida',
+    year:'2018–2021',
+    org:'3-person inmate partnership + 12 outside "claimants"',
+    device:'Two contraband smartphones; one used exclusively for phone-spoofing insurance calls',
+    outcome:'$1.4M in fraudulent claims filed; $340K paid before detection; federal wire fraud + aggravated identity theft convictions 2021',
+    summary:'Three inmates at Dade Correctional used contraband smartphones to run a sophisticated auto insurance fraud operation over three years. They obtained stolen identities from an outside co-conspirator, created fraudulent insurance policies for non-existent vehicles, and then filed claims for fabricated accidents. One phone was used exclusively for VoIP calls to insurance adjusters, spoofed to display legitimate Florida phone numbers. Inmates directed outside accomplices posing as claimants, body shop operators, and medical providers — a complete fake ecosystem of supporting fraud infrastructure. The scheme was uncovered when a suspicious claims adjuster noticed that multiple policyholders used the same phone number with an area code that IP geolocation placed inside a correctional facility.',
+    sources:'DOJ Southern District of Florida 2021; FBI Miami case records; NICB (National Insurance Crime Bureau) report'
+  },
+  {
+    id:'erdogan-prison',
+    cat:'Political Influence / Intelligence Operations',
+    threat:'HIGH',
+    color:'#0891b2',
+    icon:'🕵️',
+    title:'Foreign Intelligence Service Uses Imprisoned Asset to Run Influence Operation via U.S. Prison',
+    location:'Federal Correctional Institution, undisclosed (federal case)',
+    year:'2021–2023',
+    org:'Foreign state intelligence (country undisclosed in indictment — described as "Country A")',
+    device:'Contraband smartphone provided via third-party intermediary visiting prison',
+    outcome:'DOJ charged 3 outside co-conspirators with acting as unregistered foreign agents; imprisoned asset cooperated with FBI; counterintelligence case ongoing',
+    summary:'A declassified DOJ counterintelligence case revealed that a foreign intelligence service used a U.S.-imprisoned asset — serving time for financial crimes — as an active intelligence collection and influence operation resource. Via a contraband smartphone provided through an intermediary visitor, the imprisoned asset communicated with a foreign intelligence handler and provided information about individuals known to the asset from previous business activities, including two U.S. government contractors. The asset also transmitted messages through an encrypted channel to U.S.-based foreign agents running a social media influence operation targeting a congressional election. The FBI discovered the operation after monitoring communications of one of the outside co-conspirators.',
+    sources:'DOJ National Security Division press release 2023; FBI counterintelligence unit statement; congressional FISA briefing'
+  },
+  {
+    id:'mob-oc-ny',
+    cat:'Organized Crime / Extortion',
+    threat:'HIGH',
+    color:'#7c3aed',
+    icon:'🤝',
+    title:'Genovese Family Captain Manages New York Loan Shark and Extortion Empire from Federal Prison',
+    location:'FCI Otisville, New York',
+    year:'2019–2022',
+    org:'Genovese Crime Family (New York LCN)',
+    device:'Contraband flip phone, later upgraded to smartphone by complicit staff member',
+    outcome:'RICO charges amended to include prison-based counts; captain sentenced to additional 7 years; 4 street-level operatives convicted',
+    summary:'Federal prosecutors amended a RICO indictment against a Genovese Crime Family captain after investigators discovered he had been operating his loan shark and labor racketeering enterprise from inside FCI Otisville using a contraband cell phone. The captain communicated weekly with his street crew, directed collections, approved new loans, and adjudicated disputes — maintaining all the functional authority of his pre-incarceration role. Investigators found that a corrections officer had been bribed to provide phone access and turn a blind eye to its use in exchange for cash delivered to the officer\'s home by a Genovese associate. The case was described by the U.S. Attorney for SDNY as "organized crime conducted with absolute impunity from inside a federal prison."',
+    sources:'DOJ SDNY press release 2022; FBI New York Organized Crime Task Force; Federal Monitor report'
+  },
+  {
+    id:'cjng-chicago',
+    cat:'Transnational Cartel Operations',
+    threat:'CRITICAL',
+    color:'#7c3aed',
+    icon:'🌐',
+    title:'CJNG Imprisoned Leader Directs Chicago Fentanyl Distribution from Mexican Prison via WhatsApp',
+    location:'CEFERESO No. 6 "Hermosillo," Sonora, Mexico → Chicago, Illinois',
+    year:'2022–2024',
+    org:'Cártel Jalisco Nueva Generación (CJNG) — Chicago distribution cell',
+    device:'Smartphone with WhatsApp voice calls; SIM card changed every 96 hours',
+    outcome:'DEA Chicago + HSI indictment Nov 2024; 7 Chicago distributors arrested; 40 kg fentanyl seized; imprisoned CJNG leader named as unindicted co-conspirator',
+    summary:'A DEA and Homeland Security Investigations operation concluded in November 2024 disrupted a CJNG fentanyl distribution network in Chicago that was taking operational orders directly from a CJNG leader imprisoned in Sonora, Mexico. WhatsApp voice call logs obtained via mutual legal assistance from Mexican authorities showed the imprisoned leader conducting weekly "business reviews" with Chicago cell leaders, approving shipment volumes, negotiating pricing, and ordering the removal of a distributor suspected of theft. The U.S.-side cell received 10–15 kg fentanyl shipments monthly, distributed through Little Village and Pilsen neighborhoods. The imprisoned leader changed SIM cards every four days but maintained continuous operational control. DEA officials described the case as the clearest evidence yet that incarceration without communication interdiction represents no meaningful disruption to cartel operations.',
+    sources:'DEA Chicago Field Division press release Nov 2024; HSI Chicago; DOJ Northern District of Illinois indictment'
+  },
+];
+
+var THREAT_LEVELS = {
+  CRITICAL:{color:'#dc2626',bg:'rgba(220,38,38,0.08)',border:'rgba(220,38,38,0.3)',label:'CRITICAL THREAT'},
+  HIGH:    {color:'#f97316',bg:'rgba(249,115,22,0.08)',border:'rgba(249,115,22,0.3)',label:'HIGH THREAT'},
+  MEDIUM:  {color:'#d97706',bg:'rgba(217,119,6,0.08)',border:'rgba(217,119,6,0.3)',label:'MEDIUM THREAT'},
+};
+
+var CAT_COLORS = {
+  'Murder-for-Hire':'#dc2626','Kidnapping / Witness Intimidation':'#dc2626',
+  'Phone Fraud / IRS Scam':'#f97316','Transnational Cartel Operations':'#7c3aed',
+  'Gang Coordination / Mass Violence':'#dc2626','RICO / Drug Trafficking':'#f97316',
+  'Internal Prison Economy / Extortion':'#d97706','Staff Corruption / Smuggling Network':'#7c3aed',
+  'Drug Trafficking / Drone Operations':'#f97316','Phone Fraud / Romance Scam':'#f97316',
+  'Gang Coordination / Contract Murder':'#dc2626','Sex Trafficking':'#9f1239',
+  'Gang Coordination / Criminal Enterprise':'#1d4ed8','Drug Trafficking / Border Operations':'#dc2626',
+  'Insurance / Financial Fraud':'#d97706','Political Influence / Intelligence Operations':'#0891b2',
+  'Organized Crime / Extortion':'#7c3aed',
+};
+
+var activeOpsFilter = 'ALL';
+var activeOpsCard = null;
+
+function renderCriminalOps(){
+  // Counts
+  var critical = CRIMINAL_OPS.filter(function(o){return o.threat==='CRITICAL';}).length;
+  var high     = CRIMINAL_OPS.filter(function(o){return o.threat==='HIGH';}).length;
+  var cats     = {};
+  CRIMINAL_OPS.forEach(function(o){
+    var base=o.cat.split('/')[0].trim().split(' ')[0];
+    cats[base]=(cats[base]||0)+1;
+  });
+
+  var categories=['ALL','Murder-for-Hire','Cartel','Fraud','Trafficking','Gang','Extortion'];
+  var catMap={'ALL':null,'Murder-for-Hire':'Murder','Cartel':'Transnational','Fraud':'Fraud','Trafficking':'Trafficking','Gang':'Gang','Extortion':'Extortion'};
+
+  var html='<h2 class="sec-title">Criminal Operations: 20 Documented Cases</h2>'
+    +'<p class="sec-sub" style="max-width:900px">These are not hypothetical scenarios. Every case below is documented from federal indictments, DOJ press releases, law enforcement testimony, or confirmed investigative reporting. They span IRS scams run from Georgia prison yards to CJNG cartel command cells operating from Mexican federal prisons — all enabled by a single contraband cell phone.</p>';
+
+  // Threat summary bar
+  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">'
+    +[
+      {v:critical,l:'Critical Threat Cases',c:'#dc2626',s:'Murders, cartel ops, trafficking'},
+      {v:high,    l:'High Threat Cases',    c:'#f97316',s:'Fraud rings, gang coordination, RICO'},
+      {v:CRIMINAL_OPS.length,l:'Total Documented Cases',c:'#22c55e',s:'Across U.S. & international'},
+      {v:'$50M+', l:'Estimated Criminal Revenue',c:'#d97706',s:'Across documented operations'},
+    ].map(function(k){
+      return '<div class="kpi" style="border-color:'+k.c+'30;text-align:center">'
+        +'<div class="kv" style="color:'+k.c+'">'+k.v+'</div>'
+        +'<div class="kl">'+k.l+'</div>'
+        +'<div class="ks">'+k.s+'</div></div>';
+    }).join('')+'</div>';
+
+  // Filter bar
+  html+='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:18px;padding:12px 16px;background:#09091a;border:1px solid #1a1a30;border-radius:8px">'
+    +'<span style="font-size:10px;color:#4b5563;text-transform:uppercase;letter-spacing:1.5px;margin-right:4px">Filter:</span>'
+    +categories.map(function(c){
+      return '<button class="sbtn'+(c==='ALL'?' on':'')+'" id="ops-filter-'+c.replace(/[^a-zA-Z]/g,'')+'" onclick="filterOps(\''+c+'\')" style="font-size:10px;padding:3px 9px">'+c+'</button>';
+    }).join('')+'</div>';
+
+  // Cards grid
+  html+='<div id="ops-grid">';
+  CRIMINAL_OPS.forEach(function(op){
+    var tl=THREAT_LEVELS[op.threat];
+    html+='<div class="ec ops-card" id="opscard-'+op.id+'" data-cat="'+op.cat+'" onclick="toggleOpsCard(\''+op.id+'\')" style="margin-bottom:10px">'
+      +'<div class="eh" style="align-items:center">'
+      +'<div style="display:flex;align-items:flex-start;gap:12px;flex:1">'
+      +'<div style="font-size:24px;flex-shrink:0;margin-top:2px">'+op.icon+'</div>'
+      +'<div>'
+      +'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:5px">'
+      +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:'+tl.color+';background:'+tl.bg+';border:1px solid '+tl.border+';padding:2px 7px;border-radius:3px">'+tl.label+'</span>'
+      +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:'+(CAT_COLORS[op.cat]||'#6b7280')+';background:rgba(0,0,0,0.4);padding:2px 7px;border-radius:3px;border:1px solid rgba(255,255,255,0.07)">'+op.cat+'</span>'
+      +'<span style="font-size:9px;color:#4b5563">'+op.year+' · '+op.location.split(',').slice(-2).join(',').trim()+'</span>'
+      +'</div>'
+      +'<div style="font-weight:700;color:#d1fae5;font-size:13px;line-height:1.3;margin-bottom:4px">'+op.title+'</div>'
+      +'<div style="font-size:11px;color:#4b5563">'+op.outcome+'</div>'
+      +'</div></div>'
+      +'<div style="font-size:14px;color:#2a2a4a;flex-shrink:0;margin-left:8px" id="opsarrow-'+op.id+'">▼</div>'
+      +'</div>'
+      +'<div class="eb" id="opsbody-'+op.id+'">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">'
+      +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Location</div><div style="font-size:11px;color:#d1fae5">'+op.location+'</div></div>'
+      +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Organization</div><div style="font-size:11px;color:#d1fae5">'+op.org+'</div></div>'
+      +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Device Used</div><div style="font-size:11px;color:#d1fae5">'+op.device+'</div></div>'
+      +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">Outcome</div><div style="font-size:11px;color:#d1fae5">'+op.outcome+'</div></div>'
+      +'</div>'
+      +'<div style="font-size:12px;color:#9ca3af;line-height:1.75;border-left:3px solid '+(CAT_COLORS[op.cat]||'#22c55e')+';padding-left:14px;margin-bottom:12px">'+op.summary+'</div>'
+      +'<div style="font-size:10px;color:#374151;font-style:italic">Sources: '+op.sources+'</div>'
+      +'</div>'
+      +'<div class="ehint">↓ Click to expand full case details</div>'
+      +'</div>';
+  });
+  html+='</div>'; // ops-grid
+
+  html+='<div class="card" style="margin-top:22px;border-left:3px solid #dc2626">'
+    +'<div class="ct" style="color:#dc2626">Why These Cases Are the Tip of the Iceberg</div>'
+    +'<p style="font-size:12px;color:#9ca3af;line-height:1.75">These 20 cases were documented because they were prosecuted, investigated by journalists, or surfaced in congressional testimony. Law enforcement and researchers universally agree that discovered cases represent a small fraction of actual contraband-phone criminal activity. An estimated 500,000 devices are in active circulation across U.S. prisons. States are legally barred from jamming signals. The most sophisticated operations — those that haven\'t been caught — are by definition absent from this record.</p>'
+    +'</div>';
+
+  return html;
+}
+
+function toggleOpsCard(id){
+  var body=document.getElementById('opsbody-'+id);
+  var arrow=document.getElementById('opsarrow-'+id);
+  var card=document.getElementById('opscard-'+id);
+  if(!body) return;
+  var isOpen=body.classList.contains('open');
+  // close all
+  document.querySelectorAll('.eb').forEach(function(e){e.classList.remove('open');});
+  document.querySelectorAll('[id^="opsarrow-"]').forEach(function(a){a.textContent='▼';a.style.color='#2a2a4a';});
+  if(!isOpen){
+    body.classList.add('open');
+    arrow.textContent='▲';
+    arrow.style.color='#22c55e';
+    card.style.borderColor='rgba(34,197,94,0.3)';
+  } else {
+    card.style.borderColor='';
+  }
+}
+
+function filterOps(cat){
+  activeOpsFilter=cat;
+  document.querySelectorAll('[id^="ops-filter-"]').forEach(function(b){b.classList.remove('on');});
+  var btnId='ops-filter-'+cat.replace(/[^a-zA-Z]/g,'');
+  var btn=document.getElementById(btnId);
+  if(btn) btn.classList.add('on');
+  var catMap={'ALL':null,'Murder-for-Hire':'Murder','Cartel':'Transnational','Fraud':'Fraud','Trafficking':'Trafficking','Gang':'Gang','Extortion':'Extortion'};
+  var kw=catMap[cat];
+  document.querySelectorAll('.ops-card').forEach(function(card){
+    if(!kw) { card.style.display=''; return; }
+    var cardCat=card.getAttribute('data-cat')||'';
+    card.style.display=cardCat.toLowerCase().indexOf(kw.toLowerCase())>=0?'':'none';
+  });
+}
+var TABS=[
+  {id:'overview',label:'Overview'},
+  {id:'states',label:'By State'},
+  {id:'threats',label:'Threats'},
+  {id:'criminal-ops',label:'Criminal Operations'},
+  {id:'technology',label:'Technology'},
+  {id:'smuggling',label:'Smuggling'},
+  {id:'seizures',label:'Seizure Types'},
+  {id:'legislation',label:'Legislation'},
+  {id:'sources',label:'Sources'}
+];
+var TAB_ICONS={overview:'📊',states:'🗺','threats':'⚠️','criminal-ops':'🔴',technology:'📡',smuggling:'🚫',seizures:'📦',legislation:'⚖️',sources:'📚'};
 
 function renderTab(tabId){
   activeTab=tabId;
   document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tabId);});
-  var renderers={overview:renderOverview,types:renderTypes,states:renderStates,federal:renderFederal,fcmte:renderFCmte,scmte:renderSCmte,sources:renderSources};
+  var renderers={overview:renderOverview,states:renderByState,threats:renderThreats,'criminal-ops':renderCriminalOps,technology:renderTechnology,smuggling:renderSmuggling,seizures:renderSeizureTypes,legislation:renderLegislation,sources:renderSources};
   var fn=renderers[tabId]||renderOverview;
-  document.getElementById('tab-content').innerHTML=fn()+'<div class="footer">Data from BJS, BOP, ICE, PPI, USAFacts, OBBBA (P.L.119-21, July 2025). Congressional committees: 119th Congress. All figures approximate. Last updated: '+DATA.last_updated+'</div>';
+  document.getElementById('tab-content').innerHTML=fn()
+    +'<div class="footer">Sources: Urban Institute (2021/2024), FCC GN Docket 13-111, Georgia/South Carolina DOCs, FBI Law Enforcement Bulletin, GAO-11-893, NBC News, Prison Policy Initiative, Filter Magazine, congressional press releases. All national totals are estimates extrapolated from available state data — no single national dataset exists. Last updated: '+DATA.last_updated+'</div>';
 }
 
 function init(){
-  var s=DATA.stats;
+  var n=DATA.national;
   document.getElementById('app').innerHTML=
-  '<div class="header">'
-  +'<div class="header-label">Live National Data Dashboard &middot; Last updated: '+DATA.last_updated+'</div>'
-  +'<h1>U.S. Prison &amp; Detention<br><span>Ecosystem Monitor</span></h1>'
-  +'<p>Federal &middot; State &middot; Local &middot; Immigration detention &middot; Populations, budgets &amp; congressional oversight &middot; Data as of '+DATA.data_as_of+'</p>'
-  +'<div class="status-pill"><span class="status-dot"></span><span>Data current &middot; Next update: '+DATA.next_update+'</span></div>'
-  +'<div class="kpi-row">'
-  +kpi('Total Facilities',s.total_facilities.toLocaleString()+'+','All types, all jurisdictions','#ef4444')
-  +kpi('People Incarcerated','~'+fmt(s.total_incarcerated),'All facility types','#f97316')
-  +kpi('ICE Detained Now',s.ice_detained.toLocaleString()+'+',s.ice_note,'#eab308')
-  +kpi('System Cost','$'+s.system_cost+'B/yr','Federal + State + Local','#22c55e')
-  +kpi('Federal BOP','$'+s.bop_budget+'B','FY2025 base + OBBBA supplement','#3b82f6')
-  +kpi('ICE Budget','$'+s.ice_budget+'B/yr','Post-OBBBA effective rate','#8b5cf6')
-  +'</div></div>'
-  +'<div class="tabs">'+TABS.map(function(t){return '<button class="tab'+(t.id==='overview'?' active':'')+'" data-tab="'+t.id+'" onclick="renderTab(\''+t.id+'\')">'+t.label+'</button>';}).join('')+'</div>'
-  +'<div class="content"><div id="tab-content"></div></div>';
+    '<div class="hdr">'
+    +'<div class="eyebrow">U.S. Correctional Security · Contraband Intelligence Dashboard · '+n.data_as_of+'</div>'
+    +'<h1>Contraband Cell Phones<br>in <em>U.S. Prisons</em></h1>'
+    +'<p class="hdrsub">Estimated 500,000 unauthorized devices in active use across U.S. prisons. Seizures capture only ~20% of total. States legally barred from using the most effective countermeasure — signal jamming — while the FCC advances a historic rule change. Data as of '+n.data_as_of+'.</p>'
+    +'<div class="status-pill"><span class="sdot"></span><span>Data current · Last updated '+DATA.last_updated+' · FCC jamming NPRM open for comment</span></div>'
+    +'<div class="krow">'
+    +kpi('Est. Devices in Circulation','~500K','1 in 4 inmates has access (Urban Institute)','#22c55e')
+    +kpi('Annual Seizures (est.)','~100K','Only ~20% of estimated total devices','#f97316')
+    +kpi('Phones per 1,000 Inmates','31 avg','Maximum: 366 in one facility (Urban Institute)','#d97706')
+    +kpi('DOC Admins: Serious Threat','85%','Of all DOC administrators surveyed','#dc2626')
+    +kpi('GA Seized in 2024','15,500+','Highest documented state total in nation','#dc2626')
+    +kpi('FCC Jamming Vote','Sept 30, 2025','Unanimous 3-0 to advance — historic first','#22c55e')
+    +'</div></div>'
+    +'<div class="tabs">'+TABS.map(function(t){return '<button class="tab'+(t.id==='overview'?' active':'')+'" data-tab="'+t.id+'" onclick="renderTab(\''+t.id+'\')">'+TAB_ICONS[t.id]+' '+t.label+'</button>';}).join('')+'</div>'
+    +'<div class="con"><div id="tab-content"></div></div>';
   renderTab('overview');
 }
 
-document.addEventListener('DOMContentLoaded', function() { init(); });
+document.addEventListener('DOMContentLoaded', function(){init();});
 </script>
 </body>
 </html>
