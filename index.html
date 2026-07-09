@@ -472,6 +472,134 @@ function renderLegislation(){
   +'</div></div>';
 }
 
+// ─── CHATRIE & GEOFENCING ────────────────────────────────────────────────────
+function renderChatrie(){
+  function fblock(label,color,content){
+    return '<div class="tech-card" style="border-left:3px solid '+color+'">'
+    +'<div style="font-size:9px;color:'+color+';text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px">'+label+'</div>'
+    +'<div class="ttxt">'+content+'</div></div>';
+  }
+  function lane(num,title,color,legal,analysis){
+    return '<div class="tech-card" style="border-left:4px solid '+color+';margin-bottom:14px">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">'
+    +'<div style="width:28px;height:28px;border-radius:50%;background:'+color+';color:#000;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+num+'</div>'
+    +'<div class="tech-name" style="flex:1;color:#d1fae5">'+title+'</div>'
+    +'<span class="badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44">'+legal+'</span>'
+    +'</div>'
+    +'<div class="tech-how">'+analysis+'</div>'
+    +'</div>';
+  }
+
+  var html='<h2 class="sec-title">Chatrie v. United States — Geofencing & Prison Law</h2>'
+  +'<p class="sec-sub">The Supreme Court decided <em>Chatrie v. United States</em> (No. 25-112) on June 29, 2026. It is the first major digital surveillance decision since <em>Carpenter v. United States</em> (2018) and the first constitutional ruling on geofence warrants. The decision has direct implications for how law enforcement can use geofencing to detect and investigate contraband phones in prisons — creating a legal framework with very different rules depending on who is doing what and how.</p>';
+
+  // Case summary card
+  html+='<div class="card" style="border-left:3px solid #7c3aed;margin-bottom:20px">'
+  +'<div class="ct">Case Summary — Chatrie v. United States, 609 U.S. ___ (2026)</div>'
+  +'<div class="g2" style="gap:14px">'
+  +'<div>'
+  +fblock('Facts','#7c3aed','May 20, 2019: Armed robbery of a credit union in Midlothian, Virginia. Robber approached while appearing to talk on a cell phone but left no other identifying information. Investigators obtained a geofence warrant directed at Google requiring production of location data for all phones within a 150-meter radius of the crime scene during a two-hour window around the robbery.')
+  +fblock('The Three-Step Warrant Process','#7c3aed','Step 1: Google produces anonymized location data for all phones inside the geofence ±30 minutes. Step 2: Officers narrow the list; Google provides additional anonymized data including locations outside the geofence for a 2-hour window. Step 3: Officers further narrow; Google de-anonymizes and produces names and phone numbers for the final list. Result: Google identified 19 phones at step one; process ultimately produced 3 users including Chatrie.')
+  +fblock('Procedural History','#7c3aed','District Court: Warrant "plainly violates" Fourth Amendment but admitted under good-faith exception. 4th Circuit panel: No search. En banc 4th Circuit: 7-7 split — affirmed in one-line per curiam. Supreme Court: Granted certiorari Jan 16, 2026. Argued April 27, 2026. Decided June 29, 2026. Vacated and remanded 6-3.')
+  +'</div>'
+  +'<div>'
+  +fblock('The Holding','#22c55e','Justice Kagan (majority, 6-3): Police conducted a Fourth Amendment search when they acquired Chatrie\'s location data from Google because an individual has a reasonable expectation of privacy in his cell phone location information. The Court expressly did not hold geofence warrants unconstitutional — it left warrant validity for the lower courts on remand.')
+  +fblock('Key Quote','#22c55e','"An individual has a legitimate expectation of privacy in his cellphone location data. Location History implicates personal privacy interests even more than CSLI, because Location History is more the cell-phone user\'s own... a user reasonably views [it] as his own and expects to be shielded from the inquisitive eyes of the government." — Justice Kagan')
+  +fblock('Vote Breakdown','#22c55e','Majority (6): Kagan (author), Roberts, Kavanaugh, Sotomayor, Jackson, Gorsuch. Gorsuch concurred on property/trespass grounds. Dissenters (3): Alito (joined by Thomas; Barrett joined in part); Barrett (separate dissent). Alito: majority "further de-stabilizes longstanding Fourth Amendment jurisprudence."')
+  +'</div></div></div>';
+
+  // Doctrinal lineage
+  html+='<div class="card" style="margin-bottom:20px"><div class="ct">Doctrinal Lineage — The Cases That Built Chatrie</div>'
+  +'<div class="timeline">'
+  +[
+    {year:'1967',case:'Katz v. United States',hold:'Fourth Amendment protects people, not places. Establishes the "reasonable expectation of privacy" test governing all subsequent cases.',col:'#9ca3af'},
+    {year:'1976',case:'Smith v. Maryland',hold:'Third-party doctrine: information voluntarily shared with a third party carries no Fourth Amendment protection. Government can obtain it without a warrant.',col:'#f97316'},
+    {year:'1984',case:'Hudson v. Palmer',hold:'Prisoners have no reasonable expectation of privacy in their cells. Fourth Amendment does not apply within prison cells. Critical for prison geofencing analysis.',col:'#dc2626'},
+    {year:'2018',case:'Carpenter v. United States',hold:'Historical CSLI spanning 129 days is a Fourth Amendment search. Narrow exception to third-party doctrine for comprehensive digital location tracking.',col:'#7c3aed'},
+    {year:'2024',case:'5th Circuit — In re Google (Texas)',hold:'Geofence warrants are "general warrants categorically prohibited by the Fourth Amendment." Most aggressive circuit court ruling against geofencing.',col:'#d97706'},
+    {year:'2026',case:'Chatrie v. United States (SCOTUS)',hold:'Even short-duration geofence location data from a third-party is a Fourth Amendment search. Does not ban geofence warrants — requires full Fourth Amendment compliance. Vacated and remanded.',col:'#22c55e'},
+  ].map(function(c){
+    return '<div class="tev" style="--dot-color:'+c.col+'">'
+    +'<div class="tyr" style="color:'+c.col+'">'+c.year+' — <span style="color:#d1fae5">'+c.case+'</span></div>'
+    +'<div class="ttxt">'+c.hold+'</div>'
+    +'</div>';
+  }).join('')
+  +'</div></div>';
+
+  // Google factor
+  html+='<div class="card" style="border-left:3px solid #d97706;margin-bottom:20px">'
+  +'<div class="ct">The Google Factor — Why Chatrie Is Already Partially Moot</div>'
+  +'<p class="ttxt" style="margin-bottom:14px">Google transferred Location History to device storage in 2025 — it can no longer execute geofence warrants. However, Apple, Lyft, Snapchat, Uber, and other companies still retain location data and are subject to Chatrie. The ruling also does not address government purchases of location data from brokers — a gap widely recognized as the next Fourth Amendment battleground.</p>'
+  +'<div class="g3">'
+  +[
+    {co:'Google',st:'Cannot comply',c:'#22c55e',n:'Location History on device since July 2025. No central database to query.'},
+    {co:'Apple',st:'Still holds data',c:'#dc2626',n:'Location Services data retained. Subject to Chatrie warrant requirements.'},
+    {co:'Lyft / Uber',st:'Still holds data',c:'#dc2626',n:'Ride-sharing location history retained. Court cited both as Chatrie-impacted.'},
+    {co:'Snapchat',st:'Still holds data',c:'#f97316',n:'Snap Map and location data retained. Warrant required for law enforcement access.'},
+    {co:'Telecom Carriers',st:'Carpenter governs',c:'#7c3aed',n:'CSLI governed by Carpenter (2018). Chatrie reinforces that framework.'},
+    {co:'Data Brokers',st:'Legal gap remains',c:'#6b7280',n:'Government purchase of location data not addressed by Chatrie. Potentially outside Fourth Amendment reach under current doctrine.'},
+  ].map(function(c){
+    return '<div class="news-card" style="border-left-color:'+c.c+'">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'
+    +'<span class="nhead" style="margin:0">'+c.co+'</span>'
+    +'<span class="badge" style="background:'+c.c+'22;color:'+c.c+';border:1px solid '+c.c+'44">'+c.st+'</span>'
+    +'</div>'
+    +'<div class="nbody">'+c.n+'</div>'
+    +'</div>';
+  }).join('')+'</div></div>';
+
+  // Four lanes
+  html+='<h2 class="sec-title" style="margin-top:8px">Prison Geofencing — Four Legal Lanes</h2>'
+  +'<p class="sec-sub">Chatrie and Hudson create a layered framework with very different rules depending on who is surveilling, how, and via what channel.</p>'
+  +lane(1,'Internal Detection — Prison Officials Using On-Site Technology','#22c55e','NO WARRANT REQUIRED',
+    'RF detectors (PocketHound), managed access systems, body scanners, K9 searches — all governed by Hudson v. Palmer (1984). Prisoners have no reasonable expectation of privacy in their cells. Prison officials need no warrant, no probable cause, and no judicial oversight to deploy detection technology inside the facility. Entirely unaffected by Chatrie. The FCC\'s CIS approvals operate in this lane.')
+  +lane(2,'Geofence Warrant to Tech Company — Identifying Phones Inside Prison','#f97316','WARRANT REQUIRED (Chatrie)',
+    'Querying Google, Apple, or another tech company to identify phones active inside a prison geofence is now unambiguously a Fourth Amendment search under Chatrie. A warrant showing probable cause and particularity is required. A prison-perimeter geofence is a much stronger particularity candidate than the 150-meter bank radius in Chatrie — a defined facility boundary is far more specific than a circle sweeping in homes and churches.')
+  +lane(3,'Carrier Tower Dump — Network-Level Phone Identification','#f97316','WARRANT REQUIRED (Carpenter + Chatrie)',
+    'Obtaining a list of all devices connecting to towers covering a prison requires a warrant under Carpenter (2018), reinforced by Chatrie. Law enforcement cannot end-run Chatrie by asking carriers instead of tech companies — the doctrine applies to both.')
+  +lane(4,'Carrier-Side Geolocation Denial — Network Blocks Service Inside Prison','#22c55e','FCC/REGULATORY — No 4th Amendment Issue',
+    'The FCC\'s Sept 2025 NPRM identified "geolocation-based denial" as a carrier-network alternative to jamming. Configuring the network to deny service inside a defined zone is not a Fourth Amendment search — it does not involve obtaining records about identified individuals. Governed by FCC authority under the Communications Act. Chatrie does not apply. This is the most legally clean large-scale interdiction option.');
+
+  // Open questions
+  html+='<div class="card" style="border-left:3px solid #dc2626;margin-top:20px">'
+  +'<div class="ct">What Chatrie Left Open</div>'
+  +'<div class="g2" style="gap:12px">'
+  +[
+    {q:'Can any geofence warrant satisfy particularity?',a:'Chatrie expressly declined to say — remanded to the 4th Circuit. A prison perimeter is a stronger particularity candidate. No court has yet ruled on a prison-specific geofence warrant.'},
+    {q:'Does the good-faith exception survive post-Chatrie?',a:'The government relied on good-faith in Chatrie itself. Now that the rule is settled, future defendants will argue law enforcement can no longer claim ignorance of the warrant requirement.'},
+    {q:'Does Hudson extend to third-party location data?',a:'Hudson addressed physical cell searches. An inmate\'s phone generates location data held by carriers outside prison walls. No precedent directly holds Hudson eliminates a prisoner\'s Chatrie/Carpenter interest in that data.'},
+    {q:'Can the government buy location data to circumvent Chatrie?',a:'Chatrie says nothing about broker purchases. This is widely recognized as the next Fourth Amendment battleground — if the government can buy what it cannot seize, the ruling\'s protection is limited.'},
+    {q:'How does Chatrie interact with FCC\'s CIS device-disabling framework?',a:'The FCC\'s carrier-notification system involves identifying and blocking specific devices. Whether that identification process constitutes a Chatrie search has not been litigated.'},
+    {q:'What particularity standard applies to a prison geofence warrant?',a:'A prison is a fixed, legally controlled space. Every person inside is either documented staff or an inmate of record. Courts may find prison geofences far easier to particularize than the Chatrie bank vicinity.'},
+  ].map(function(item){
+    return '<div class="news-card" style="border-left-color:#dc2626">'
+    +'<div class="nhead">'+item.q+'</div>'
+    +'<div class="nbody">'+item.a+'</div>'
+    +'</div>';
+  }).join('')+'</div></div>';
+
+  // Practical takeaways
+  html+='<div class="card" style="margin-top:18px;border-left:3px solid #22c55e">'
+  +'<div class="ct">Practical Takeaways for Prison Contraband Phone Programs</div>'
+  +'<div class="g2" style="gap:12px">'
+  +[
+    {icon:'✅',t:'Use internal detection freely',c:'#22c55e',b:'PocketHound, RF scanners, managed access, body scanners, K9 — no warrant needed. Hudson clears the way entirely.'},
+    {icon:'✅',t:'Pursue carrier-side geofencing',c:'#22c55e',b:'FCC geolocation-based denial (Lane 4) is the most legally clean large-scale solution. Chatrie does not govern network configuration.'},
+    {icon:'⚠️',t:'Get a warrant for tech company queries',c:'#f97316',b:'Chatrie requires probable cause and particularity. A prison-boundary geofence is far more particular than the Chatrie bank radius — get the warrant and document it properly.'},
+    {icon:'⚠️',t:'Get a warrant for tower dumps',c:'#f97316',b:'Carpenter + Chatrie both require warrants for carrier CSLI. Narrow the request to specific device identifiers where possible.'},
+    {icon:'❌',t:'Do not query tech companies without a warrant',c:'#dc2626',b:'Post-Chatrie, good-faith exception is unlikely to be available. Evidence without a warrant is a suppression risk.'},
+    {icon:'❌',t:'Do not use broker data as a workaround',c:'#dc2626',b:'While not yet clearly prohibited, purchasing location data to circumvent Chatrie carries significant legal risk as courts and Congress examine the issue.'},
+  ].map(function(item){
+    return '<div class="news-card" style="border-left-color:'+item.c+'">'
+    +'<div class="nhead">'+item.icon+' '+item.t+'</div>'
+    +'<div class="nbody">'+item.b+'</div>'
+    +'</div>';
+  }).join('')+'</div></div>';
+
+  html+='<div class="footer">Sources: Chatrie v. United States, No. 25-112, 609 U.S. ___ (June 29, 2026) — Kagan majority; SCOTUSblog; NACDL Fourth Amendment Center; EFF Deeplinks June 2026; Just Security June 2026; ACLU June 2026; Hudson v. Palmer 468 U.S. 517 (1984); Carpenter v. United States 585 U.S. 296 (2018); FCC GN Docket 13-111 NPRM Fact Sheet Sept 9, 2025; CRS LSB11274 (Jan 2025)</div>';
+  return html;
+}
+
 function renderSources(){
   return '<h2 class="sec-title">Data Sources & Update Guide</h2>'
   +'<p class="sec-sub">To update: GitHub repo → index.html → pencil icon → find DATA section → edit numbers or news → Commit changes. Site updates in ~2 minutes. Last updated June 2026.</p>'
@@ -498,7 +626,449 @@ function renderSources(){
   }).join('');
 }
 
-// ─── CRIMINAL OPERATIONS ──────────────────────────────────────────────────────
+// ─── MEXICO FEDERAL PRISONS ───────────────────────────────────────────────────
+var MX_FACILITIES = [
+  {
+    id:'cefereso-1',
+    name:'CEFERESO No. 1 "El Altiplano"',
+    location:'Almoloya de Juárez, State of Mexico',
+    security:'Maximum Security — Federal',
+    capacity:724,
+    population_design:'724 (built 1988-1990, first inmates Nov 1991)',
+    population_actual:'~1,140 confirmed at time of 2015 El Chapo escape (CNDH); current figures not publicly disclosed by OADPRS',
+    population_note:'Historically 35-57% over designed capacity. CNDH 2015 report confirmed severe overcrowding.',
+    staff:'Not publicly disclosed per facility. OADPRS does not publish per-CEFERESO staffing figures. Estimated 400-600 staff system-wide for El Altiplano based on security protocols described in press reports.',
+    staff_note:'OADPRS 2025 recruitment drive targets correctional officers, medical staff, psychologists, social workers for all federal facilities combined. No per-facility breakdown published.',
+    budget:'Not disclosed per facility. Mexico\'s total federal prison system budget is embedded within SSPC (Secretary of Security and Citizen Protection) appropriations — not broken out by CEFERESO.',
+    budget_note:'Mexico\'s 2025 security budget was CUT 36% from 2024. State police in half of Mexican states earn less than minimum wage. Federal prison officer starting salary ~20,000 MXN/month (~$1,100 USD) per 2025 OADPRS recruitment posting — a key corruption vulnerability.',
+    cartel_presence:'Sinaloa, Los Zetas/CDN, Gulf Cartel, Knights Templar, Tijuana Cartel',
+    color:'#dc2626',
+    threat:'CRITICAL',
+    phone_status:'Phones confirmed inside despite "maximum security" designation. Authorities claim cell signal limited within 10km radius but this has proven ineffective. Sinaloa cartel hired a hacker in 2014 specifically to breach El Altiplano communications infrastructure. Director Luis Fernando Mendoza Castellanos accused July 2025 of protecting cartel operations inside.',
+    known_ops:'El Chapo managed Sinaloa Cartel operations from here 2014-2015 before escape. Sinaloa operative confirmed managing U.S. fentanyl supply chain via WhatsApp 2019-2022. Z-40 coordinated Zetas assassinations of rival leaders using contacts established from El Altiplano.',
+    notable_inmates:'El Chapo Guzmán (extradited 2017); Z-40 Treviño (extradited Feb 2025); Z-42 Treviño (extradited Feb 2025); Rafael Caro Quintero (extradited Feb 2025); El Cuini González Valencia (extradited Aug 2025); La Tuta Gómez (extradited Aug 2025); Osiel Cárdenas Guillén (Gulf Cartel, admitted Dec 2024); El Max — Sinaloa operator (admitted Oct 2024)',
+    escape:'El Chapo escaped July 11, 2015 via 1.5km tunnel with motorcycle rail system. Required blueprints — a guard told CNN anonymously "El Chapo escaped because of corruption. Without the blueprints he couldn\'t have built the tunnel." Re-captured Jan 2016.',
+    cndh_rating:'7.32 / 10 (CNDH 2015 national inspection — 10th best of 21 federal prisons)',
+    sources:'Telegraph/Latin Times capacity figures; CNDH 2015 National Penitentiary Supervision Report; Insight Crime; Los Angeles Press July 2025; TechCrunch June 2025; OADPRS 2025 recruitment posting (Infobae Feb 2025)'
+  },
+  {
+    id:'cefereso-14',
+    name:'CEFERESO No. 14 "Durango" (CPS Durango)',
+    location:'Remote desert, Durango state',
+    security:'Maximum Security — Federal (built post-El Chapo escape)',
+    capacity:2520,
+    population_design:'2,520 (opened 2014)',
+    population_actual:'Not publicly disclosed. Designed as high-isolation overflow from El Altiplano. CNDH inspection found Sonora CEFERESO (similar design) housed ~3,500 vs. 2,520 capacity.',
+    population_note:'Physical design is extreme isolation: 3x4 meter cells, windows under 1cm opening, 6 guard towers, 4 automated security checkpoints.',
+    staff:'Not publicly disclosed. Facility designed for maximum separation of staff from inmate contact — automated systems reduce staffing needs vs. El Altiplano.',
+    staff_note:'Same OADPRS system as El Altiplano. No per-facility figures published.',
+    budget:'Not disclosed per facility. Same SSPC appropriation structure as all CEFERESOs.',
+    budget_note:'Built under Felipe Calderón prison expansion program. Operational costs embedded in OADPRS federal budget line.',
+    cartel_presence:'Santa Rosa de Lima Cartel, Sinaloa overflow, Gulf Cartel',
+    color:'#f97316',
+    threat:'CRITICAL',
+    phone_status:'U.S. authorities confirmed El Marro continues directing SRLC operations from inside despite extreme physical isolation design. Communication method not publicly disclosed — phone access via corrupt staff suspected given documented pattern at other CEFERESOs.',
+    known_ops:'El Marro (José Antonio Yépez Ortiz) confirmed by U.S. intelligence running SRLC extortion, fuel theft (huachicol), and drug operations as of late 2025.',
+    notable_inmates:'El Marro — José Antonio Yépez Ortiz, SRLC founder (captured 2020, transferred from El Altiplano). Multiple Sinaloa and Gulf Cartel operators.',
+    escape:'No confirmed escapes. Designed specifically to prevent El Altiplano-style escape.',
+    cndh_rating:'Not available for this specific facility in public CNDH reports.',
+    sources:'Latin Times Dec 2025; Infobae México; U.S. intelligence cited in Latin Times; CNDH 2015 Sonora overcrowding data (comparable facility)'
+  },
+  {
+    id:'cefereso-13',
+    name:'CEFERESO No. 13 "Oaxaca" (CPS Oaxaca)',
+    location:'San Cayetano Morelos, Oaxaca',
+    security:'High Security — Federal',
+    capacity:null,
+    population_design:'Not publicly confirmed',
+    population_actual:'Not publicly disclosed by OADPRS',
+    population_note:'Population data exists in Mexico\'s datos.gob.mx open data portal (OADPRS Feb 2025 statistical release) but not in a readily accessible per-facility summary format.',
+    staff:'Not publicly disclosed.',
+    staff_note:'Same OADPRS system. No per-facility staffing data published.',
+    budget:'Not disclosed.',
+    budget_note:'Embedded in SSPC/OADPRS federal appropriation.',
+    cartel_presence:'Los Zetas (historically dominant), CDN',
+    color:'#7c3aed',
+    threat:'HIGH',
+    phone_status:'Confirmed cartel command operations run from inside with prison authority complicity. Z-40 orchestrated targeted assassinations of rival cartel leaders using state resources and collaborating officials.',
+    known_ops:'Z-40 Miguel Treviño Morales ran Zetas assassination program targeting rival cartel leaders from inside, with documented complicity of prison authorities providing logistics and protection.',
+    notable_inmates:'Z-40 Miguel Treviño Morales (Los Zetas leader — subsequently transferred to El Altiplano, extradited to U.S. Feb 2025)',
+    escape:'None confirmed.',
+    cndh_rating:'Not available in reviewed public sources.',
+    sources:'Los Angeles Press July 2025; Insight Crime; DEA reports; datos.gob.mx OADPRS Feb 2025'
+  },
+  {
+    id:'cereso-guadalajara',
+    name:'CERESO Guadalajara (State Prison)',
+    location:'Guadalajara, Jalisco',
+    security:'State Prison — Medium/High (Jalisco state system)',
+    capacity:null,
+    population_design:'Not publicly confirmed for this specific facility',
+    population_actual:'Overcrowded — Jalisco state prison system among most overcrowded in Mexico. National average 107% capacity; Jalisco historically worse.',
+    population_note:'State prisons governed by state secretariats, not OADPRS. Jalisco publishes limited data. Mexico City\'s Reclusorio Norte runs ~150% capacity as a comparable state facility benchmark.',
+    staff:'Not publicly disclosed. State-level staffing data is not centrally published.',
+    staff_note:'State correctional officers in Jalisco earn significantly less than federal CEFERESO staff — a major corruption vulnerability. CJNG is known to pay state prison staff directly.',
+    budget:'Not disclosed. Jalisco state prison budget embedded in state government appropriations.',
+    budget_note:'State prison budgets in Mexico are significantly lower per inmate than federal CEFERESOs. CJNG\'s annual revenue estimated in billions — bribing state prison staff is operationally trivial.',
+    cartel_presence:'CJNG (dominant throughout Jalisco)',
+    color:'#7c3aed',
+    threat:'CRITICAL',
+    phone_status:'CJNG command cell operated full fentanyl trafficking network from inside 2020-2023. Smartphones with Signal and Telegram; SIM cards rotated every 48-72 hours; satellite backup when cellular jammed. DEA: imprisoned leaders held more operational authority than any CJNG member outside.',
+    known_ops:'3 senior CJNG operatives managed fentanyl/meth distribution to U.S. via Tijuana and Nogales, directing Los Angeles, Phoenix, Chicago networks. DEA/SEMAR disruption indicted 11 outside coordinators 2023.',
+    notable_inmates:'3 CJNG command-level operatives (names sealed in DEA affidavits)',
+    escape:'None confirmed in this context.',
+    cndh_rating:'State prisons not rated in same CNDH federal inspection system. Jalisco CERESO facilities inspected separately under state CNDH mechanism.',
+    sources:'DEA Chicago Field Division indictment 2023; Insight Crime; Reforma investigative report; Foreign Affairs July 2025 (Jalisco prison system context)'
+  },
+  {
+    id:'reclusorio-norte',
+    name:'Reclusorio Norte',
+    location:'Mexico City, CDMX',
+    security:'State Prison — High (Mexico City penitentiary system)',
+    capacity:8000,
+    population_design:'Designed capacity ~8,000',
+    population_actual:'Historically 12,000-14,000 — approximately 150-175% of capacity. Mexico City prison system among most overcrowded in Latin America.',
+    population_note:'Reclusorio Norte is one of three major Mexico City prisons (Norte, Sur, Oriente). Combined system population far exceeds design. Overcrowding is a documented chronic condition per CNDH.',
+    staff:'Not publicly disclosed per facility. Mexico City prison system is operated by the CDMX Secretariat of Citizen Security.',
+    staff_note:'CDMX prison staff salaries are state-level — significantly below federal CEFERESO officers. With 14,000 inmates and chronic underfunding, staff-to-inmate ratios are extremely poor.',
+    budget:'Not disclosed per facility. CDMX penitentiary budget embedded in city government appropriations.',
+    budget_note:'Mexico City\'s prison system is chronically underfunded relative to population. Gang control of internal economies (including phone rental) partially substitutes for state-provided services.',
+    cartel_presence:'CDN (Cartel del Noreste / Zetas remnant), Gulf Cartel, local CDMX criminal organizations',
+    color:'#d97706',
+    threat:'HIGH',
+    phone_status:'CISEN (Mexican intelligence) identified as de facto CDN command hub 2015-2018. Daily SIM rotation; encrypted push-to-talk handsets; multiple encrypted messaging platforms frustrated federal wiretap efforts for ~2 years.',
+    known_ops:'CDN lieutenants coordinated Tamaulipas territorial battles; recruited members; managed Nuevo Laredo extortion; negotiated with U.S. distribution networks. Dismantled via physical surveillance and turned informants — signals intelligence was ineffective.',
+    notable_inmates:'CDN/Zetas remnant lieutenants (names partially sealed). Reclusorio Norte historically houses high-profile cartel figures during pre-trial detention under arraigo system.',
+    escape:'Multiple escapes historically documented at Reclusorio Norte — it is significantly less secure than federal CEFERESOs.',
+    cndh_rating:'State facilities inspected under separate CNDH mechanism. Reclusorio Norte has received poor ratings historically for overcrowding and conditions.',
+    sources:'Insight Crime 2018; CISEN declassified briefings via Proceso; Prison Insider Mexico 2024 (capacity figures); CDMX penitentiary system reports'
+  },
+  {
+    id:'cereso-hermosillo',
+    name:'CEFERESO No. 6 "Nor-Noroeste" / CPS Sonora',
+    location:'Hermosillo, Sonora',
+    security:'Federal — High Security',
+    capacity:2520,
+    population_design:'2,520',
+    population_actual:'CNDH 2015 inspection found ~3,500 inmates in this facility vs. 2,520 design — approximately 39% over capacity. Current figures not publicly disclosed.',
+    population_note:'This is the Sonora federal CEFERESO cited in CNDH 2015 as the most severely overcrowded federal facility inspected. Current population not available in reviewed public sources.',
+    staff:'Not publicly disclosed. OADPRS does not publish per-facility staffing.',
+    staff_note:'Sonora is a key Sinaloa Cartel corridor state. CJNG also active in the region. Documented pattern of cartel bribery of federal staff in Sonora corridor facilities.',
+    budget:'Not disclosed per facility.',
+    budget_note:'Same SSPC/OADPRS structure as all federal CEFERESOs. Sonora\'s proximity to the U.S. border and cartel wealth makes staff corruption particularly acute despite federal pay scales.',
+    cartel_presence:'CJNG, Sinaloa Cartel (Sonora is primary Sinaloa corridor state)',
+    color:'#dc2626',
+    threat:'CRITICAL',
+    phone_status:'DEA Nov 2024 Chicago indictment: CJNG leader imprisoned here conducted weekly WhatsApp voice "business reviews" with Chicago distribution cell. SIM card changed every 96 hours. Continuous operational control maintained from inside.',
+    known_ops:'CJNG imprisoned leader directed 10-15 kg/month fentanyl shipments to Chicago (Little Village/Pilsen). Approved volumes, set pricing, ordered removal of suspected theft. Operation ran until Nov 2024 — 7 Chicago distributors arrested, 40 kg fentanyl seized.',
+    notable_inmates:'CJNG senior operative (named as unindicted co-conspirator, DOJ N.D. Illinois Nov 2024)',
+    escape:'None confirmed.',
+    cndh_rating:'6.63 range (Sonora federal facility was lowest-rated federal prison in CNDH 2015 inspection)',
+    sources:'DEA Chicago Field Division Nov 2024; HSI Chicago; DOJ Northern District of Illinois; CNDH 2015 National Penitentiary Supervision Report (overcrowding and rating data); CBC News May 2016'
+  },
+];
+
+var MX_SYSTEM = {
+  total_facilities: 300,
+  federal_cefereso: 21,
+  total_population: 234500,
+  capacity_pct: 107,
+  pretrial_pct: 40,
+  corruption_index: 'Transparency International 2024: Mexico ranked 140/180 (score 31/100)',
+  phone_data: 'No centralized seizure statistics published. Phones confirmed inside highest-security federal facilities via DEA evidence, court records, and investigative journalism.',
+  jamming_status: 'Mexico has no equivalent of U.S. FCC Section 333 prohibition — jamming is legally permitted and has been attempted at CEFERESO facilities, but corruption ensures phones re-enter via staff. The problem is structural and human, not technical.',
+  extraditions_2025: '55+ cartel figures extradited to U.S. in 2025 (Feb and Aug waves). Eliminates phone access but transfers intelligence risk to U.S. federal system.',
+  sheinbaum_policy: 'President Sheinbaum (Oct 2024-present) has taken harder line vs. cartels: increased seizures, 25% homicide reduction claimed, unprecedented 29-figure extradition Feb 2025. Security budget CUT 36% in 2025, however, limiting capacity.',
+  key_difference: 'Unlike the U.S., Mexico faces not just contraband phones but wholesale institutional corruption — prison directors, guards, and judges are on cartel payrolls. Technology solutions are secondary to the corruption problem.'
+};
+
+function renderMexico(){
+  var html='<h2 class="sec-title">Mexico Federal Prisons — Cartel Command Operations</h2>'
+  +'<p class="sec-sub">Mexico\'s 300 prison facilities — including 21 federal CEFERESOs — have been repeatedly documented as active cartel command centers. Unlike the U.S., where the core problem is contraband phones smuggled past inadequate detection, Mexico faces wholesale institutional corruption: prison directors, guards, and judges on cartel payrolls. The result is that even Mexico\'s highest-security facilities function as operational headquarters for the cartels whose leaders are imprisoned there.</p>';
+
+  // System overview KPIs
+  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">'
+  +[
+    {v:'300',l:'Total Prison Facilities',c:'#dc2626',s:'21 federal CEFERESOs + state CERESOs'},
+    {v:'260K+',l:'Prison Population (Feb 2026)',c:'#f97316',s:'Record high — up from 236K in 2024, surging under Sheinbaum enforcement'},
+    {v:'40%',l:'Pre-Trial Detention',c:'#d97706',s:'Arraigo system holds suspects up to 80 days without charge'},
+    {v:'140/180',l:'Corruption Index Rank',c:'#7c3aed',s:'Transparency International 2024 — score 31/100'},
+  ].map(function(k){
+    return '<div class="kpi" style="border-color:'+k.c+'30;text-align:center">'
+    +'<div class="kv" style="color:'+k.c+'">'+k.v+'</div>'
+    +'<div class="kl">'+k.l+'</div>'
+    +'<div class="ks">'+k.s+'</div></div>';
+  }).join('')+'</div>';
+
+  // Key difference callout
+  html+='<div class="card" style="border-left:3px solid #dc2626;margin-bottom:20px">'
+  +'<div class="ct" style="color:#dc2626">The Critical Distinction: Corruption vs. Contraband</div>'
+  +'<div class="g2" style="gap:14px">'
+  +'<div><div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px">U.S. Problem</div>'
+  +'<div style="font-size:12px;color:#9ca3af;line-height:1.7">Contraband phones are smuggled past inadequate detection systems. The solution is technological: jamming, managed access, body scanners, drone interdiction. The law prohibits jamming; FCC rule pending. Staff corruption exists but is the exception.</div></div>'
+  +'<div><div style="font-size:9px;color:#dc2626;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px">Mexico Problem</div>'
+  +'<div style="font-size:12px;color:#9ca3af;line-height:1.7">Prison directors, guards, prosecutors, and judges are on cartel payrolls. Phones enter with institutional cooperation. Jamming is legally permitted in Mexico but irrelevant when the warden is receiving monthly cartel payments. The problem is structural corruption — not technology. As of July 2025, El Altiplano\'s own director stands accused of protecting cartel operations from inside.</div></div>'
+  +'</div></div>';
+
+  // 2025 extradition wave context
+  html+='<div class="card" style="border-left:3px solid #22c55e;margin-bottom:20px">'
+  +'<div class="ct">2025: Mexico\'s Mass Extradition Strategy — 55+ Cartel Figures Sent to U.S.</div>'
+  +'<p style="font-size:12px;color:#9ca3af;line-height:1.7;margin-bottom:12px">President Sheinbaum\'s most significant counter-cartel move has been unprecedented extraditions rather than improved prison security. In February 2025, Mexico extradited 29 cartel figures to the U.S. simultaneously — including Z-40, Z-42, Rafael Caro Quintero, and others. A second wave in August 2025 sent 26 more, including El Cuini (CJNG) and La Tuta (Knights Templar). This eliminates phone-based command from Mexican prisons for these figures — but transfers the problem to the U.S. federal system, where BOP contraband phone vulnerabilities are documented.</p>'
+  +'<div class="g3" style="gap:10px">'
+  +[
+    {name:'Z-40 — Miguel Treviño Morales',org:'Los Zetas / CDN founder',date:'Feb 27, 2025',col:'#dc2626'},
+    {name:'Z-42 — Omar Treviño Morales',org:'Los Zetas deputy leader',date:'Feb 27, 2025',col:'#dc2626'},
+    {name:'Rafael Caro Quintero',org:'Guadalajara Cartel founder',date:'Feb 27, 2025',col:'#f97316'},
+    {name:'El Cuini — Abigael González Valencia',org:'CJNG financial arm (Los Cuinis)',date:'Aug 12, 2025',col:'#7c3aed'},
+    {name:'La Tuta — Servando Gómez',org:'Knights Templar leader',date:'Aug 12, 2025',col:'#d97706'},
+    {name:'24 additional operators',org:'Sinaloa, CJNG, CDN affiliates',date:'Feb-Aug 2025',col:'#4b5563'},
+  ].map(function(e){
+    return '<div style="background:rgba(0,0,0,0.3);border:1px solid #1a1a30;border-radius:6px;padding:11px">'
+    +'<div style="color:'+e.col+';font-weight:700;font-size:11px;margin-bottom:3px">'+e.name+'</div>'
+    +'<div style="color:#4b5563;font-size:10px">'+e.org+'</div>'
+    +'<div style="color:#22c55e;font-size:10px;margin-top:3px">Extradited: '+e.date+'</div></div>';
+  }).join('')
+  +'</div></div>';
+
+  // Facility cards
+  html+='<h2 class="sec-title" style="margin-top:8px">Key Facilities — Documented Cases</h2>'
+  +'<p class="sec-sub">Six facilities with confirmed or credibly documented cartel phone operations based on DEA evidence, court records, and investigative journalism. Click to expand full case detail.</p>';
+
+  MX_FACILITIES.forEach(function(f,i){
+    var tcolor=f.threat==='CRITICAL'?'#dc2626':f.threat==='HIGH'?'#f97316':'#d97706';
+    var tbg=f.threat==='CRITICAL'?'rgba(220,38,38,0.08)':'rgba(249,115,22,0.08)';
+    var tid='mx-'+i;
+    html+='<div class="ec" onclick="tog(\''+tid+'\')" style="margin-bottom:10px">'
+    +'<div class="eh">'
+    +'<div style="flex:1">'
+    +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">'
+    +'<span style="font-size:16px;font-weight:800;color:'+f.color+'">'+f.name+'</span>'
+    +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:'+tcolor+';background:'+tbg+';border:1px solid '+tcolor+'30;padding:2px 7px;border-radius:3px">'+f.threat+'</span>'
+    +'<span style="font-size:9px;color:#4b5563;background:rgba(0,0,0,0.4);padding:2px 7px;border-radius:3px;border:1px solid #1a1a30">'+f.security+'</span>'
+    +'</div>'
+    +'<div style="font-size:11px;color:#6b7280;margin-bottom:3px">📍 '+f.location+'</div>'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:10px;margin-bottom:3px">'
+    +(f.capacity?'<span style="color:#d97706">Capacity: '+f.capacity.toLocaleString()+'</span>':'')
+    +'<span style="color:#4b5563">Cartel: '+f.cartel_presence+'</span>'
+    +'</div>'
+    +'</div></div>'
+    +'<div class="eb" id="'+tid+'">'
+
+    // Population block
+    +'<div style="background:rgba(0,0,0,0.25);border:1px solid #1a1a30;border-radius:6px;padding:12px;margin-bottom:12px">'
+    +'<div style="font-size:9px;color:#d97706;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:700">Population</div>'
+    +'<div class="g2" style="gap:10px">'
+    +'<div><div style="font-size:9px;color:#4b5563;margin-bottom:2px">Designed Capacity</div><div style="font-size:11px;color:#d1fae5">'+f.population_design+'</div></div>'
+    +'<div><div style="font-size:9px;color:#4b5563;margin-bottom:2px">Actual Population</div><div style="font-size:11px;color:#ef4444">'+f.population_actual+'</div></div>'
+    +'</div>'
+    +(f.population_note?'<div style="font-size:10px;color:#374151;margin-top:7px;font-style:italic">'+f.population_note+'</div>':'')
+    +'</div>'
+
+    // Staff block
+    +'<div style="background:rgba(0,0,0,0.25);border:1px solid #1a1a30;border-radius:6px;padding:12px;margin-bottom:12px">'
+    +'<div style="font-size:9px;color:#7c3aed;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:700">Personnel</div>'
+    +'<div style="font-size:11px;color:#9ca3af;margin-bottom:6px">'+f.staff+'</div>'
+    +(f.staff_note?'<div style="font-size:10px;color:#374151;font-style:italic">'+f.staff_note+'</div>':'')
+    +'</div>'
+
+    // Budget block
+    +'<div style="background:rgba(0,0,0,0.25);border:1px solid #1a1a30;border-radius:6px;padding:12px;margin-bottom:12px">'
+    +'<div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:700">Funding & Budget</div>'
+    +'<div style="font-size:11px;color:#9ca3af;margin-bottom:6px">'+f.budget+'</div>'
+    +(f.budget_note?'<div style="font-size:10px;color:#374151;font-style:italic">'+f.budget_note+'</div>':'')
+    +'</div>'
+
+    // Operations grid
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">'
+    +[
+      {l:'Phone / Comms Status',v:f.phone_status,c:'#ef4444'},
+      {l:'Known Cartel Operations',v:f.known_ops,c:'#f97316'},
+      {l:'Notable Inmates (Current / Historical)',v:f.notable_inmates,c:'#d97706'},
+      {l:'Escape History',v:f.escape,c:'#6b7280'},
+    ].map(function(field){
+      return '<div><div style="font-size:9px;color:'+field.c+';text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">'+field.l+'</div>'
+      +'<div style="font-size:11px;color:#9ca3af;line-height:1.65">'+field.v+'</div></div>';
+    }).join('')
+    +'</div>'
+    +(f.cndh_rating?'<div style="font-size:10px;color:#4b5563;margin-bottom:8px">CNDH Human Rights Rating: <span style="color:#d97706">'+f.cndh_rating+'</span></div>':'')
+    +'<div style="font-size:10px;color:#374151;font-style:italic">Sources: '+f.sources+'</div>'
+    +'</div>'
+    +'<div class="ehint">CLICK TO EXPAND ▾</div></div>';
+  });
+
+  // Sheinbaum policy section
+  html+='<div class="card" style="margin-top:22px;border-left:3px solid #7c3aed">'
+  +'<div class="ct">Sheinbaum Security Strategy — What\'s Changed Since Oct 2024</div>'
+  +'<div class="g2" style="gap:14px">'
+  +'<div>'
+  +'<div style="font-size:9px;color:#22c55e;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Actions Taken</div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px;margin-bottom:8px"><div style="color:#22c55e;font-weight:700;font-size:11px;margin-bottom:3px">Mass Extraditions (Feb + Aug 2025)</div><div style="color:#4b5563;font-size:11px">55+ cartel figures extradited to U.S. in two waves. Unprecedented in scale. Removes imprisoned leaders from Mexico\'s corrupt prison system entirely.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px;margin-bottom:8px"><div style="color:#22c55e;font-weight:700;font-size:11px;margin-bottom:3px">Increased Drug + Weapons Seizures</div><div style="color:#4b5563;font-size:11px">Post-Trump tariff threat (Feb 2025): Mexico dramatically expanded fentanyl precursor interdiction, weapons seizures, and midlevel cartel arrests.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px"><div style="color:#22c55e;font-weight:700;font-size:11px;margin-bottom:3px">~25% Homicide Reduction (Official)</div><div style="color:#4b5563;font-size:11px">Government claims 25% drop since Sept 2024. Journalists note disappearances have increased, suggesting violence may be hidden rather than reduced.</div></div>'
+  +'</div>'
+  +'<div>'
+  +'<div style="font-size:9px;color:#dc2626;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Structural Obstacles Remain</div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px;margin-bottom:8px"><div style="color:#dc2626;font-weight:700;font-size:11px;margin-bottom:3px">Security Budget CUT 36% in 2025</div><div style="color:#4b5563;font-size:11px">State police in half of Mexican states make less than minimum wage. Budget constraints directly undermine capacity to address prison corruption.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px;margin-bottom:8px"><div style="color:#dc2626;font-weight:700;font-size:11px;margin-bottom:3px">Corruption Networks Intact</div><div style="color:#4b5563;font-size:11px">Criminal-political networks continue dividing Mexico into private fiefdoms. El Altiplano director accused of protecting cartels as recently as July 2025. Sheinbaum has not moved against internal Morena corruption.</div></div>'
+  +'<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:11px"><div style="color:#dc2626;font-weight:700;font-size:11px;margin-bottom:3px">Replacement Problem</div><div style="color:#4b5563;font-size:11px">Criminal groups weakened by arrests are simply replaced by new ones while political and judicial protection networks remain intact. Cartel fragmentation (Chapitos vs. Mayizas civil war) creates new violence even as old leaders are removed.</div></div>'
+  +'</div></div></div>';
+
+  html+='<div class="footer">Sources: Insight Crime; Los Angeles Press July 2025; Latin Times Dec 2025; DEA Chicago Field Division Nov 2024; DOJ Northern District of Illinois indictment; Wikipedia CEFERESO No. 1; Foreign Affairs July 2025; FIU Gordon Institute March 2025; Brookings Institution April 2026; Infobae May 2026; Notitia Criminis April 2023; CNDH 2015 National Penitentiary Supervision Report</div>';
+
+  // ── FULL SYSTEM MAP + TABLE ──────────────────────────────────────────────────
+  html+='<h2 class="sec-title" style="margin-top:28px">Complete Federal CEFERESO System — All Active Facilities</h2>'
+  +'<p class="sec-sub">Mexico currently operates 14 active federal CEFERESOs plus the CEFEREPSI psychiatric facility. Four facilities were closed 2017-2020 by presidential decree. The map and table below cover all active facilities, not just those with documented phone operations.</p>';
+
+  // Map canvas
+  html+='<div style="background:#04060c;border:1px solid #1a1a30;border-radius:8px;overflow:hidden;margin-bottom:18px;position:relative">'
+  +'<canvas id="mxmap" style="display:block;width:100%;cursor:crosshair"></canvas>'
+  +'<div id="mxtip" style="position:absolute;background:rgba(4,6,15,0.97);border:1px solid #22c55e;border-radius:6px;padding:9px 13px;pointer-events:none;font-size:11px;color:#e2e8f0;display:none;z-index:20;max-width:220px;line-height:1.5"></div>'
+  +'<div style="position:absolute;bottom:10px;left:10px;background:rgba(4,6,15,0.93);border:1px solid #1a1a30;border-radius:6px;padding:8px 12px;font-size:10px;pointer-events:none">'
+  +'<div style="color:#4b5563;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-size:9px">Legend</div>'
+  +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:10px;height:10px;border-radius:50%;background:#dc2626;flex-shrink:0"></div><span style="color:#9ca3af">Documented phone/cartel ops</span></div>'
+  +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><div style="width:10px;height:10px;border-radius:50%;background:#22c55e;flex-shrink:0"></div><span style="color:#9ca3af">Active — no documented ops</span></div>'
+  +'<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:50%;background:#7c3aed;flex-shrink:0"></div><span style="color:#9ca3af">State prison (tab case study)</span></div>'
+  +'</div></div>';
+
+  // Reference table
+  var ALL_CEFERESOS = [
+    {num:1, name:'El Altiplano',       loc:'Almoloya de Juárez, State of Mexico', cap:724,  opened:1991, status:'OPEN',   ops:true,  cartel:'Sinaloa, Zetas, Gulf, KT, Tijuana', cndh:'7.32', lat:19.37, lng:-99.77},
+    {num:2, name:'Occidente',          loc:'El Salto, Jalisco',                    cap:756,  opened:1993, status:'OPEN',   ops:false, cartel:'Sinaloa, CJNG',                     cndh:'7.65', lat:20.53, lng:-103.20},
+    {num:4, name:'Noroeste "El Rincón"',loc:'Tepic, Nayarit',                     cap:756,  opened:2004, status:'OPEN',   ops:false, cartel:'CJNG, Sinaloa',                     cndh:'7.48', lat:21.48, lng:-104.84},
+    {num:5, name:'Oriente',            loc:'Villa Aldama, Veracruz',               cap:756,  opened:2009, status:'OPEN',   ops:false, cartel:'CDN/Zetas, Gulf',                   cndh:'7.10', lat:19.64, lng:-97.01},
+    {num:7, name:'Nor-Noroeste',       loc:'Guadalupe Victoria, Durango',          cap:756,  opened:2010, status:'OPEN',   ops:false, cartel:'Sinaloa, Zetas',                    cndh:'7.40', lat:24.45, lng:-104.12},
+    {num:8, name:'Nor-Poniente',       loc:'Guasave, Sinaloa',                     cap:756,  opened:2011, status:'OPEN',   ops:false, cartel:'Sinaloa (home state)',               cndh:'7.55', lat:25.57, lng:-108.47},
+    {num:11,name:'CPS Sonora',         loc:'Hermosillo, Sonora',                   cap:2520, opened:2012, status:'OPEN',   ops:true,  cartel:'CJNG, Sinaloa',                     cndh:'6.63', lat:29.10, lng:-110.97},
+    {num:12,name:'CPS Guanajuato',     loc:'Ocampo, Guanajuato',                   cap:2500, opened:2012, status:'OPEN',   ops:false, cartel:'CJNG, Sinaloa (NSCLC)',             cndh:'7.21', lat:21.65, lng:-101.50},
+    {num:13,name:'CPS Oaxaca',         loc:'Miahuatlán de Porfirio Díaz, Oaxaca',  cap:2520, opened:2013, status:'OPEN',   ops:true,  cartel:'CDN/Zetas',                         cndh:'N/A',  lat:16.33, lng:-96.60},
+    {num:14,name:'CPS Durango',        loc:'Gómez Palacio, Durango',               cap:2520, opened:2014, status:'OPEN',   ops:true,  cartel:'SRLC, Sinaloa, Gulf',               cndh:'N/A',  lat:25.57, lng:-103.50},
+    {num:15,name:'CPS Chiapas',        loc:'Villa Comaltitlán, Chiapas',           cap:2520, opened:2014, status:'OPEN',   ops:false, cartel:'CJNG, Sinaloa',                     cndh:'N/A',  lat:15.20, lng:-92.56},
+    {num:16,name:'CPS Femenil Morelos',loc:'Coatlán del Río, Morelos',             cap:1000, opened:2015, status:'OPEN',   ops:false, cartel:'CJNG, Sinaloa (women)',             cndh:'N/A',  lat:18.73, lng:-99.43},
+    {num:17,name:'CPS Michoacán',      loc:'Buenavista Tomatlán, Michoacán',       cap:2520, opened:2015, status:'OPEN',   ops:false, cartel:'CJNG, NFLM',                        cndh:'N/A',  lat:18.93, lng:-102.52},
+    {num:18,name:'CPS Coahuila',       loc:'Ramos Arizpe, Coahuila',               cap:2520, opened:2018, status:'OPEN',   ops:false, cartel:'CDN, Gulf',                         cndh:'N/A',  lat:25.55, lng:-100.95},
+    {num:0, name:'CEFEREPSI',          loc:'Ayala, Morelos',                       cap:300,  opened:1993, status:'OPEN',   ops:false, cartel:'Federal psychiatric — various',     cndh:'8.18', lat:18.77, lng:-98.97},
+  ];
+  var STATE_PRISONS = [
+    {name:'CERESO Guadalajara',loc:'Guadalajara, Jalisco', ops:true, cartel:'CJNG', lat:20.64, lng:-103.35},
+    {name:'Reclusorio Norte',  loc:'Mexico City, CDMX',   ops:true, cartel:'CDN/Gulf', lat:19.50, lng:-99.13},
+  ];
+
+  html+='<div class="card" style="margin-bottom:18px"><div class="ct">All Active Federal Facilities — Quick Reference</div>'
+  +'<div class="tw"><table>'
+  +'<thead><tr>'
+  +'<th>#</th><th>Name</th><th>Location</th><th>Opened</th><th>Capacity</th><th>Dominant Cartel(s)</th><th>CNDH Score</th><th>Phone Ops</th>'
+  +'</tr></thead><tbody>'
+  +ALL_CEFERESOS.map(function(c){
+    var numLabel = c.num===0?'PSI':c.num;
+    var opsCell = c.ops
+      ? '<span style="color:#dc2626;font-weight:700">DOCUMENTED</span>'
+      : '<span style="color:#374151">Not confirmed</span>';
+    return '<tr>'
+    +'<td style="font-family:monospace;color:'+(c.ops?'#dc2626':'#22c55e')+';font-weight:700">'+numLabel+'</td>'
+    +'<td style="color:#d1fae5;font-weight:600">'+c.name+'</td>'
+    +'<td style="color:#6b7280;font-size:11px">'+c.loc+'</td>'
+    +'<td style="font-family:monospace;color:#4b5563">'+c.opened+'</td>'
+    +'<td style="font-family:monospace;color:#d97706">'+(c.cap?c.cap.toLocaleString():'N/D')+'</td>'
+    +'<td style="font-size:10px;color:#9ca3af">'+c.cartel+'</td>'
+    +'<td style="font-family:monospace;color:#4b5563">'+c.cndh+'</td>'
+    +'<td>'+opsCell+'</td>'
+    +'</tr>';
+  }).join('')
+  +'<tr style="border-top:2px solid #1a1a30"><td colspan="8" style="font-size:10px;color:#374151;padding-top:8px">'
+  +'Closed by presidential decree: No. 3 Noreste (Matamoros, 2020) · No. 6 Sureste (Huimanguillo, 2020) · No. 9 Norte (Ciudad Juárez, 2020) · No. 10 Nor-Noreste (Monclova, 2017)'
+  +'</td></tr>'
+  +'</tbody></table></div></div>';
+
+  // Map canvas — initMxMap defined at module level, called after DOM renders
+  window._mxData = {all: ALL_CEFERESOS, state: STATE_PRISONS};
+  setTimeout(initMxMap, 0);
+  html += '<p style="font-size:10px;color:#374151;margin:6px 0 0 4px">Hover over dots for detail. Red = documented cartel/phone operations. Green = active, no documented phone ops. Purple triangle = state prison case study.</p>';
+
+  return html;
+}
+// ─── MEXICO MAP (module-level canvas renderer) ───────────────────────────────
+function initMxMap(){
+  var canvas=document.getElementById('mxmap'); if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var tip=document.getElementById('mxtip');
+  var d=window._mxData||{all:[],state:[]};
+  var ALL=d.all, ST=d.state;
+  var VIEW={minLat:14.5,maxLat:32.5,minLng:-117.5,maxLng:-86.5};
+  function proj(lat,lng,W,H){
+    return [(lng-VIEW.minLng)/(VIEW.maxLng-VIEW.minLng)*W,
+            (1-(lat-VIEW.minLat)/(VIEW.maxLat-VIEW.minLat))*H];
+  }
+  function draw(){
+    var W=canvas.width,H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#04060c'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(20,30,50,0.9)'; ctx.lineWidth=0.5;
+    for(var lat=15;lat<=32;lat+=2){var y=proj(lat,0,W,H)[1];ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    for(var lng=-116;lng<=-88;lng+=4){var x=proj(0,lng,W,H)[0];ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    var border=[[32.53,-117.12],[32.72,-114.72],[31.33,-111.07],[31.33,-108.21],[29.76,-104.52],[29.38,-100.90],[26.85,-99.47],[25.87,-97.43]];
+    ctx.beginPath();
+    border.forEach(function(p,i){var xy=proj(p[0],p[1],W,H);if(i===0)ctx.moveTo(xy[0],xy[1]);else ctx.lineTo(xy[0],xy[1]);});
+    ctx.strokeStyle='rgba(251,191,36,0.4)'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.stroke(); ctx.setLineDash([]);
+    [['SONORA',29.5,-110.5],['CHIHUAHUA',28.5,-106.0],['COAHUILA',27.5,-102.0],['TAMAULIPAS',24.5,-98.5],
+     ['SINALOA',24.5,-107.3],['DURANGO',24.8,-104.6],['NAYARIT',21.7,-104.5],['JALISCO',20.4,-103.5],
+     ['VERACRUZ',19.5,-96.5],['GTO',21.0,-101.0],['OAXACA',16.8,-96.5],['CHIAPAS',16.0,-92.5],
+     ['MICHOACAN',19.2,-102.0],['MORELOS',18.7,-99.0]].forEach(function(s){
+      var xy=proj(s[1],s[2],W,H);
+      ctx.font='bold 9px monospace'; ctx.fillStyle='rgba(55,65,81,0.7)'; ctx.textAlign='center'; ctx.fillText(s[0],xy[0],xy[1]);
+    });
+    ctx.textAlign='left';
+    ALL.forEach(function(f){
+      var xy=proj(f.lat,f.lng,W,H); var col=f.ops?'#dc2626':'#22c55e'; var r=f.ops?9:7;
+      var g=ctx.createRadialGradient(xy[0],xy[1],0,xy[0],xy[1],r*2.5);
+      g.addColorStop(0,f.ops?'rgba(220,38,38,0.35)':'rgba(34,197,94,0.2)'); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.arc(xy[0],xy[1],r*2.5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      ctx.beginPath();ctx.arc(xy[0],xy[1],r,0,Math.PI*2);
+      ctx.fillStyle=col; ctx.shadowBlur=6; ctx.shadowColor=col; ctx.fill(); ctx.shadowBlur=0;
+      ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=1; ctx.stroke();
+      ctx.font='bold 8px monospace'; ctx.fillStyle='#fff'; ctx.textAlign='center';
+      ctx.fillText(f.num===0?'PSI':f.num.toString(),xy[0],xy[1]+3); ctx.textAlign='left';
+    });
+    ST.forEach(function(s){
+      var xy=proj(s.lat,s.lng,W,H); var ts=8;
+      ctx.beginPath();ctx.moveTo(xy[0],xy[1]-ts);ctx.lineTo(xy[0]-ts*0.8,xy[1]+ts*0.6);ctx.lineTo(xy[0]+ts*0.8,xy[1]+ts*0.6);ctx.closePath();
+      ctx.fillStyle='#7c3aed'; ctx.shadowBlur=8; ctx.shadowColor='#7c3aed'; ctx.fill(); ctx.shadowBlur=0;
+      ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1; ctx.stroke();
+    });
+    ctx.font='bold 11px Georgia,serif'; ctx.fillStyle='rgba(200,216,240,0.7)';
+    ctx.fillText('Mexico Federal Prison System — CEFERESO Network',10,16);
+  }
+  function resize(){
+    canvas.width=canvas.parentElement.offsetWidth;
+    canvas.height=Math.round(canvas.width*0.56);
+    canvas.style.height=canvas.height+'px'; draw();
+  }
+  window.addEventListener('resize',resize); resize();
+  canvas.addEventListener('mousemove',function(e){
+    var rect=canvas.getBoundingClientRect();
+    var mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+    var my=(e.clientY-rect.top)*(canvas.height/rect.height);
+    var W=canvas.width,H=canvas.height;
+    var hit=null,minD=18;
+    ALL.concat(ST.map(function(s){return Object.assign({num:-1},s);})).forEach(function(f){
+      var xy=proj(f.lat,f.lng,W,H);
+      var dist=Math.sqrt(Math.pow(mx-xy[0],2)+Math.pow(my-xy[1],2));
+      if(dist<minD){minD=dist;hit=f;}
+    });
+    if(hit){
+      var label=hit.num===0?'CEFEREPSI':hit.num===-1?hit.name:'CEFERESO No. '+hit.num+' — '+hit.name;
+      tip.style.display='block';
+      tip.style.left=(e.clientX-rect.left+14)+'px';
+      tip.style.top=(e.clientY-rect.top-10)+'px';
+      tip.innerHTML='<strong style="color:'+(hit.ops?'#dc2626':'#22c55e')+'">'+label+'</strong><br>'
+        +'<span style="color:#4b5563;font-size:10px">'+hit.loc+'</span><br>'
+        +(hit.cap?'Capacity: <strong>'+hit.cap.toLocaleString()+'</strong><br>':'')
+        +'Cartel: <span style="color:#d97706">'+hit.cartel+'</span>'
+        +(hit.ops?'<br><span style="color:#dc2626;font-weight:700">Documented ops</span>':'');
+    } else { tip.style.display='none'; }
+  });
+  canvas.addEventListener('mouseleave',function(){tip.style.display='none';});
+}
+
 var CRIMINAL_OPS = [
   {
     id:'ga-birthday',
@@ -940,18 +1510,20 @@ var TABS=[
   {id:'states',label:'By State'},
   {id:'threats',label:'Threats'},
   {id:'criminal-ops',label:'Criminal Operations'},
+  {id:'mexico',label:'Mexico Federal Prisons'},
   {id:'technology',label:'Technology'},
   {id:'smuggling',label:'Smuggling'},
   {id:'seizures',label:'Seizure Types'},
   {id:'legislation',label:'Legislation'},
+  {id:'chatrie',label:'Chatrie & Geofencing'},
   {id:'sources',label:'Sources'}
 ];
-var TAB_ICONS={overview:'📊',states:'🗺','threats':'⚠️','criminal-ops':'🔴',technology:'📡',smuggling:'🚫',seizures:'📦',legislation:'⚖️',sources:'📚'};
+var TAB_ICONS={overview:'📊',states:'🗺','threats':'⚠️','criminal-ops':'🔴',mexico:'🇲🇽',technology:'📡',smuggling:'🚫',seizures:'📦',legislation:'⚖️',chatrie:'⚖️',sources:'📚'};
 
 function renderTab(tabId){
   activeTab=tabId;
   document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tabId);});
-  var renderers={overview:renderOverview,states:renderByState,threats:renderThreats,'criminal-ops':renderCriminalOps,technology:renderTechnology,smuggling:renderSmuggling,seizures:renderSeizureTypes,legislation:renderLegislation,sources:renderSources};
+  var renderers={overview:renderOverview,states:renderByState,threats:renderThreats,'criminal-ops':renderCriminalOps,mexico:renderMexico,technology:renderTechnology,smuggling:renderSmuggling,seizures:renderSeizureTypes,legislation:renderLegislation,chatrie:renderChatrie,sources:renderSources};
   var fn=renderers[tabId]||renderOverview;
   document.getElementById('tab-content').innerHTML=fn()
     +'<div class="footer">Sources: Urban Institute (2021/2024), FCC GN Docket 13-111, Georgia/South Carolina DOCs, FBI Law Enforcement Bulletin, GAO-11-893, NBC News, Prison Policy Initiative, Filter Magazine, congressional press releases. All national totals are estimates extrapolated from available state data — no single national dataset exists. Last updated: '+DATA.last_updated+'</div>';
